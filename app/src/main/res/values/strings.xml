@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TextBlock</string>
+    <string name="_000_miles_hour">000 miles/hour</string>
+    <string name="use_metric_units">Use metric units?</string>
+</resources>
