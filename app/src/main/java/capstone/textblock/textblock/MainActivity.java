@@ -47,13 +47,13 @@ public class MainActivity extends Activity implements speed_ui.IBaseGpsListener 
 
         }
 
-        //runs speed function in this activity
+        //runs speed function activity
         this.updateSpeed(null);
 
 
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-        };
+        }
 
 
 
