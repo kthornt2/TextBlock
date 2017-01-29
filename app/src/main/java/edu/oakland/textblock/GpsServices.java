@@ -1,6 +1,5 @@
 package edu.oakland.textblock;
 
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -12,36 +11,60 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
+//for permissions
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 
-import fly.speedmeter.grub.GpsDataHandler;
 
+//Service is a component that allows apps to run in the background even if the user switches to
+//another app.  Since the app will need to keep tabs continuously, well need our class
+//to extend Service.
 public class GpsServices extends Service implements LocationListener, GpsStatus.Listener {
+
     private LocationManager mLocationManager;
-
-    Location lastLocation = new Location("last");
+    Location lastLocation = new Location("last location");
     GpsDataHandler data;
+    //current coordinates
+    double cLongitude=0 ;
+    double cLatitude=0 ;
+    //last coordinates
+    double lLongitude = 0;
+    double lLatitude = 0;
 
-
-
-    double currentLon=0 ;
-    double currentLat=0 ;
-    double lastLon = 0;
-    double lastLat = 0;
 
     PendingIntent contentIntent;
+
+    //Checks for GPS location permissions.  The request, if needed,
+    // has to come from the Main Activity.  (TO DO)
+    public static boolean checkPermission(final Context context) {
+        return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED;
+    }
+
+    //Things that are "Services" requires IBinders, but since we dont use we can return null.
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
 
 
     @Override
     public void onCreate() {
 
+    //This will have to work off of the main activity.  Basically it is an intent to start when the
+    //main activity starts
         Intent notificationIntent = new Intent(this, MainActivity.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         contentIntent = PendingIntent.getActivity(
                 this, 0, notificationIntent, 0);
 
-        updateNotification(false);
 
         mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        //actually checks the permissions here
+        checkPermission(this);
         mLocationManager.addGpsStatusListener( this);
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 0, this);
     }
@@ -49,25 +72,28 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
     public void onLocationChanged(Location location) {
 
         //Note that normally this should run from Main activity.  Once we get to the point where our
-        //main activity is fleshed out, we'll use the commented part instad of initiating a new object
+        //main activity is fleshed out, we'll use the commented part instead of initiating a new object
         //right from the GPSDataHandler class.
         //GpsDataHandler = MainActivity.getGpsDataHandler();
 
         GpsDataHandler gpsDataHandler = new GpsDataHandler();
-            currentLat = location.getLatitude();
-            currentLon = location.getLongitude();
 
-            lastLocation.setLatitude(lastLat);
-            lastLocation.setLongitude(lastLon);
+        //gets coordinates from gps
+            cLatitude = location.getLatitude();
+            cLongitude = location.getLongitude();
+
+            lastLocation.setLatitude(lLatitude);
+            lastLocation.setLongitude(lLongitude);
             double distance = lastLocation.distanceTo(location);
 
+        //checks accuracy.  if accurate, saves coordinates and calculates distance.
             if (location.getAccuracy() < distance){
                 gpsDataHandler.distanceOutputFunction(distance);
 
-                lastLat = currentLat;
-                lastLon = currentLon;
+                lLatitude = cLatitude;
+                lLongitude = cLongitude;
             }
-
+        //checks if vehicle is stopped
             if (location.hasSpeed()) {
                 gpsDataHandler.currentSpeed(location.getSpeed());
                 if(location.getSpeed() == 0){
@@ -96,7 +122,7 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
         @Override
         protected String doInBackground(Void... unused) {
             try {
-                while (GpsDataHandler.getSpeed() == 0) {
+                while (data.getSpeed() == 0) {
                     Thread.sleep(1000);
                     timer++;
                 }
@@ -108,7 +134,7 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
 
         @Override
         protected void onPostExecute(String message) {
-            GpsDataHandler.setTimeStopped(timer);
+            data.setTimeStopped(timer);
         }
     }
 }
