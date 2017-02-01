@@ -57,7 +57,7 @@ public class GpsDataHandler {
     public String outputDistanceFunction(){
         String s;
 
-            s = new String(String.format("%.3f", distanceM) + "miles");
+            s = new String(String.format("%.3f", (distanceM * 1609.34) + "miles");
 
         return s;
     }
