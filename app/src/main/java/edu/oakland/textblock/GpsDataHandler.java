@@ -1,12 +1,16 @@
 package edu.oakland.textblock;
 
 
+import android.icu.math.BigDecimal;
+import android.icu.text.DecimalFormat;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
 
+import java.math.RoundingMode;
 
 
 public class GpsDataHandler {
+
     private boolean activeStatus;
     private long time;
     private long timeStopped;
@@ -47,23 +51,29 @@ public class GpsDataHandler {
     }
 
     //fetches distance from GPS.  By default, Location services uses meters.  .
-    public void distanceOutputFunction(double distance){
+    public void distanceFunction(double distance){
         distanceM = (distanceM + distance);
+
 
 
     }
 
     //Outputs distance to string so it can be put in UI
-    public String outputDistanceFunction(){
+    public String outputDistanceFunction(double distanceM){
+
+
+        double milesDistanceM = Math.round((distanceM / 1609.34) * 100)/100.0d;
         String s;
 
-            s = new String(String.format("%.3f", (distanceM * 1609.34) + "miles");
+            s = milesDistanceM + " " + "miles";
+
 
         return s;
     }
 
     //outputs max speed to string for use in UI
-    public String topSpeedFunction() {
+    public String topSpeedFunction(double maxSpeed) {
+
         String s;
 
         s = new String(String.format("%.0f", maxSpeed) + "mph");
@@ -71,9 +81,11 @@ public class GpsDataHandler {
     }
 
     //calculates average speed then outputs it to string for UI. Assumes vehicle in motion.
-    //multiply by 2.23694 to get mph instead of meters/second
-    public String meanSpeedFunction(){
-        double averageSpeed = ((distanceM / (time / 1000)) * 2.23694);
+    //multiply by .447 to get mph instead of meters/second
+    public String meanSpeedFunction(double distanceM, long time){
+
+
+        double averageSpeed = ((distanceM / (time / 1000)) * .447);
         String s;
         if (time > 0){
             s = new String(String.format("%.0f", averageSpeed) + "mph");
@@ -85,14 +97,15 @@ public class GpsDataHandler {
     }
 
     //If a vehicle stops, the calc for average speed must ignore the time the vehicle is stopped.
-    //multiply by 2.23694 to get mph instead of meters/second
-    public String meanSpeedFunctionStopped(){
+    //multiply by .447 to get mph instead of meters/second
+    public String meanSpeedFunctionStopped(long time, long timeStopped, double distanceM){
+
         double motionTime = time - timeStopped;
         String s;
         if (motionTime < 0){
             s = new String(0 + "mph");
         }else{
-            double average = ((distanceM / ( (time - timeStopped) / 1000)) * 2.23694) ;
+            double average = ((distanceM / ( (time - timeStopped) / 1000)) * .447) ;
             s = new String(String.format("%.0f", average) + "mph");
         }
         return s;
@@ -100,10 +113,10 @@ public class GpsDataHandler {
 
     //Determines max speed by an operation of the current speed vs the stored max speed
     //speed here is input from GPSServices from onLocationChanged()
-    //multiply by 2.23694 to get mph instead of meters/second
+    //multiply by .447 to get mph instead of meters/second
     public void currentSpeed(double speed) {
 
-        this.speed = speed * 2.23694;
+        this.speed = speed * .447;
         if (speed > maxSpeed){
             maxSpeed = speed;
         }

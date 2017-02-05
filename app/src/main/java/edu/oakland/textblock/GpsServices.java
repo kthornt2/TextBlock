@@ -88,7 +88,7 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
 
         //checks accuracy.  if accurate, saves coordinates and calculates distance.
             if (location.getAccuracy() < distance){
-                gpsDataHandler.distanceOutputFunction(distance);
+                gpsDataHandler.distanceFunction(distance);
 
                 lLatitude = cLatitude;
                 lLongitude = cLongitude;
