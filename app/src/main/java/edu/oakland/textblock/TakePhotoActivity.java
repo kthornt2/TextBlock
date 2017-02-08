@@ -34,23 +34,60 @@ public class TakePhotoActivity extends AppCompatActivity {
     private Camera camera;
     private CameraPreview cameraPreview;
 
+    /**
+     * Create a file Uri for saving an image or video
+     */
+    private static Uri getOutputMediaFileUri(int type) {
+        return Uri.fromFile(getOutputMediaFile(type));
+    }
+
+    /**
+     * Create a File for saving an image or video
+     */
+    public static File getOutputMediaFile(int type) {
+        // To be safe, you should check that the SDCard is mounted
+        // using Environment.getExternalStorageState() before doing this.
+
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "TextBlock");
+        // This location works best if you want the created images to be shared
+        // between applications and persist after your app has been uninstalled.
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d("TextBlock", "failed to create directory");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+                    "IMG_" + timeStamp + ".jpg");
+        } else if (type == MEDIA_TYPE_VIDEO) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+                    "VID_" + timeStamp + ".mp4");
+        } else {
+            return null;
+        }
+
+        return mediaFile;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_photo);
 
-
         if (checkCameraHardware(this)) {
             Log.d("number of camera: ", String.valueOf(Camera.getNumberOfCameras()));
 
             // to create an instance of Camera
             // to open the front-facing camera first
-            try {
-                camera = Camera.open(findFrontFacingCamera());
-            } catch (Exception e) {
-                Log.d("error", "Camera is occupied.");
-            }
+
 
             // to get the default parameters and set
 //            camera.setParameters(camera.getParameters());
@@ -58,7 +95,7 @@ public class TakePhotoActivity extends AppCompatActivity {
             // to ensure correct orientation of preview
 //            camera.setPreviewDisplay();
 
-            if (camera != null) {
+            if (getCameraInstance()) {
                 // get an instance of Camera successfully
                 // then Create our Preview view and set it as the content of our activity.
                 cameraPreview = new CameraPreview(this, camera);
@@ -76,6 +113,22 @@ public class TakePhotoActivity extends AppCompatActivity {
         } else {
             Log.d("tag", "There is no camera on the device");
         }
+    }
+
+    private boolean getCameraInstance() {
+
+        if (camera != null) {
+            camera.release();
+            camera = null;
+        }
+        try {
+            camera = Camera.open(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("Failed to open a camera", e.toString());
+            return false;
+        }
+        return true;
     }
 
     //  Check if this device has a camera
@@ -133,50 +186,6 @@ public class TakePhotoActivity extends AppCompatActivity {
     public void takePhoto(View view) {
         // get data from the camera
         camera.takePicture(null, null, pictureCallback);
-    }
-
-
-    /**
-     * Create a file Uri for saving an image or video
-     */
-    private static Uri getOutputMediaFileUri(int type) {
-        return Uri.fromFile(getOutputMediaFile(type));
-    }
-
-    /**
-     * Create a File for saving an image or video
-     */
-    public static File getOutputMediaFile(int type) {
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
-
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "TextBlock");
-        // This location works best if you want the created images to be shared
-        // between applications and persist after your app has been uninstalled.
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Log.d("TextBlock", "failed to create directory");
-                return null;
-            }
-        }
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_" + timeStamp + ".jpg");
-        } else if (type == MEDIA_TYPE_VIDEO) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "VID_" + timeStamp + ".mp4");
-        } else {
-            return null;
-        }
-
-        return mediaFile;
     }
 
 }
