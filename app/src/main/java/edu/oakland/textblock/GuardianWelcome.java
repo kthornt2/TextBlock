@@ -28,9 +28,25 @@ public class GuardianWelcome extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        
+        NotifiButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(GuardianWelcome.this, Notifications.class);
+                startActivity(intent);
+            }
+        });
+
+        settingButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(GuardianWelcome.this, Settings.class);
+                startActivity(intent);
+            }
+        });
 
     }
-
-
 
 }
