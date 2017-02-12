@@ -1,4 +1,4 @@
-package edu.oakland.textblock;
+package com.example.hejialin.tblogin;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         // [END config_signin]
 
         statusTextView = (TextView) findViewById(R.id.status_textview);
-
         emailEdit = (EditText) findViewById(R.id.editEmail);
         passEdit = (EditText) findViewById(R.id.editPass);
         forgetButton = (Button) findViewById(R.id.forget_password_button);
@@ -83,8 +82,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         signOutButton = (Button) findViewById(R.id.sign_out_button);
         signOutButton.setOnClickListener(this);
-
         forgetButton.setOnClickListener(this);
+
         signUpButton.setOnClickListener(this);
         emailSignInButton.setOnClickListener(this);
 
@@ -180,6 +179,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             GoogleSignInAccount acct = result.getSignInAccount();
             statusTextView.setText("Hello Google Account User: " + acct.getDisplayName());
             firebaseAuthWithGoogle(acct);
+            Intent intent=new Intent(MainActivity.this,GuardianWelcome.class);
+            startActivity(intent);
         } else {
             //updateUI(null);
             statusTextView.setText("Google accounts sign in failed, please check the network access.");
@@ -217,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
 
-    private void signOut() {
+    public void signOut() {
         // firebase sign out
         mAuth.signOut();
 
@@ -225,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
             @Override
             public void onResult(@NonNull Status status) {
-                //statusTextView.setText("Signed out.");
+                statusTextView.setText("Signed out.");
                 updateUI(null);
             }
         });
@@ -251,7 +252,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 passEdit.setError(null);
             }
         }
-
 
         return valid;
     }
@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 });
     }
 
-    private void signUp(String email, String password){
+   private void signUp(String email, String password){
         // sign up
         if (!validateForm(1)) { // validate email address and password
             return;
@@ -298,6 +298,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                                     Toast.LENGTH_SHORT).show();
                             // update status textview
                             statusTextView.setText("Sign up failed, please check the network access.");
+                        }
+                        else{
+                            Intent intent=new Intent(MainActivity.this,GuardianWelcome.class);
+                            startActivity(intent);
                         }
                     }
                 });
@@ -323,6 +327,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                             // update status textview
                             statusTextView.setText("Sign in failed");
                         }
+                        else{
+
+                            Intent intent=new Intent(MainActivity.this,GuardianWelcome.class);
+                            startActivity(intent);
+                        }
 
                     }
                 });
@@ -330,15 +339,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            statusTextView.setText("Hello Email User: " + user.getEmail() );
+          statusTextView.setText("Hello Email User: " + user.getEmail() );
 
             findViewById(R.id.editPass).setVisibility(View.GONE);
+            findViewById(R.id.editEmail).setVisibility(View.GONE);
             findViewById(R.id.sign_out_button).setVisibility(View.VISIBLE);
         } else {
             statusTextView.setText("Signed Out.");
             findViewById(R.id.editPass).setVisibility(View.VISIBLE);
+            findViewById(R.id.editEmail).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_button).setVisibility(View.GONE);
         }
     }
 
 }
+
