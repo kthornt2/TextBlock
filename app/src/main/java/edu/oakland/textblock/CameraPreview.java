@@ -52,10 +52,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         }
 
         int result;
-        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
             result = (info.orientation + degrees) % 360;
             result = (360 - result) % 360;
         } else {
+            //back facing len
             result = (info.orientation - degrees + 360) % 360;
         }
 
@@ -95,6 +96,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         // set preview size and make any resize, rotate or
         // reformatting changes here
+/*
 
         setCameraDisplayOrientation((Activity) getContext(), Camera.CameraInfo.CAMERA_FACING_BACK, camera);
         Camera.Parameters parameters = camera.getParameters();
@@ -118,6 +120,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
         camera.setParameters(parameters);
 
+*/
 
         // start preview with new settings
         try {
