@@ -31,7 +31,7 @@
         <activity android:name=".StatusActivity" />
         <activity
             android:name=".TakePhotoActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="reversePortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
