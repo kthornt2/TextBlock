@@ -16,7 +16,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="e4211ff9b3428c35f8f3ffd0270e3044fa4d4854">
+        sha1="015308b6660db6bc1e9bf293f5aec70242613401">
         <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_47d24a2757dc4d33e418e154554c7148687e290d.jar" />
     </item>
     <item
@@ -216,6 +216,15 @@
         revision="25.0.2"
         sha1="d38084015027549951cbaea5d5f6fb795cc81151">
         <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/com.android.support-transition-25.1.0_4b6f66eec548538512dbd217d3967414d33e4bd5.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/exploded-aar/net.gotev/uploadservice/2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="372295458f730b0715898d4b477a85aa1a777504">
+        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/net.gotev-uploadservice-2.1_578fe11fcfcf562b52fd66f483d51c92488efe0c.jar" />
     </item>
     <item
         is-multidex="false"

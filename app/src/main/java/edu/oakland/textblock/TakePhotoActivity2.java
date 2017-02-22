@@ -92,8 +92,13 @@ public class TakePhotoActivity2 extends AppCompatActivity {
 //            showPhoto1(image);
 //            showPhoto2(image);
 //            numbersOfPhoto++;
+
+
+            // to upload photos background
+            NetworkUtils.uploadPhoto(this, photo);
+
+            // then to open camera again to take an opposite direction photo
             if (numbersOfPhoto++ < 1) {
-                // then to open camera again to take an opposite direction photo
                 openAnCamera();
             }
         } else {
@@ -102,7 +107,6 @@ public class TakePhotoActivity2 extends AppCompatActivity {
         }
 
     }
-
 
     private void addPhotoToGallery() {
         Intent mediaScanIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
