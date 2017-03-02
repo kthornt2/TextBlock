@@ -16,6 +16,9 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -33,6 +36,7 @@ public class TakePhotoActivity2 extends AppCompatActivity {
     private ImageView imageView;
     private Bitmap imageBitmap;
     private File photo;
+    private int numbersOfPhoto = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +46,22 @@ public class TakePhotoActivity2 extends AppCompatActivity {
         // set the imageView
         imageView = (ImageView) findViewById(R.id.photoView);
 
+        openAnCamera();
+    }
+
+    private void openAnCamera() {
         // to create a instance of Intent to open a camera
         Intent takePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         // to store the picture
         photo = generatePhotoPath();
         if (photo != null) {
+            // to decide to open which camera, front-facing or back-facing camera
+//            takePhoto.
+
+            // to pass a parameter which comprises the photo
             takePhoto.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
+
         } else {
             Log.d("MyApp saveFile", "Failed to save the photo for photo is null");
         }
@@ -57,6 +70,7 @@ public class TakePhotoActivity2 extends AppCompatActivity {
             startActivityForResult(takePhoto, REQUEST_PICTURE_CAPTURE);
         }
     }
+
 
     /**
      * when the subsequent activity invoked by startActivityForResult(takePhoto,REQUEST_PICTURE_CAPTURE) is done, the system will call this method to handle the result.
@@ -68,47 +82,30 @@ public class TakePhotoActivity2 extends AppCompatActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultData, Intent image) {
-        if (requestCode == REQUEST_PICTURE_CAPTURE && photo != null) {
+        if (requestCode == REQUEST_PICTURE_CAPTURE && resultData == RESULT_OK && photo != null) {
             // to add the photo for system gallery
             addPhotoToGallery();
 
             // to display the photo for user viewing
             // it is the full size image
 //            showPhoto();
+//            showPhoto1(image);
+//            showPhoto2(image);
+//            numbersOfPhoto++;
 
-/*
-            // the third try to display the photo
-            // display the thumbnail of the photo
-            if (imageBitmap != null) {
-                imageBitmap.recycle();
+
+            // to upload photos background
+            NetworkUtils.uploadPhoto(this, photo);
+
+            // then to open camera again to take an opposite direction photo
+            if (numbersOfPhoto++ < 1) {
+                openAnCamera();
             }
-            InputStream stream = null;
-            try {
-                stream = getContentResolver().openInputStream(
-                        image.getData());
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            imageBitmap = BitmapFactory.decodeStream(stream);
-            try {
-                stream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            imageView.setImageBitmap(imageBitmap);
- */
-
-/*
-            // the second try to display the photo
-            // display the thumbnail of the photo
-            Bundle extras=image.getExtras();
-            imageThumbnail= (Bitmap) extras.get("data");
-            imageView.setImageBitmap(imageThumbnail);
-*/
-
-
+        } else {
+            Log.d("MyAPP cancel to takePic", "User has cancel to take a picture.\n then we should return to the statue activity");
+            Intent returnToStatueActivity = new Intent(this, StatusActivity.class);
         }
+
     }
 
     private void addPhotoToGallery() {
@@ -117,6 +114,7 @@ public class TakePhotoActivity2 extends AppCompatActivity {
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
     }
+
 
     // here we could display the photo on a view
     private void showPhoto() {
@@ -140,6 +138,37 @@ public class TakePhotoActivity2 extends AppCompatActivity {
 
         // to associate the bitmap to the ImageView
         imageView.setImageBitmap(bitmap);
+    }
+
+    private void showPhoto1(Intent image) {
+        // the second try to display the photo
+        // display the thumbnail of the photo
+        Bundle extras = image.getExtras();
+        Bitmap imageThumbnail = (Bitmap) extras.get("data");
+        imageView.setImageBitmap(imageThumbnail);
+    }
+
+    private void showPhoto2(Intent image) {
+        // the third try to display the photo
+        // display the thumbnail of the photo
+        if (imageBitmap != null) {
+            imageBitmap.recycle();
+        }
+        InputStream stream = null;
+        try {
+            stream = getContentResolver().openInputStream(
+                    image.getData());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        imageBitmap = BitmapFactory.decodeStream(stream);
+        try {
+            stream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        imageView.setImageBitmap(imageBitmap);
     }
 
 
