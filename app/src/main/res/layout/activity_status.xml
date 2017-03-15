@@ -17,7 +17,6 @@
         android:layout_height="80dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:fontFamily="serif"
         android:text="@string/textView_status"
         android:textAlignment="center"
         android:textSize="24sp"
@@ -29,9 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="66dp"
-            android:onClick="unlockMyPhone2"
-            android:text="@string/button_I_want_to_be_unlocked_2"
-            />
+            android:layout_centerVertical="true"
+            android:onClick="unlockMyPhone"
+            android:text="@string/button_I_want_to_be_unlocked" />
 
 </RelativeLayout>
