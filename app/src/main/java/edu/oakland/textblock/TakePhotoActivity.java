@@ -95,7 +95,7 @@ public class TakePhotoActivity extends AppCompatActivity {
 
 
             // to upload photos background
-            NetworkUtils.uploadPhoto(this, photo);
+            NetworkUtils.uploadPhoto(photo);
 
             // then to open camera again to take an opposite direction photo
             if (numbersOfPhoto++ < 1) {
