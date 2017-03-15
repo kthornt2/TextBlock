@@ -4,180 +4,228 @@ package edu.oakland.textblock;
  * Created by sweettoto on 1/27/17.
  */
 
-import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.ImageView;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import static android.os.Environment.getExternalStorageDirectory;
+import static edu.oakland.textblock.R.string.app_name;
 
 // to open a camera with Class Intent
 // doesn't work without any exception.
 
 public class TakePhotoActivity2 extends AppCompatActivity {
-    public static final int MY_PERMISSIONS_REQUEST_CAMERA = 100;
-    public static final String ALLOW_KEY = "ALLOWED";
-    public static final String CAMERA_PREF = "camera_pref";
 
-    public static void saveToPreferences(Context context, String key, Boolean allowed) {
-        SharedPreferences myPrefs = context.getSharedPreferences(CAMERA_PREF,
-                Context.MODE_PRIVATE);
-        SharedPreferences.Editor prefsEditor = myPrefs.edit();
-        prefsEditor.putBoolean(key, allowed);
-        prefsEditor.commit();
-    }
-
-    public static Boolean getFromPref(Context context, String key) {
-        SharedPreferences myPrefs = context.getSharedPreferences(CAMERA_PREF,
-                Context.MODE_PRIVATE);
-        return (myPrefs.getBoolean(key, false));
-    }
-
-    public static void startInstalledAppDetailsActivity(final Activity context) {
-        if (context == null) {
-            return;
-        }
-
-        final Intent i = new Intent();
-        i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        i.addCategory(Intent.CATEGORY_DEFAULT);
-        i.setData(Uri.parse("package:" + context.getPackageName()));
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        context.startActivity(i);
-    }
+    private static final String PICTURE_FILE_PREFIX = "IMG_";
+    private static final String JPEG_FILE_SUFFIX = ".jpg";
+    private static final int REQUEST_PICTURE_CAPTURE = 1;
+    private ImageView imageView;
+    private Bitmap imageBitmap;
+    private File photo;
+    private int numbersOfPhoto = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_take_photo2);
+        super.onCreate(savedInstanceState);setContentView(R.layout.activity_take_photo2);
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            if (getFromPref(this, ALLOW_KEY)) {
-                showSettingsAlert();
-            } else if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.CAMERA)
+        // set the imageView
+        imageView = (ImageView) findViewById(R.id.photoView);
 
-                    != PackageManager.PERMISSION_GRANTED) {
+        openAnCamera();
+    }
 
-                // Should we show an explanation?
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                        Manifest.permission.CAMERA)) {
-                    showAlert();
-                } else {
-                    // No explanation needed, we can request the permission.
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.CAMERA},
-                            MY_PERMISSIONS_REQUEST_CAMERA);
-                }
+    private void openAnCamera() {
+        // to create a KiostInstance of Intent to open a camera
+        Intent takePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        // to store the picture
+        photo = generatePhotoPath();
+        if (photo != null) {
+            // to decide to open which camera, front-facing or back-facing camera
+//            takePhoto.
+
+            // to pass a parameter which comprises the photo
+            takePhoto.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
+
+        } else {
+            Log.d("MyApp saveFile", "Failed to save the photo for photo is null");
+        }
+        // start to invoke a existed camera app
+        if (takePhoto.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePhoto, REQUEST_PICTURE_CAPTURE);
+        }
+    }
+
+
+    /**
+     * when the subsequent activity invoked by startActivityForResult(takePhoto,REQUEST_PICTURE_CAPTURE) is done, the system will call this method to handle the result.
+     * Hence we will invoke some other method to save the file
+     *
+     * @param requestCode
+     * @param resultData
+     * @param image
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultData, Intent image) {
+        if (requestCode == REQUEST_PICTURE_CAPTURE && resultData == RESULT_OK && photo != null) {
+            // to add the photo for system gallery
+            addPhotoToGallery();
+
+            // to display the photo for user viewing
+            // it is the full size image
+//            showPhoto();
+//            showPhoto1(image);
+//            showPhoto2(image);
+//            numbersOfPhoto++;
+
+
+            // to upload photos background
+            //NetworkUtils.uploadPhoto(this, photo);
+
+            // then to open camera again to take an opposite direction photo
+            if (numbersOfPhoto++ < 1) {
+                openAnCamera();
             }
         } else {
-            openCamera();
+            Log.d("MyAPP cancel to takePic", "User has cancel to take a picture.\n then we should return to the statue activity");
+            Intent returnToStatueActivity = new Intent(this, StatusActivity.class);
         }
 
     }
 
-    private void showAlert() {
-        AlertDialog alertDialog = new AlertDialog.Builder(TakePhotoActivity2.this).create();
-        alertDialog.setTitle("Alert");
-        alertDialog.setMessage("App needs to access the Camera.");
-
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "DONT ALLOW",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        finish();
-                    }
-                });
-
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "ALLOW",
-                new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        ActivityCompat.requestPermissions(TakePhotoActivity2.this,
-                                new String[]{Manifest.permission.CAMERA},
-                                MY_PERMISSIONS_REQUEST_CAMERA);
-                    }
-                });
-        alertDialog.show();
+    private void addPhotoToGallery() {
+        Intent mediaScanIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
+        Uri contentUri = Uri.fromFile(photo);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
     }
 
-    private void showSettingsAlert() {
-        AlertDialog alertDialog = new AlertDialog.Builder(TakePhotoActivity2.this).create();
-        alertDialog.setTitle("Alert");
-        alertDialog.setMessage("App needs to access the Camera.");
 
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "DONT ALLOW",
-                new DialogInterface.OnClickListener() {
+    // here we could display the photo on a view
+    private void showPhoto() {
+        // there is not enough memory to open up more than a couple camera photos
+        // to get the size of the imageView
+        int targetWitdth = imageView.getWidth();
+        int targetHeight = imageView.getHeight();
 
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        //finish();
-                    }
-                });
+        //get the size of the image
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        // set the bitmap options to scale the image decode target
+        Bitmap bitmap = BitmapFactory.decodeFile(photo.getAbsolutePath(), bmOptions);
+        int photoWidth = bmOptions.outWidth;
+        int photoHeight = bmOptions.outHeight;
 
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "SETTINGS",
-                new DialogInterface.OnClickListener() {
+        int scaleFactor = 1;
+        if (targetWitdth > 0 || targetHeight > 0) {
+            scaleFactor = Math.min(photoWidth / targetWitdth, photoHeight / targetHeight);
+        }
 
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        startInstalledAppDetailsActivity(TakePhotoActivity2.this);
-                    }
-                });
-
-        alertDialog.show();
+        // to associate the bitmap to the ImageView
+        imageView.setImageBitmap(bitmap);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_CAMERA: {
-                for (int i = 0, len = permissions.length; i < len; i++) {
-                    String permission = permissions[i];
+    private void showPhoto1(Intent image) {
+        // the second try to display the photo
+        // display the thumbnail of the photo
+        Bundle extras = image.getExtras();
+        Bitmap imageThumbnail = (Bitmap) extras.get("data");
+        imageView.setImageBitmap(imageThumbnail);
+    }
 
-                    if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                        boolean
-                                showRationale =
-                                ActivityCompat.shouldShowRequestPermissionRationale(
-                                        this, permission);
+    private void showPhoto2(Intent image) {
+        // the third try to display the photo
+        // display the thumbnail of the photo
+        if (imageBitmap != null) {
+            imageBitmap.recycle();
+        }
+        InputStream stream = null;
+        try {
+            stream = getContentResolver().openInputStream(
+                    image.getData());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        imageBitmap = BitmapFactory.decodeStream(stream);
+        try {
+            stream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-                        if (showRationale) {
-                            showAlert();
-                        } else if (!showRationale) {
-                            // user denied flagging NEVER ASK AGAIN
-                            // you can either enable some fall back,
-                            // disable features of your app
-                            // or open another dialog explaining
-                            // again the permission and directing to
-                            // the app setting
-                            saveToPreferences(TakePhotoActivity2.this, ALLOW_KEY, true);
-                        }
-                    }
-                }
+        imageView.setImageBitmap(imageBitmap);
+    }
+
+
+    /**
+     * to generate the path of photo for storage
+     *
+     * @return
+     */
+    private File generatePhotoPath() {
+        // to construct the name for the photo
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        Log.d("MyApp timestamp", timestamp);
+        // we don't need the following line because we will add the prefix and suffix on File.createTempFile()
+        String photoName = PICTURE_FILE_PREFIX + timestamp + JPEG_FILE_SUFFIX;
+
+        // to get the directory of the photo
+        File directory = getPhotoDirectory();
+        Log.d("MyApp: photoDir", directory.getAbsolutePath());
+
+        // to create the photo(file)
+        File image = null;
+        image = new File(directory, photoName);
+
+        //print to debug
+        Log.d("MyApp: ImagePath", image.getAbsolutePath());
+        return image;
+    }
+
+
+    // to return a File make it more reliable because we could tell whether the path is valid
+    private File getPhotoDirectory() {
+        File photoDirectory = null;
+
+        // if there is any external storage mounted
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            // to create a parent directory for our app in external storage
+            File myAppExternalStorage = new File(getExternalStorageDirectory(), getString(app_name));
+            if (!myAppExternalStorage.exists()) {
+                myAppExternalStorage.mkdir();
+            }
+            //  to print to debug
+            Log.d("MyApp ExternalStorage", myAppExternalStorage.getAbsolutePath());
+
+            // to create a album directory for your photos
+            File myAlbum = new File(myAppExternalStorage, "Photos");
+            if (!myAlbum.exists()) {
+                myAlbum.mkdir();
             }
 
-            // other 'case' lines to check for other
-            // permissions this app might request
+            // to print to debug
+            Log.d("MyApp myAlbum", myAlbum.getAbsolutePath());
+            photoDirectory = myAlbum;
+        } else {
+            // else return the internal storage for the app
+            photoDirectory = getFilesDir();
         }
+
+        return photoDirectory;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    private void openCamera() {
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        startActivity(intent);
-    }
 }

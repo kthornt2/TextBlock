@@ -20,7 +20,6 @@ import java.util.Date;
 // to open a camera with Class Camera
 // doesn't work with exception NullPoint of holder
 public class TakePhotoActivity extends AppCompatActivity {
-
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
     public Camera.PictureCallback pictureCallback = new Camera.PictureCallback() {
@@ -83,16 +82,26 @@ public class TakePhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_photo);
 
+/*
+
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+        // Remember that you should never show the action bar if the
+        // status bar is hidden, so hide that too if necessary.
+        ActionBar actionBar = getActionBar();
+        actionBar.hide();
+
+*/
 
         if (checkCameraHardware(this)) {
             Log.d("number of camera: ", String.valueOf(Camera.getNumberOfCameras()));
 
-            // to create an instance of Camera
-            try {
-                camera = Camera.open();
-            } catch (Exception e) {
-                Log.d("error", "Camera is occupied.");
-            }
+            // to create an KiostInstance of Camera
+            // to open the front-facing camera first
+
 
             // to get the default parameters and set
 //            camera.setParameters(camera.getParameters());
@@ -100,8 +109,8 @@ public class TakePhotoActivity extends AppCompatActivity {
             // to ensure correct orientation of preview
 //            camera.setPreviewDisplay();
 
-            if (camera != null) {
-                // get an instance of Camera successfully
+            if (getCameraInstance()) {
+                // get an KiostInstance of Camera successfully
                 // then Create our Preview view and set it as the content of our activity.
                 cameraPreview = new CameraPreview(this, camera);
                 FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
@@ -110,22 +119,77 @@ public class TakePhotoActivity extends AppCompatActivity {
                 // to print the failure of accessing a camera
                 TextView showCameraStatus = new TextView(this);
                 showCameraStatus.setText("Fail to access a camera.\n OpenCamera() return null.");
+                showCameraStatus.setTextSize(30);
                 ViewGroup show = (ViewGroup) findViewById(R.id.camera_preview);
                 show.addView(showCameraStatus);
 
             }
         } else {
-            Log.d("tag", "something wrong with open a camera");
+            Log.d("tag", "There is no camera on the device");
         }
     }
 
-    private boolean checkCameraHardware(Context context) {
-        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            return true;
-        } else {
+    private boolean getCameraInstance() {
+
+        if (camera != null) {
+            camera.release();
+            camera = null;
+        }
+        try {
+            camera = Camera.open(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("Failed to open a camera", e.toString());
             return false;
         }
+        return true;
+    }
+
+    //  Check if this device has a camera
+    private boolean checkCameraHardware(Context context) {
+        return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
 //        Camera.getNumberOfCameras();
+    }
+
+    private int findBackFacingCamera() {
+        int backFacingCameraID = 0;
+        boolean isCameraFound = false;
+        int numberOfCamera = Camera.getNumberOfCameras();
+        for (int i = 0; i < numberOfCamera; i++) {
+            Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+            Camera.getCameraInfo(i, cameraInfo);
+            if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                backFacingCameraID = i;
+            }
+        }
+        if (isCameraFound) {
+            Log.d("backFacingCameraId ", Integer.toString(backFacingCameraID));
+            return backFacingCameraID;
+        } else {
+            Log.d("backFacingCameraId ", "-1");
+            return -1;
+        }
+    }
+
+    private int findFrontFacingCamera() {
+        int frontFacingCameraID = 0;
+        boolean isCameraFound = false;
+        int numberOfCamera = Camera.getNumberOfCameras();
+        for (int i = 0; i < numberOfCamera; i++) {
+            Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+            Camera.getCameraInfo(i, cameraInfo);
+            if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                frontFacingCameraID = i;
+                isCameraFound = true;
+            }
+        }
+        if (isCameraFound) {
+            Log.d("frontFacingCameraId ", Integer.toString(frontFacingCameraID));
+            return frontFacingCameraID;
+        } else {
+            Log.d("frontFacingCameraId ", "-1");
+            return -1;
+        }
     }
 
     /**

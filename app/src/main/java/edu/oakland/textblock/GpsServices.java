@@ -11,10 +11,12 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.content.Intent;
 //for permissions
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
+
 
 
 //Service is a component that allows apps to run in the background even if the user switches to
@@ -53,7 +55,7 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
 
     @Override
     public void onCreate() {
-
+        super.onCreate();
     //This will have to work off of the main activity.  Basically it is an intent to start when the
     //main activity starts
         Intent notificationIntent = new Intent(this, MainActivity.class);
@@ -68,7 +70,6 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
         mLocationManager.addGpsStatusListener( this);
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 0, this);
     }
-
     public void onLocationChanged(Location location) {
 
         //Note that normally this should run from Main activity.  Once we get to the point where our
@@ -76,7 +77,11 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
         //right from the GPSDataHandler class.
         //GpsDataHandler = MainActivity.getGpsDataHandler();
 
+
         GpsDataHandler gpsDataHandler = new GpsDataHandler();
+
+        lockListener(location);
+        //unlockListener(location);
 
         //gets coordinates from gps
             cLatitude = location.getLatitude();
@@ -93,6 +98,7 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
                 lLatitude = cLatitude;
                 lLongitude = cLongitude;
             }
+
         //checks if vehicle is stopped
             if (location.hasSpeed()) {
                 gpsDataHandler.currentSpeed(location.getSpeed());
@@ -101,9 +107,48 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
                 }
             }
             gpsDataHandler.update();
+
+        }
+    // looks at speed, if over 10mph, returns true.  can use this method to activate
+    public void lockListener (Location location){
+        double speedNow = (location.getSpeed()) * 2.24;
+
+
+        if(speedNow >= 15) {
+            Intent i = new Intent();
+            i.setClass(this,BlockActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
+
         }
 
 
+    }
+    // looks at speed.  if under 10mph for 10secs, returns true.  can be used to deactivate
+    public boolean unlockTimer (Location location){
+        double speedNow = (location.getSpeed()) * 2.24;
+        int timer = 0;
+
+
+        while(speedNow < 15) {
+            try {
+
+                timer++;
+                Thread.sleep(1000);
+            }
+            catch (InterruptedException ie)
+            {
+                break;
+            }
+
+
+
+        }
+
+
+
+        return false;
+    }
 
     @Override
     public void onGpsStatusChanged(int event) {}

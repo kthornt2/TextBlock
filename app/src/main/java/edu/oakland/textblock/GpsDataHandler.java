@@ -73,10 +73,9 @@ public class GpsDataHandler {
 
     //outputs max speed to string for use in UI
     public String topSpeedFunction(double maxSpeed) {
-
         String s;
-
-        s = new String(String.format("%.0f", maxSpeed) + "mph");
+        double thisMaxSpeed = Math.round(maxSpeed * 100)/100d;
+        s = thisMaxSpeed+ " " + "mph";
         return s;
     }
 
@@ -113,14 +112,16 @@ public class GpsDataHandler {
 
     //Determines max speed by an operation of the current speed vs the stored max speed
     //speed here is input from GPSServices from onLocationChanged()
-    //multiply by .447 to get mph instead of meters/second
+    //multiply by 2.27to get mph instead of meters/second
     public void currentSpeed(double speed) {
 
-        this.speed = speed * .447;
+        this.speed = speed * 2.27;
         if (speed > maxSpeed){
             maxSpeed = speed;
         }
     }
+
+
 
 
     //keeps tabs on how long vehicle has been stopped
