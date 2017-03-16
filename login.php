@@ -1,22 +1,15 @@
 <?php
+
 require "init.php";
-$guar_first_name = "Kevin";
-$guar_last_name = "Kevin";
-
-$sql_query = "select first name from guardian where guar_first_name like '$guar_first_name' and guar_last_name like '$guar_last_name';";
-
-$result = mysqli_guery($con,$sql_guery);
-
-if(mysqli_num_rows($result) > 0)
-{
-$row = mysqli_fetch_assoc($result);
-$name = $row["guar_first_name"];
-echo "<h3>Hello welcome".$guar_first_name"</h3>";
+$user_name = $_POST["user_name"];
+$user_pass = $_POST["password"];
+$mysql_qry = "select * from guardian where guar_email like '$user_name' and guar_password like '$user_pass';";
+$result = mysqli_query($con,$mysql_qry);
+if(mysqli_num_rows($result) > 0) {
+echo "login success";
 }
-else
-{
-echo "No info is available";
+else {
+echo "login not success";
 }
-
 
 ?>
