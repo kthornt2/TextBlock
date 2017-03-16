@@ -19,14 +19,5 @@ public class StatusActivity extends AppCompatActivity {
         startActivity(takePhoto);
     }
 
-    public void unlockMyPhone2(View view) {
-        Intent takePhoto = new Intent(this, TakePhotoActivity2.class);
-        startActivity(takePhoto);
-    }
-
-    public void unlockMyPhone3(View view) {
-        Intent takePhoto = new Intent(this, TakePhotoActivity3.class);
-        startActivity(takePhoto);
-    }
 
 }

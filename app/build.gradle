@@ -28,4 +28,7 @@ dependencies {
     compile 'com.android.support:support-v4:25.1.0'
     compile 'com.android.support:design:25.1.0'
     testCompile 'junit:junit:4.12'
+
+    // to use android upload service
+    compile 'net.gotev:uploadservice:2.1'
 }

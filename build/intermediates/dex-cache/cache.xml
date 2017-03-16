@@ -3,107 +3,62 @@
 
     <item
         is-multidex="false"
-        jar="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.1.0/jars/classes.jar"
-        jumboMode="true"
+        jar="/Volumes/Toto/totosweet/.android/build-cache/b743da247a8e1969ad775942261ebee347cc1ff3/output/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
-        sha1="f02263e35e52668dd17b73bf961437e3d562b35f">
-        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/com.android.support-support-media-compat-25.1.0_f5d520b657ee05a46f70df39c05ed36de5616db1.jar" />
+        sha1="372295458f730b0715898d4b477a85aa1a777504">
+        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/classes_d70bff93f9bbadfaa4d05c1ab18942d3c07103bb.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="abaaad1dd26febd8a9931eb4968b45fcace5ae0a">
-        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_47d24a2757dc4d33e418e154554c7148687e290d.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.1.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="6fb6ac3e8d3b9013819920d9ea11f3803c4c0033">
-        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-25.1.0_c7519659013795ae33b94360dba8a7a48aadf305.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.1.0/jars/classes.jar"
-        jumboMode="true"
+        jar="/Volumes/Toto/totosweet/.android/build-cache/a49135e9b6e5a6be80155d1b1a18ade37a9f44a5/output/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
         sha1="ca3c7aa31e2726a400a6e552b93cb9f63c9a1e6d">
-        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/com.android.support-support-compat-25.1.0_6b08ee6f889f53d21df8f90d0fa13cd3eda9f3d6.jar" />
+        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/classes_808f6945d857f17b3162b15599d9ed810d0e412c.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="58ff832b017858e314ac65bbff45c0593dad2973">
-        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/instant-run_669d73aea8fecd9da977c9b1f2bc6623d07159ae.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.1.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="e79aa3d9a16f8c9f16377c0608de70a8f31e5d80">
-        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-25.1.0_ef8c1b85da0cf40144477723a381833510586e3e.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.1.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="2a53c4f3518116b8c6aee0e477233f0f7da8616f">
-        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/com.android.support-support-fragment-25.1.0_3d6beb7ce85ba0b86270cff06f24159bc66b751e.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.1.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="0a0ef86b7fa568a52bf6214a0326ca1f1d618da7">
-        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-utils-25.1.0_b8736b88ba506e49107f888e6aeeeb7ac0f510a9.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.1.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-25.1.0_6bb106e3fd613189f0475d41fb3ce19c7de33c28.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/exploded-aar/com.android.support/design/25.1.0/jars/classes.jar"
-        jumboMode="true"
+        jar="/Volumes/Toto/totosweet/.android/build-cache/db596c9ae8d63d3ed6263b235380cb5e59261da1/output/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
         sha1="30103d98fa5ed824b54af839c85e2111f9bde8ec">
-        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/com.android.support-design-25.1.0_c90d91f0c7aa1625626966b8cf7faf786351b0a6.jar" />
+        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/classes_dc93998ac738574570e54e49b7e9361dca6a46cc.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/25.1.0/jars/classes.jar"
-        jumboMode="true"
+        jar="/Volumes/Toto/totosweet/.android/build-cache/636034187fc8fd9c9af422cb0b304d124174b4b5/output/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
-        sha1="b266c8faa5af72e579b9da36ef35053ffed6ac64">
-        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/com.android.support-recyclerview-v7-25.1.0_6ed1e0e2a4fb53e98c8358f4169d6ae8f093ac44.jar" />
+        sha1="e79aa3d9a16f8c9f16377c0608de70a8f31e5d80">
+        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/classes_aa86249cb76f9f45b41ebf7198e41443ca6fd955.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Volumes/Toto/totosweet/.android/build-cache/e382b47512f4f4fc3f98724c16630a3eec7ecb0d/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="1630658fbc2d222b988603c27b4a4249586fbfe7">
+        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/classes_6d7456b5b291fc6c5e700727e9b3111276f51c03.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Volumes/Toto/totosweet/.android/build-cache/ba3cc636dc636f507e45c09c3d9e5ff3187e6722/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="aee64634871d88a419d59eb743c1258a60f19700">
+        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/classes_a765679753a5c52fd6759044cf66d9cb75814cf0.jar" />
     </item>
     <item
         is-multidex="false"
         jar="/Volumes/Toto/totosweet/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/25.1.0/support-annotations-25.1.0.jar"
-        jumboMode="true"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
         sha1="64cb6b229a8bdfd907bc8dd46839a0053e4c018d">
@@ -111,30 +66,66 @@
     </item>
     <item
         is-multidex="false"
-        jar="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/exploded-aar/com.android.support/transition/25.1.0/jars/classes.jar"
-        jumboMode="true"
+        jar="/Volumes/Toto/totosweet/.android/build-cache/b1e79e09c4bc8c1aad6da686d155574b30168701/output/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
         sha1="d38084015027549951cbaea5d5f6fb795cc81151">
-        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/com.android.support-transition-25.1.0_4b6f66eec548538512dbd217d3967414d33e4bd5.jar" />
+        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/classes_d43d80bf1fcfda9b3cf8bc6449cc59fc9cdbe08a.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.1.0/jars/classes.jar"
-        jumboMode="true"
+        jar="/Volumes/Toto/totosweet/.android/build-cache/b81bf18cb082ebe64e6abd29108faecdd0b6cd1c/output/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
-        sha1="1630658fbc2d222b988603c27b4a4249586fbfe7">
-        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-25.1.0_3d8e248421a13b19eae71b1af2c22aebb84cc8af.jar" />
+        sha1="b266c8faa5af72e579b9da36ef35053ffed6ac64">
+        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/classes_0812a058bcc6bf123158a4daeff5d9832a690ad6.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.1.0/jars/classes.jar"
-        jumboMode="true"
+        jar="/Volumes/Toto/totosweet/.android/build-cache/a397062092ceab72b65738f6ce17f0c66da91310/output/jars/classes.jar"
+        jumboMode="false"
         optimize="true"
         revision="25.0.2"
-        sha1="aee64634871d88a419d59eb743c1258a60f19700">
-        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/com.android.support-support-core-ui-25.1.0_9d2b77a768f16e111143e718294ebd0af7a4073b.jar" />
+        sha1="2a53c4f3518116b8c6aee0e477233f0f7da8616f">
+        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/classes_f986ef6bdd7d86f7eb55e82934293e2823d0f99b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Volumes/Toto/totosweet/.android/build-cache/b5f17484aae1b8167c76602f5204b21f01fb0b07/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="f02263e35e52668dd17b73bf961437e3d562b35f">
+        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/classes_5ab140eed9545a5d46f9385d3f317d182bd47f8d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Volumes/Toto/totosweet/.android/build-cache/682796652a7727178a77fa9f6f7077e06dcf188d/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="0a0ef86b7fa568a52bf6214a0326ca1f1d618da7">
+        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/classes_6aac4025dc4afb426104075745d694c846949fd7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Volumes/Toto/totosweet/.android/build-cache/c825a3efacc467e6c18b6ad92c7c4041b8037027/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="6fb6ac3e8d3b9013819920d9ea11f3803c4c0033">
+        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/classes_7025d010dbba3b35e0ccf7bf95a95e40234ed520.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Volumes/Toto/totosweet/.android/build-cache/2337fc58829e0c6f417a586288c19c4ed389fc33/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/Volumes/Toto/totosweet/AndroidStudioProjects/TextBlock/app/build/intermediates/pre-dexed/debug/classes_6cea3d58235979a18bfaccbf5f9a7759eb0dcbcb.jar" />
     </item>
 
 </items>
