@@ -10,9 +10,11 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98627db3-ebda-4dd4-acda-2b91b5744174" name="Default" comment="well any exception won't never appear and http response return with 200 and OK, however, the file won't appear on the server as expected. more work will be done.&#10;">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/UploadPhoto.php" />
+    <list default="true" id="98627db3-ebda-4dd4-acda-2b91b5744174" name="Default" comment="add php script on server side for uploading photo&#10;">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/TakePhotoActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/TakePhotoActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/test/java/edu/oakland/textblock/NetworkUtilsTest.java" afterPath="$PROJECT_DIR$/app/src/test/java/edu/oakland/textblock/NetworkUtilsTest.java" />
     </list>
     <ignored path="TextBlock.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -44,46 +46,49 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="TakePhotoActivity.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="TakePhotoActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/TakePhotoActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="97" column="37" selection-start-line="97" selection-start-column="37" selection-end-line="97" selection-end-column="37" />
-              <folding />
+            <state relative-caret-position="190">
+              <caret line="170" column="27" selection-start-line="170" selection-start-column="27" selection-end-line="170" selection-end-column="27" />
+              <folding>
+                <element signature="e#5733#5734#0" expanded="true" />
+                <element signature="e#5791#5792#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="activity_status.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_status.xml">
+          <provider selected="true" editor-type-id="android-designer2">
+            <state />
+          </provider>
           <provider editor-type-id="text-editor">
             <state relative-caret-position="252">
               <caret line="18" column="35" selection-start-line="18" selection-start-column="35" selection-end-line="18" selection-end-column="35" />
               <folding />
             </state>
           </provider>
-          <provider selected="true" editor-type-id="android-designer2">
-            <state />
-          </provider>
         </entry>
       </file>
       <file leaf-file-name="activity_take_photo.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_take_photo.xml">
+          <provider selected="true" editor-type-id="android-designer2">
+            <state />
+          </provider>
           <provider editor-type-id="text-editor">
             <state relative-caret-position="210">
               <caret line="15" column="8" selection-start-line="15" selection-start-column="8" selection-end-line="15" selection-end-column="8" />
               <folding />
             </state>
           </provider>
-          <provider selected="true" editor-type-id="android-designer2">
-            <state />
-          </provider>
         </entry>
       </file>
       <file leaf-file-name="StatusActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/StatusActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="112">
+            <state relative-caret-position="70">
               <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -95,8 +100,8 @@
       <file leaf-file-name="NetworkUtils.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/NetworkUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-240">
-              <caret line="101" column="73" selection-start-line="101" selection-start-column="73" selection-end-line="101" selection-end-column="73" />
+            <state relative-caret-position="376">
+              <caret line="148" column="18" selection-start-line="148" selection-start-column="18" selection-end-line="148" selection-end-column="18" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -104,11 +109,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UploadPhoto.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/UploadPhoto.php">
+      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="42">
+              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -1842,11 +1847,11 @@
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_take_photo.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/TakePhotoActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/UploadPhotoAsync.java" />
-        <option value="$PROJECT_DIR$/app/src/test/java/edu/oakland/textblock/NetworkUtilsTest.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/abc.txt" />
+        <option value="$PROJECT_DIR$/app/src/test/java/edu/oakland/textblock/NetworkUtilsTest.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/NetworkUtils.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/TakePhotoActivity.java" />
       </list>
     </option>
   </component>
@@ -1881,7 +1886,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane" />
       <pane id="Scope" />
@@ -1987,6 +1991,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -2017,7 +2022,7 @@
       <recent name="$PROJECT_DIR$/app/src/main/res/layout" />
     </key>
   </component>
-  <component name="RunManager" selected="Android JUnit.NetworkUtilsTest.testUploadPhoto">
+  <component name="RunManager" selected="Android App.app">
     <configuration default="false" name="NetworkUtilsTest.testUploadPhoto" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -2508,31 +2513,17 @@
       <option name="project" value="LOCAL" />
       <updated>1489619116101</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="add php script on server side for uploading photo&#10;">
+      <created>1489629298011</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1489629298011</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="NetworkUtilsTest_testUploadPhoto - 2017.03.15 at 16h 32m 32s.xml">
-      <configuration name="NetworkUtilsTest.testUploadPhoto" configurationId="AndroidJUnit" />
-    </history-entry>
-    <history-entry file="NetworkUtilsTest_testUploadPhoto - 2017.03.15 at 16h 43m 01s.xml">
-      <configuration name="NetworkUtilsTest.testUploadPhoto" configurationId="AndroidJUnit" />
-    </history-entry>
-    <history-entry file="NetworkUtilsTest_testUploadPhoto - 2017.03.15 at 17h 19m 12s.xml">
-      <configuration name="NetworkUtilsTest.testUploadPhoto" configurationId="AndroidJUnit" />
-    </history-entry>
-    <history-entry file="NetworkUtilsTest_testUploadPhoto - 2017.03.15 at 18h 20m 23s.xml">
-      <configuration name="NetworkUtilsTest.testUploadPhoto" configurationId="AndroidJUnit" />
-    </history-entry>
-    <history-entry file="NetworkUtilsTest_testUploadPhoto - 2017.03.15 at 18h 21m 48s.xml">
-      <configuration name="NetworkUtilsTest.testUploadPhoto" configurationId="AndroidJUnit" />
-    </history-entry>
-    <history-entry file="NetworkUtilsTest_testUploadPhoto - 2017.03.15 at 18h 23m 39s.xml">
-      <configuration name="NetworkUtilsTest.testUploadPhoto" configurationId="AndroidJUnit" />
-    </history-entry>
-    <history-entry file="NetworkUtilsTest_testUploadPhoto - 2017.03.15 at 18h 25m 22s.xml">
-      <configuration name="NetworkUtilsTest.testUploadPhoto" configurationId="AndroidJUnit" />
-    </history-entry>
     <history-entry file="NetworkUtilsTest_testUploadPhoto - 2017.03.15 at 18h 26m 57s.xml">
       <configuration name="NetworkUtilsTest.testUploadPhoto" configurationId="AndroidJUnit" />
     </history-entry>
@@ -2540,6 +2531,27 @@
       <configuration name="NetworkUtilsTest.testUploadPhoto" configurationId="AndroidJUnit" />
     </history-entry>
     <history-entry file="NetworkUtilsTest_testUploadPhoto - 2017.03.15 at 18h 38m 55s.xml">
+      <configuration name="NetworkUtilsTest.testUploadPhoto" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="NetworkUtilsTest_testUploadPhoto - 2017.03.18 at 11h 50m 09s.xml">
+      <configuration name="NetworkUtilsTest.testUploadPhoto" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="NetworkUtilsTest_testUploadPhoto - 2017.03.18 at 11h 52m 12s.xml">
+      <configuration name="NetworkUtilsTest.testUploadPhoto" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="NetworkUtilsTest_testUploadPhoto - 2017.03.18 at 11h 53m 37s.xml">
+      <configuration name="NetworkUtilsTest.testUploadPhoto" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="NetworkUtilsTest_testUploadPhoto - 2017.03.18 at 11h 56m 02s.xml">
+      <configuration name="NetworkUtilsTest.testUploadPhoto" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="NetworkUtilsTest_testUploadPhoto - 2017.03.18 at 11h 58m 06s.xml">
+      <configuration name="NetworkUtilsTest.testUploadPhoto" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="NetworkUtilsTest_testUploadPhoto - 2017.03.18 at 12h 53m 39s.xml">
+      <configuration name="NetworkUtilsTest.testUploadPhoto" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="NetworkUtilsTest_testUploadPhoto - 2017.03.18 at 12h 54m 04s.xml">
       <configuration name="NetworkUtilsTest.testUploadPhoto" configurationId="AndroidJUnit" />
     </history-entry>
   </component>
@@ -2563,7 +2575,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.207483" sideWeight="0.5" order="6" side_tool="false" content_ui="combo" />
       <window_info id="Statistic" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.9500805" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26615646" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26615646" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31078905" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -2642,7 +2654,8 @@
     <MESSAGE value="implement the client side of uploading the image with HttpURLConnection&#10;&#10;" />
     <MESSAGE value="implement the client side of uploading the image with HttpURLConnection, while a little unknown exception occurred&#10;&#10;" />
     <MESSAGE value="well any exception won't never appear and http response return with 200 and OK, however, the file won't appear on the server as expected. more work will be done.&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="well any exception won't never appear and http response return with 200 and OK, however, the file won't appear on the server as expected. more work will be done.&#10;" />
+    <MESSAGE value="add php script on server side for uploading photo&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="add php script on server side for uploading photo&#10;" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -2728,31 +2741,49 @@
           <properties />
           <option name="timeStamp" value="15" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/TakePhotoActivity.java</url>
+          <line>141</line>
+          <properties />
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/TakePhotoActivity.java</url>
+          <line>142</line>
+          <properties />
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/TakePhotoActivity.java</url>
+          <line>143</line>
+          <properties />
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="16" />
+      <option name="time" value="19" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_take_photo.xml" />
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="795">
           <caret line="53" column="0" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_welcome.xml">
       <provider editor-type-id="android-designer2">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_welcome.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
           <caret line="22" column="28" selection-start-line="22" selection-start-column="28" selection-end-line="22" selection-end-column="28" />
         </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/MainActivity.java">
@@ -2779,26 +2810,26 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_status.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="555">
           <caret line="37" column="33" selection-start-line="37" selection-start-column="33" selection-end-line="37" selection-end-column="33" />
           <folding />
         </state>
       </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_taken_photo.xml" />
     <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/TakenPhotoActivity.java" />
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_welcome.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="97">
           <caret line="22" column="28" selection-start-line="22" selection-start-column="28" selection-end-line="22" selection-end-column="28" />
         </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
@@ -2852,13 +2883,13 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/TakePhotoActivity3.java" />
     <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/TakePhotoActivity.java" />
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+      <provider selected="true" editor-type-id="android-designer2">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state relative-caret-position="419">
           <caret line="53" column="4" selection-start-line="53" selection-start-column="4" selection-end-line="53" selection-end-column="4" />
         </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer2">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_take_photo.xml" />
@@ -2900,23 +2931,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/UploadImage.php" />
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider editor-type-id="android-manifest">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="197">
           <caret line="23" column="22" selection-start-line="23" selection-start-column="22" selection-end-line="23" selection-end-column="22" />
           <folding>
             <element signature="e#924#942#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-      <provider editor-type-id="android-manifest">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="19" column="33" selection-start-line="19" selection-start-column="16" selection-end-line="19" selection-end-column="33" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2936,25 +2959,25 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_status.xml">
+      <provider selected="true" editor-type-id="android-designer2">
+        <state />
+      </provider>
       <provider editor-type-id="text-editor">
         <state relative-caret-position="252">
           <caret line="18" column="35" selection-start-line="18" selection-start-column="35" selection-end-line="18" selection-end-column="35" />
           <folding />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_take_photo.xml">
       <provider selected="true" editor-type-id="android-designer2">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_take_photo.xml">
       <provider editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="15" column="8" selection-start-line="15" selection-start-column="8" selection-end-line="15" selection-end-column="8" />
           <folding />
         </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer2">
-        <state />
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/Pictures/Others/love.jpg">
@@ -2966,17 +2989,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="154">
           <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/TakePhotoActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="97" column="37" selection-start-line="97" selection-start-column="37" selection-end-line="97" selection-end-column="37" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3000,7 +3012,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/StatusActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
+        <state relative-caret-position="70">
           <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -3008,39 +3020,51 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/abc.txt">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/abc.txt" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/UploadPhoto.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="3" selection-start-line="0" selection-start-column="3" selection-end-line="0" selection-end-column="3" />
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/test/java/edu/oakland/textblock/NetworkUtilsTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="602">
-          <caret line="43" column="13" selection-start-line="43" selection-start-column="13" selection-end-line="43" selection-end-column="13" />
+        <state relative-caret-position="83">
+          <caret line="17" column="76" selection-start-line="17" selection-start-column="76" selection-end-line="17" selection-end-column="76" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/NetworkUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-240">
-          <caret line="101" column="73" selection-start-line="101" selection-start-column="73" selection-end-line="101" selection-end-column="73" />
+        <state relative-caret-position="376">
+          <caret line="148" column="18" selection-start-line="148" selection-start-column="18" selection-end-line="148" selection-end-column="18" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/UploadPhoto.php">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/edu/oakland/textblock/TakePhotoActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="190">
+          <caret line="170" column="27" selection-start-line="170" selection-start-column="27" selection-end-line="170" selection-end-column="27" />
+          <folding>
+            <element signature="e#5733#5734#0" expanded="true" />
+            <element signature="e#5791#5792#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

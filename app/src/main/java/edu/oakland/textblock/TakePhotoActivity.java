@@ -6,7 +6,6 @@ package edu.oakland.textblock;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,9 +15,6 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -89,13 +85,13 @@ public class TakePhotoActivity extends AppCompatActivity {
             // to display the photo for user viewing
             // it is the full size image
 //            showPhoto();
-//            showPhoto1(image);
+            showPhoto3();
 //            showPhoto2(image);
 //            numbersOfPhoto++;
 
 
             // to upload photos background
-            NetworkUtils.uploadPhoto(photo);
+//            NetworkUtils.uploadPhoto();
 
             // then to open camera again to take an opposite direction photo
             if (numbersOfPhoto++ < 1) {
@@ -115,60 +111,65 @@ public class TakePhotoActivity extends AppCompatActivity {
         this.sendBroadcast(mediaScanIntent);
     }
 
+    /*
+        // here we could display the photo on a view
+        private void showPhoto() {
+            // there is not enough memory to open up more than a couple camera photos
+            // to get the size of the imageView
+            int targetWitdth = imageView.getWidth();
+            int targetHeight = imageView.getHeight();
 
-    // here we could display the photo on a view
-    private void showPhoto() {
-        // there is not enough memory to open up more than a couple camera photos
-        // to get the size of the imageView
-        int targetWitdth = imageView.getWidth();
-        int targetHeight = imageView.getHeight();
+            //get the size of the image
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            bmOptions.inJustDecodeBounds = true;
+            // set the bitmap options to scale the image decode target
+            Bitmap bitmap = BitmapFactory.decodeFile(photo.getAbsolutePath(), bmOptions);
+            int photoWidth = bmOptions.outWidth;
+            int photoHeight = bmOptions.outHeight;
 
-        //get the size of the image
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        // set the bitmap options to scale the image decode target
-        Bitmap bitmap = BitmapFactory.decodeFile(photo.getAbsolutePath(), bmOptions);
-        int photoWidth = bmOptions.outWidth;
-        int photoHeight = bmOptions.outHeight;
+            int scaleFactor = 1;
+            if (targetWitdth > 0 || targetHeight > 0) {
+                scaleFactor = Math.min(photoWidth / targetWitdth, photoHeight / targetHeight);
+            }
 
-        int scaleFactor = 1;
-        if (targetWitdth > 0 || targetHeight > 0) {
-            scaleFactor = Math.min(photoWidth / targetWitdth, photoHeight / targetHeight);
+            // to associate the bitmap to the ImageView
+            imageView.setImageBitmap(bitmap);
         }
 
-        // to associate the bitmap to the ImageView
-        imageView.setImageBitmap(bitmap);
-    }
-
-    private void showPhoto1(Intent image) {
-        // the second try to display the photo
-        // display the thumbnail of the photo
-        Bundle extras = image.getExtras();
-        Bitmap imageThumbnail = (Bitmap) extras.get("data");
-        imageView.setImageBitmap(imageThumbnail);
-    }
-
-    private void showPhoto2(Intent image) {
-        // the third try to display the photo
-        // display the thumbnail of the photo
-        if (imageBitmap != null) {
-            imageBitmap.recycle();
-        }
-        InputStream stream = null;
-        try {
-            stream = getContentResolver().openInputStream(
-                    image.getData());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        imageBitmap = BitmapFactory.decodeStream(stream);
-        try {
-            stream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        private void showPhoto1(Intent image) {
+            // the second try to display the photo
+            // display the thumbnail of the photo
+            Bundle extras = image.getExtras();
+            Bitmap imageThumbnail = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(imageThumbnail);
         }
 
-        imageView.setImageBitmap(imageBitmap);
+        private void showPhoto2(Intent image) {
+            // the third try to display the photo
+            // display the thumbnail of the photo
+            if (imageBitmap != null) {
+                imageBitmap.recycle();
+            }
+            InputStream stream = null;
+            try {
+                stream = getContentResolver().openInputStream(
+                        image.getData());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            imageBitmap = BitmapFactory.decodeStream(stream);
+            try {
+                stream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            imageView.setImageBitmap(imageBitmap);
+        }
+
+    */
+    private void showPhoto3() {
+        imageView.setImageURI(Uri.fromFile(photo));
     }
 
 

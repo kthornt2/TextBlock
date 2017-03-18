@@ -15,7 +15,7 @@ public class NetworkUtilsTest {
 
     @Test
     public void testUploadPhoto() {
-        String photoPath = "abc.txt";
+        String photoPath = "/Volumes/Toto/totosweet/Pictures/Others/love.jpg";
         File photo = new File(photoPath);
         if (!photo.exists()) {
             // to create a new file and write something if it doesn't exist.
