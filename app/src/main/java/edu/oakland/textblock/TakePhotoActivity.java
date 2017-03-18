@@ -85,14 +85,24 @@ public class TakePhotoActivity extends AppCompatActivity {
             // to display the photo for user viewing
             // it is the full size image
 //            showPhoto();
-            showPhoto3();
+            showPhoto();
 //            showPhoto2(image);
 //            numbersOfPhoto++;
 
+//            File file=new File("/Volumes/Toto/totosweet/Pictures/Others/abc.txt");
+            new NetworkUtils().uploadFileAsync(photo);
 
-            // to upload photos background
-//            NetworkUtils.uploadPhoto();
+            /*
+            // try to run the thread on a UI thread
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    // to upload photos background
+                    NetworkUtils.uploadPhoto(photo);
+                }
+            });
 
+*/
             // then to open camera again to take an opposite direction photo
             if (numbersOfPhoto++ < 1) {
                 openAnCamera();
@@ -168,7 +178,7 @@ public class TakePhotoActivity extends AppCompatActivity {
         }
 
     */
-    private void showPhoto3() {
+    private void showPhoto() {
         imageView.setImageURI(Uri.fromFile(photo));
     }
 
