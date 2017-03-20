@@ -4,11 +4,15 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.LauncherApps;
+import android.location.GnssStatus;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.nfc.Tag;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.content.Intent;
@@ -16,7 +20,8 @@ import android.content.Intent;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
-
+import android.util.Log;
+import android.widget.Toast;
 
 
 //Service is a component that allows apps to run in the background even if the user switches to
@@ -24,6 +29,7 @@ import android.support.v4.app.ActivityCompat;
 //to extend Service.
 public class GpsServices extends Service implements LocationListener, GpsStatus.Listener {
 
+    private static final String TAG ="GpsServices";
     private LocationManager mLocationManager;
     Location lastLocation = new Location("last location");
     GpsDataHandler data;
@@ -33,7 +39,9 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
     //last coordinates
     double lLongitude = 0;
     double lLatitude = 0;
-
+    private boolean running = false;
+    private Thread t = null;
+    private Location m;
 
     PendingIntent contentIntent;
 
@@ -58,17 +66,30 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
         super.onCreate();
     //This will have to work off of the main activity.  Basically it is an intent to start when the
     //main activity starts
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        contentIntent = PendingIntent.getActivity(
-                this, 0, notificationIntent, 0);
+        //Intent notificationIntent = new Intent(this, MainActivity.class);
+        //notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+       // contentIntent = PendingIntent.getActivity(
+                //this, 0, notificationIntent, 0);
+
+
 
 
         mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         //actually checks the permissions here
         checkPermission(this);
-        mLocationManager.addGpsStatusListener( this);
+        mLocationManager.addGpsStatusListener(this);
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 0, this);
+
+
+
+
+    }
+
+    public boolean checkLocationPermission()
+    {
+        String permission = "android.permission.ACCESS_FINE_LOCATION";
+        int res = this.checkCallingOrSelfPermission(permission);
+        return (res == PackageManager.PERMISSION_GRANTED);
     }
     public void onLocationChanged(Location location) {
 
@@ -77,11 +98,10 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
         //right from the GPSDataHandler class.
         //GpsDataHandler = MainActivity.getGpsDataHandler();
 
-
+        running = true;
         GpsDataHandler gpsDataHandler = new GpsDataHandler();
 
-        lockListener(location);
-        //unlockListener(location);
+
 
         //gets coordinates from gps
             cLatitude = location.getLatitude();
@@ -108,22 +128,33 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
             }
             gpsDataHandler.update();
 
+            if (location.hasSpeed()) {
+                t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        do {
+
+                            double speedNow = (m.getSpeed()) * 2.24;
+                            if (speedNow >= 15){
+                                Intent service = new Intent(getApplicationContext(),PretendKiosk.class);
+                                startService(service);
+                            }
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                                Log.i(TAG, "Thread interrupted - Speed Listener");
+                            }
+
+                        } while (running);
+                        stopSelf();
+                    }
+                });
+            }
+
         }
     // looks at speed, if over 10mph, returns true.  can use this method to activate
-    public void lockListener (Location location){
-        double speedNow = (location.getSpeed()) * 2.24;
 
-
-        if(speedNow >= 15) {
-            Intent i = new Intent();
-            i.setClass(this,BlockActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(i);
-
-        }
-
-
-    }
     // looks at speed.  if under 10mph for 10secs, returns true.  can be used to deactivate
     public boolean unlockTimer (Location location){
         double speedNow = (location.getSpeed()) * 2.24;
@@ -181,5 +212,9 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
         protected void onPostExecute(String message) {
             data.setTimeStopped(timer);
         }
+    }
+    public void onDestroy() {
+        Toast.makeText(this, "GpsServices", Toast.LENGTH_LONG).show();
+        Log.d(TAG, "onDestroy");
     }
 }

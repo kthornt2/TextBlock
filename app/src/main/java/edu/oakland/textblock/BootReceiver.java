@@ -1,3 +1,4 @@
+/*
 package edu.oakland.textblock;
 
 import android.app.Activity;
@@ -5,9 +6,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+*/
 /**
  * Created by Remzorz on 3/10/2017.
- */
+ *//*
+
 //created a reciever so the Kiosk service can activate(currently on boot, later when the speed>15mph)
 public class BootReceiver extends BroadcastReceiver {
 
@@ -19,3 +22,4 @@ public class BootReceiver extends BroadcastReceiver {
     }
 
 }
+*/

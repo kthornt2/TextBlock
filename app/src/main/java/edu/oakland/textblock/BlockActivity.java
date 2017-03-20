@@ -15,7 +15,7 @@ public class BlockActivity extends AppCompatActivity {
     private ImageButton MailButton;
     private ImageButton CameraButton;
     private ImageButton MapButton;
-    private KioskContext instance;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class BlockActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-            stopService(new Intent(BlockActivity.this, PretendKiosk.class));
+                stopService(new Intent(BlockActivity.this, PretendKiosk.class));
                 ImageButton btn = (ImageButton)findViewById(R.id.emergency_call);
                 btn.setImageResource(R.drawable.unlocked);
 

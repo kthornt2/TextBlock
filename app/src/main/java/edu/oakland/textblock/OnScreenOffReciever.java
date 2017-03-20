@@ -1,3 +1,4 @@
+/*
 package edu.oakland.textblock;
 
 import android.content.BroadcastReceiver;
@@ -7,9 +8,11 @@ import android.content.SharedPreferences;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 
+*/
 /**
  * Created by Remzorz on 3/10/2017.
- */
+ *//*
+
 
 public class OnScreenOffReciever extends BroadcastReceiver {
 
@@ -45,3 +48,4 @@ public class OnScreenOffReciever extends BroadcastReceiver {
     }
 }
 
+*/

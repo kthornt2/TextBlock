@@ -11,6 +11,8 @@
 
     <!-- location permission -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.PERMISSION_ACCESS_COARSE_LOCATION" />
     <uses-feature android:name="android.hardware.location.gps" />
 
 
@@ -26,12 +28,13 @@
     <uses-permission android:name="android.permission.GET_TASKS"/>
 
     <application
-        android:name=".KioskContext"
+
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:fullBackupContent="@xml/backup_descriptor">
         <service android:name=".PretendKiosk"/>
         <service android:name=".GpsServices"/>
 
@@ -106,11 +109,11 @@
             android:label="@string/title_activity_take_photo3"
             android:theme="@style/FullscreenTheme" />
 
-        <receiver android:name=".BootReceiver">
+        <!--<receiver android:name=".BootReceiver">
             <intent-filter >
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
-        </receiver>
+        </receiver>-->
 
         <receiver android:name=".BootReceiver2">
             <intent-filter >

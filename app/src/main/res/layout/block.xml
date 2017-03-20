@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/tb_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="40dp"
-        android:src="@drawable/textblock"/>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:baselineAligned="false">
 
     <TextView
         android:id="@+id/welcome_textview"
@@ -19,11 +13,25 @@
         android:layout_marginTop="6dp"
         android:text="Innovation saving lives" />
 
+    <EditText
+        android:id="@+id/currentSpeed"
+        android:layout_width="112dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/logo"/>
+        android:src="@drawable/logo" /><![CDATA[
+
+    >
+
+
+
+    ]]>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,8 +45,7 @@
             android:layout_marginLeft="60dp"
             android:layout_marginTop="40dp"
             android:background="#00000000"
-            android:src="@drawable/mail"
-            />
+            android:src="@drawable/mail" />
 
         <ImageButton
             android:id="@+id/map"
@@ -47,8 +54,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginTop="25dp"
             android:background="#00000000"
-            android:src="@drawable/mapnew"
-            />
+            android:src="@drawable/mapnew" />
 
 
         <ImageButton
@@ -58,10 +64,9 @@
             android:layout_marginLeft="40dp"
             android:layout_marginTop="30dp"
             android:background="#00000000"
-            android:src="@drawable/cameranew"
-            />
+            android:src="@drawable/cameranew" />
 
-    </LinearLayout>>
+    </LinearLayout>
 
     <ImageButton
         android:id="@+id/emergency_call"
