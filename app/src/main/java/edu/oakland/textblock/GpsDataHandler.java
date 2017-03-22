@@ -18,9 +18,10 @@ public class GpsDataHandler {
     private double distanceM;
     private double speed;
     private double maxSpeed;
+    private boolean isFirstTime;
 
 
-    private gpsUpdateTrigger gpsTrigger;
+    private gpsUpdateTrigger gpsUpdateTrigger;
 
     //when GPS service updates location, application is updated with latest info
     public interface gpsUpdateTrigger{
@@ -28,11 +29,11 @@ public class GpsDataHandler {
     }
 
     public void whenTriggered(gpsUpdateTrigger gpsUpdateTrigger){
-        this.gpsTrigger = gpsUpdateTrigger;
+        this.gpsUpdateTrigger = gpsUpdateTrigger;
     }
 
     public void update(){
-        gpsTrigger.update();
+        gpsUpdateTrigger.update();
     }
 
     //defining variables used in calculating and displaying distance and speed
@@ -121,7 +122,13 @@ public class GpsDataHandler {
         }
     }
 
+    public boolean isFirstTime() {
+        return isFirstTime;
+    }
 
+    public void setFirstTime(boolean isFirstTime) {
+        this.isFirstTime = isFirstTime;
+    }
 
 
     //keeps tabs on how long vehicle has been stopped

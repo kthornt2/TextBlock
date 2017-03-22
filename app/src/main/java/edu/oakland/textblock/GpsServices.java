@@ -23,6 +23,12 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+
+import static java.lang.Math.abs;
+
 
 //Service is a component that allows apps to run in the background even if the user switches to
 //another app.  Since the app will need to keep tabs continuously, well need our class
@@ -34,14 +40,15 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
     Location lastLocation = new Location("last location");
     GpsDataHandler data;
     //current coordinates
-    double cLongitude=0 ;
-    double cLatitude=0 ;
-    //last coordinates
-    double lLongitude = 0;
-    double lLatitude = 0;
-    private boolean running = false;
+    double currentLon=0 ;
+    double currentLat=0 ;
+    double lastLon = 0;
+    double lastLat = 0;
     private Thread t = null;
     private Location m;
+    GoogleApiClient client;
+    private GpsDataHandler.gpsUpdateTrigger gpsUpdateTrigger;
+
 
     PendingIntent contentIntent;
 
@@ -54,22 +61,24 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
                         == PackageManager.PERMISSION_GRANTED;
     }
 
-    //Things that are "Services" requires IBinders, but since we dont use we can return null.
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
+
 
 
     @Override
     public void onCreate() {
+
+        data=new GpsDataHandler(gpsUpdateTrigger);
+        data.setFirstTime(true);
+
         super.onCreate();
-    //This will have to work off of the main activity.  Basically it is an intent to start when the
-    //main activity starts
+        //This will have to work off of the main activity.  Basically it is an intent to start when the
+        //main activity starts
         //Intent notificationIntent = new Intent(this, MainActivity.class);
         //notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-       // contentIntent = PendingIntent.getActivity(
-                //this, 0, notificationIntent, 0);
+        // contentIntent = PendingIntent.getActivity(
+        //this, 0, notificationIntent, 0);
+
+
 
 
 
@@ -79,6 +88,7 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
         checkPermission(this);
         mLocationManager.addGpsStatusListener(this);
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 0, this);
+
 
 
 
@@ -98,123 +108,90 @@ public class GpsServices extends Service implements LocationListener, GpsStatus.
         //right from the GPSDataHandler class.
         //GpsDataHandler = MainActivity.getGpsDataHandler();
 
-        running = true;
+        Location lastLocation = new Location("last");
         GpsDataHandler gpsDataHandler = new GpsDataHandler();
 
 
 
-        //gets coordinates from gps
-            cLatitude = location.getLatitude();
-            cLongitude = location.getLongitude();
+        currentLat = location.getLatitude();
+        currentLon = location.getLongitude();
 
-            lastLocation.setLatitude(lLatitude);
-            lastLocation.setLongitude(lLongitude);
-            double distance = lastLocation.distanceTo(location);
+        //if (data.isFirstTime()){
+          //  lastLat = currentLat;
+          //  lastLon = currentLon;
+           // data.setFirstTime(false);
+       // }
 
-        //checks accuracy.  if accurate, saves coordinates and calculates distance.
-            if (location.getAccuracy() < distance){
-                gpsDataHandler.distanceFunction(distance);
+        lastLocation.setLatitude(lastLat);
+        lastLocation.setLongitude(lastLon);
+        double distance = lastLocation.distanceTo(location);
 
-                lLatitude = cLatitude;
-                lLongitude = cLongitude;
-            }
+        if (location.getAccuracy() < distance){
+            data.distanceFunction(distance);
 
-        //checks if vehicle is stopped
-            if (location.hasSpeed()) {
-                gpsDataHandler.currentSpeed(location.getSpeed());
-                if(location.getSpeed() == 0){
-                    new isStillStopped().execute();
-                }
-            }
-            gpsDataHandler.update();
+            lastLat = currentLat;
+            lastLon = currentLon;
+        }
 
-            if (location.hasSpeed()) {
-                t = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        do {
-
-                            double speedNow = (m.getSpeed()) * 2.24;
-                            if (speedNow >= 15){
-                                Intent service = new Intent(getApplicationContext(),PretendKiosk.class);
-                                startService(service);
-                            }
-                            try {
-                                Thread.sleep(2000);
-                            } catch (InterruptedException e) {
-                                Log.i(TAG, "Thread interrupted - Speed Listener");
-                            }
-
-                        } while (running);
-                        stopSelf();
-                    }
-                });
+        if (location.hasSpeed()) {
+            data.currentSpeed(location.getSpeed() * 3.6);
+            if(location.getSpeed() == 0){
+                new isStillStopped().execute();
             }
 
         }
-    // looks at speed, if over 10mph, returns true.  can use this method to activate
 
-    // looks at speed.  if under 10mph for 10secs, returns true.  can be used to deactivate
-    public boolean unlockTimer (Location location){
-        double speedNow = (location.getSpeed()) * 2.24;
-        int timer = 0;
-
-
-        while(speedNow < 15) {
-            try {
-
-                timer++;
-                Thread.sleep(1000);
-            }
-            catch (InterruptedException ie)
-            {
-                break;
-            }
-
-
+        if (location.getSpeed() >= 6.7) {
+            startService(new Intent(this,PretendKiosk.class));
 
         }
+        data.update();
 
-
-
-        return false;
     }
+
+
+
+
+
+
+    @Override
+    public IBinder onBind(Intent intent) {
+
+        return null;
+    }
+
+
 
     @Override
     public void onGpsStatusChanged(int event) {}
 
     @Override
     public void onProviderDisabled(String provider) {}
-   
+
     @Override
     public void onProviderEnabled(String provider) {}
-   
+
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {}
 
-    class isStillStopped extends AsyncTask<Void, Integer, String> {
-        int timer = 0;
-        @Override
-        protected String doInBackground(Void... unused) {
-            try {
-                while (data.getSpeed() == 0) {
-                    Thread.sleep(1000);
-                    timer++;
-                }
-            } catch (InterruptedException t) {
-                return ("The sleep operation failed");
+class isStillStopped extends AsyncTask<Void, Integer, String> {
+    int timer = 0;
+    @Override
+    protected String doInBackground(Void... unused) {
+        try {
+            while (data.getSpeed() == 0) {
+                Thread.sleep(1000);
+                timer++;
             }
-            return ("return object when task is finished");
+        } catch (InterruptedException t) {
+            return ("The sleep operation failed");
         }
+        return ("return object when task is finished");
+    }
 
-        @Override
-        protected void onPostExecute(String message) {
-            data.setTimeStopped(timer);
-        }
+    @Override
+    protected void onPostExecute(String message) {
+        data.setTimeStopped(timer);
     }
-    public void onDestroy() {
-        Toast.makeText(this, "GpsServices", Toast.LENGTH_LONG).show();
-        Log.d(TAG, "onDestroy");
-    }
+}
 }

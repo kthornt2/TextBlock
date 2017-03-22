@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -74,11 +75,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        askForPermission();
 
-        client = new GoogleApiClient.Builder(this)
-                .addApi(AppIndex.API)
-                .addApi(LocationServices.API)
-                .build();
+
 
 
         // [START config_signin]
@@ -156,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         } else {
             Toast.makeText(this, "" + permission + " is already granted.", Toast.LENGTH_SHORT).show();
         }
-    }
+        startService(new Intent(this, GpsServices.class));    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,String[] permissions, int[] grantResults) {
@@ -165,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
-                    startService(new Intent(this, GpsServices.class));
+
                 } else {
                     Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
                     System.exit(5);
@@ -184,25 +183,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
 
 
-    // [START on_start_add_listener]
-    @Override
-    public void onStart() {
-        super.onStart();
-        client.connect();
-        mAuth.addAuthStateListener(mAuthListener);
-    }
-    // [END on_start_add_listener]
 
-    // [START on_stop_remove_listener]
-    @Override
-    public void onStop() {
-        super.onStop();
-        client.disconnect();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
-    }
-    // [END on_stop_remove_listener]
 
     // 简单工厂模式
     @Override
@@ -222,8 +203,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 signUp(emailEdit.getText().toString(), passEdit.getText().toString());
                 break;
             case R.id.email_sign_in_button:
-                askForPermission();
-                onRequestPermissionsResult();
+
+
                 //startService(new Intent(this, GpsServices.class));
                 emailSignIn(emailEdit.getText().toString(), passEdit.getText().toString());
                 break;
@@ -434,32 +415,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
     }
 
-    private void askForGPS(){
-        mLocationRequest = LocationRequest.create();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(30 * 1000);
-        mLocationRequest.setFastestInterval(5 * 1000);
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(mLocationRequest);
-        builder.setAlwaysShow(true);
-        result = LocationServices.SettingsApi.checkLocationSettings(client, builder.build());
-        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-            @Override
-            public void onResult(LocationSettingsResult result) {
-                final Status status = result.getStatus();
-                switch (status.getStatusCode()) {
-                    case LocationSettingsStatusCodes.SUCCESS:
-                        break;
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        try {
-                            status.startResolutionForResult(MainActivity.this, GPS_SETTINGS);
-                        } catch (IntentSender.SendIntentException e) {
 
-                        }
-                        break;
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        break;
-                }
-            }
-        });
-    }
+
+
 }
