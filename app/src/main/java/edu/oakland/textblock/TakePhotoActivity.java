@@ -94,7 +94,7 @@ public class TakePhotoActivity extends AppCompatActivity {
             }
         } else {
             Log.d("MyAPP cancel to takePic", "User has cancel to take a picture.\n then we should return to the statue activity");
-            Intent returnToStatueActivity = new Intent(this, StatusActivity.class);
+            Intent returnToStatueActivity = new Intent(this, BlockActivity.class);
         }
 
     }

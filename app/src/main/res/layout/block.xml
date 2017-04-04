@@ -2,36 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:baselineAligned="false">
+    android:baselineAligned="false"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/welcome_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="16dp"
         android:text="Innovation saving lives" />
 
-    <EditText
-        android:id="@+id/currentSpeed"
-        android:layout_width="112dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/logo" /><![CDATA[
-
-    >
-
-
-
-    ]]>
+        android:src="@drawable/logo" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -64,6 +52,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginTop="30dp"
             android:background="#00000000"
+            android:onClick="unlockMyPhone"
             android:src="@drawable/cameranew" />
 
     </LinearLayout>
@@ -86,5 +75,12 @@
         android:background="#00000000"
         android:src="@drawable/lock"
         />
+
+    <TextView
+        android:id="@+id/drivingStatsTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName" />
 
 </LinearLayout>

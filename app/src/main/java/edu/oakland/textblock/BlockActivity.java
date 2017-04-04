@@ -87,5 +87,8 @@ public class BlockActivity extends AppCompatActivity {
     }
 
 
-
+    public void unlockMyPhone(View view) {
+        Intent takePhoto = new Intent(this, TakePhotoActivity.class);
+        startActivity(takePhoto);
+    }
 }
