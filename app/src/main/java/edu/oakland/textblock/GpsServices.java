@@ -1,197 +1,196 @@
 package edu.oakland.textblock;
 
-import android.app.PendingIntent;
+import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.LauncherApps;
-import android.location.GnssStatus;
-import android.location.GpsStatus;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.nfc.Tag;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
-import android.content.Intent;
-//for permissions
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
+import android.Manifest;
 
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
+public class GpsServices extends Service
+{
+    private LocationManager locManager;
+    private LocationListener locListener = new myLocationListener();
+    static final Double EARTH_RADIUS = 6371.00;
 
-import static java.lang.Math.abs;
-
-
-//Service is a component that allows apps to run in the background even if the user switches to
-//another app.  Since the app will need to keep tabs continuously, well need our class
-//to extend Service.
-public class GpsServices extends Service implements LocationListener, GpsStatus.Listener {
-
-    private static final String TAG ="GpsServices";
-    private LocationManager mLocationManager;
-    Location lastLocation = new Location("last location");
-    GpsDataHandler data;
-    //current coordinates
-    double currentLon=0 ;
-    double currentLat=0 ;
-    double lastLon = 0;
-    double lastLat = 0;
-    private Thread t = null;
-    private Location m;
-    GoogleApiClient client;
-    private GpsDataHandler.gpsUpdateTrigger gpsUpdateTrigger;
+    public static String
+            DISTANCE_BROADCAST = GpsServices.class.getName() + "Location Broadcast",
+            EXTRA_SPEED = "extra_speed",
+            EXTRA_DISTANCE = "extra_distance";
 
 
-    PendingIntent contentIntent;
 
-    //Checks for GPS location permissions.  The request, if needed,
-    // has to come from the Main Activity.  (TO DO)
-    public static boolean checkPermission(final Context context) {
+    private boolean gps_enabled = false;
+    private boolean network_enabled = false;
+
+    private Handler handler = new Handler();
+    Thread t;
+
+    @Override
+    public IBinder onBind(Intent intent) {return null;}
+    @Override
+    public void onCreate() {
+    }
+    @Override
+    public void onDestroy() {}
+    @Override
+    public void onStart(Intent intent, int startid) {}
+    public static boolean checkPermission(final Context context){
         return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED;
     }
-
-
-
-
     @Override
-    public void onCreate() {
-
-        data=new GpsDataHandler(gpsUpdateTrigger);
-        data.setFirstTime(true);
-
-        super.onCreate();
-        //This will have to work off of the main activity.  Basically it is an intent to start when the
-        //main activity starts
-        //Intent notificationIntent = new Intent(this, MainActivity.class);
-        //notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        // contentIntent = PendingIntent.getActivity(
-        //this, 0, notificationIntent, 0);
+    public int onStartCommand(Intent intent, int flags, int startId){
 
 
+        Toast.makeText(getBaseContext(), "Service Started", Toast.LENGTH_SHORT).show();
 
-
-
-
-        mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        //actually checks the permissions here
-        checkPermission(this);
-        mLocationManager.addGpsStatusListener(this);
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 0, this);
-
-
-
-
-
+        final Runnable r = new Runnable()
+        {   public void run()
+        {
+            Log.v("Debug", "Hello");
+            location();
+            handler.postDelayed(this, 5000);
+        }
+        };
+        handler.postDelayed(r, 5000);
+        return START_STICKY;
     }
 
-    public boolean checkLocationPermission()
+    public void location(){
+        locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        try{
+            gps_enabled = locManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        }
+        catch(Exception ex){}
+        try{
+            network_enabled = locManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        }
+        catch(Exception ex){}
+        Log.v("Debug", "in on create.. 2");
+        if (gps_enabled) {
+
+            checkPermission(this);
+            locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locListener);
+            Log.v("Debug", "Enabled..");
+        }
+        if (network_enabled) {
+            locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,locListener);
+            Log.v("Debug", "Disabled..");
+        }
+        Log.v("Debug", "in on create..3");
+    }
+    public class myLocationListener implements LocationListener
     {
-        String permission = "android.permission.ACCESS_FINE_LOCATION";
-        int res = this.checkCallingOrSelfPermission(permission);
-        return (res == PackageManager.PERMISSION_GRANTED);
-    }
-    public void onLocationChanged(Location location) {
+        double lat_old = 0;
+        double lon_old = 0;
+        double lat_new = 0;
+        double lon_new = 0;
+        double time=10;
+        double speed=0.0;
+        double totalDistance = 0;
 
-        //Note that normally this should run from Main activity.  Once we get to the point where our
-        //main activity is fleshed out, we'll use the commented part instead of initiating a new object
-        //right from the GPSDataHandler class.
-        //GpsDataHandler = MainActivity.getGpsDataHandler();
+        @Override
+        public void onLocationChanged(Location location) {
+            Log.v("Debug", "in onLocation changed..");
+            if(location!=null){
+                double distance;
 
-        Location lastLocation = new Location("last");
-        GpsDataHandler gpsDataHandler = new GpsDataHandler();
+                locManager.removeUpdates(locListener);
+                //String Speed = "Device Speed: " +location.getSpeed();
+                lat_new=location.getLongitude();
+                lon_new =location.getLatitude();
+                if(lat_old == 0){
+                    distance = 0;
+                    speed = 0;
+                } else {
+
+
+                    distance = CalculationByDistance(lat_new, lon_new, lat_old, lon_old);
+                    speed = (distance/time) * 2.23694;
+                }
 
 
 
-        currentLat = location.getLatitude();
-        currentLon = location.getLongitude();
+                Toast.makeText(getApplicationContext(), "Distance is: "
+                        +totalDistance(distance)+"\nSpeed is: "+speed , Toast.LENGTH_SHORT).show();
+                lat_old=lat_new;
+                lon_old=lon_new;
+                sendBroadcastMessage(totalDistance(distance), speed);
 
-        //if (data.isFirstTime()){
-          //  lastLat = currentLat;
-          //  lastLon = currentLon;
-           // data.setFirstTime(false);
-       // }
+                if (isMyServiceRunning(PretendKiosk.class) == false) {
 
-        lastLocation.setLatitude(lastLat);
-        lastLocation.setLongitude(lastLon);
-        double distance = lastLocation.distanceTo(location);
+                    if (totalDistance >= .01) {
+                        Intent startLock = new Intent(getApplicationContext(), PretendKiosk.class);
+                        startService(startLock);
+                    }
 
-        if (location.getAccuracy() < distance){
-            data.distanceFunction(distance);
+                }
 
-            lastLat = currentLat;
-            lastLon = currentLon;
-        }
 
-        if (location.hasSpeed()) {
-            data.currentSpeed(location.getSpeed() * 3.6);
-            if(location.getSpeed() == 0){
-                new isStillStopped().execute();
+
             }
+        }
+
+        public double totalDistance (double mdistance){
+           totalDistance = totalDistance + (mdistance * .00062);
+
+            return totalDistance;
 
         }
 
-        if (location.getSpeed() >= 6.7) {
-            startService(new Intent(this,PretendKiosk.class));
 
-        }
-        data.update();
+
+        @Override
+        public void onProviderDisabled(String provider) {}
+        @Override
+        public void onProviderEnabled(String provider) {}
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
+    }
+
+    public double CalculationByDistance(double lat1, double lon1, double lat2, double lon2) {
+        double Radius = EARTH_RADIUS;
+        double dLat = Math.toRadians(lat2-lat1);
+        double dLon = Math.toRadians(lon2-lon1);
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                        Math.sin(dLon/2) * Math.sin(dLon/2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        return Radius * c;
+    }
+
+    private void sendBroadcastMessage(double distance, double speed) {
+
+            double roundedDistance= Math.round((distance * 100)) / 100.0d;
+            double roundedSpeed= Math.round((speed * 100)) / 100.0d;
+            Intent intent = new Intent(DISTANCE_BROADCAST);
+            intent.putExtra(EXTRA_DISTANCE,roundedDistance);
+            intent.putExtra(EXTRA_SPEED,roundedSpeed);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 
     }
 
-
-
-
-
-
-    @Override
-    public IBinder onBind(Intent intent) {
-
-        return null;
-    }
-
-
-
-    @Override
-    public void onGpsStatusChanged(int event) {}
-
-    @Override
-    public void onProviderDisabled(String provider) {}
-
-    @Override
-    public void onProviderEnabled(String provider) {}
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-class isStillStopped extends AsyncTask<Void, Integer, String> {
-    int timer = 0;
-    @Override
-    protected String doInBackground(Void... unused) {
-        try {
-            while (data.getSpeed() == 0) {
-                Thread.sleep(1000);
-                timer++;
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
             }
-        } catch (InterruptedException t) {
-            return ("The sleep operation failed");
         }
-        return ("return object when task is finished");
+        return false;
     }
-
-    @Override
-    protected void onPostExecute(String message) {
-        data.setTimeStopped(timer);
-    }
-}
 }

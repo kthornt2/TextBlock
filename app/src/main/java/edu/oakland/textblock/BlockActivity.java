@@ -1,13 +1,17 @@
 package edu.oakland.textblock;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-
+import android.widget.TextView;
 
 
 public class BlockActivity extends AppCompatActivity {
@@ -15,6 +19,7 @@ public class BlockActivity extends AppCompatActivity {
     private ImageButton MailButton;
     private ImageButton CameraButton;
     private ImageButton MapButton;
+    private TextView drivingStatsTextView;
 
 
     @Override
@@ -27,6 +32,7 @@ public class BlockActivity extends AppCompatActivity {
         MailButton     = (ImageButton) findViewById(R.id.mail);
         CameraButton   = (ImageButton) findViewById(R.id.camera);
         MapButton      = (ImageButton) findViewById(R.id.map);
+        drivingStatsTextView = (TextView) findViewById(R.id.drivingStatsTextView);
 
         EmergencyCall.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -67,6 +73,19 @@ public class BlockActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        double distance = intent.getDoubleExtra(GpsServices.EXTRA_DISTANCE, 0);
+                        double speed = intent.getDoubleExtra(GpsServices.EXTRA_SPEED, 0);
+                        drivingStatsTextView.setText("Distance: " + distance + " miles" + " " + "Speed: " + speed + " mph");
+                    }
+
+                }, new IntentFilter(GpsServices.DISTANCE_BROADCAST)
+        );
     }
+
+
 
 }

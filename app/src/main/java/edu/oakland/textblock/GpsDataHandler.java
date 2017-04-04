@@ -1,19 +1,12 @@
 package edu.oakland.textblock;
 
 
-import android.icu.math.BigDecimal;
-import android.icu.text.DecimalFormat;
-import android.text.SpannableString;
-import android.text.style.RelativeSizeSpan;
-
-import java.math.RoundingMode;
 
 
 public class GpsDataHandler {
 
-    private boolean activeStatus;
+
     private long time;
-    private long timeStopped;
     //distance in meters
     private double distanceM;
     private double speed;
@@ -38,42 +31,39 @@ public class GpsDataHandler {
 
     //defining variables used in calculating and displaying distance and speed
     public GpsDataHandler() {
-        activeStatus = false;
+
         distanceM = 0;
         speed = 0;
         maxSpeed = 0;
-        timeStopped = 0;
+
     }
 
-    //initiates the class
-    public GpsDataHandler(gpsUpdateTrigger gpsUpdateTrigger){
-        this();
-        whenTriggered(gpsUpdateTrigger);
-    }
 
     //fetches distance from GPS.  By default, Location services uses meters.  .
-    public void distanceFunction(double distance){
+   /* public void distanceFunction(double distance){
         distanceM = (distanceM + distance);
 
 
 
-    }
+    }*/
+
+
 
     //Outputs distance to string so it can be put in UI
-    public String outputDistanceFunction(double distanceM){
+    public String outputDistanceFunction() {
 
 
-        double milesDistanceM = Math.round((distanceM / 1609.34) * 100)/100.0d;
+        double milesDistanceM = Math.round((distanceM / 1609.34) * 100) / 100.0d;
         String s;
 
-            s = milesDistanceM + " " + "miles";
+        s = milesDistanceM + " " + "miles";
 
 
         return s;
     }
 
     //outputs max speed to string for use in UI
-    public String topSpeedFunction(double maxSpeed) {
+    public String topSpeedFunction() {
         String s;
         double thisMaxSpeed = Math.round(maxSpeed * 100)/100d;
         s = thisMaxSpeed+ " " + "mph";
@@ -132,9 +122,9 @@ public class GpsDataHandler {
 
 
     //keeps tabs on how long vehicle has been stopped
-    public void setTimeStopped(long timeStopped) {
-        this.timeStopped += timeStopped;
-    }
+   // public void setTimeStopped(long timeStopped) {
+        //this.timeStopped += timeStopped;
+    //}
 
     //used to deliver the speed 
     public double getSpeed() {

@@ -14,7 +14,7 @@ public class BootReceiver2 extends BroadcastReceiver {
     @Override
     public void onReceive(Context context2, Intent intent2) {
         Intent myIntent = new Intent(context2, GpsServices.class);
-        context2.startActivity(myIntent);
+        context2.startService(myIntent);
         Log.i("Autostart","started");
     }
 

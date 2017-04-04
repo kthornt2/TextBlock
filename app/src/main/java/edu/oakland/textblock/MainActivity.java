@@ -1,5 +1,8 @@
 package edu.oakland.textblock;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -8,6 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private SignInButton googleSignInButton;
     private Button signOutButton;
     private TextView statusTextView;
+
     private GoogleApiClient mGoogleApiClient;
     private EditText emailEdit, passEdit;
     private Button forgetButton, signUpButton, emailSignInButton;
@@ -80,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
 
 
+
         // [START config_signin]
         // Configure email sign in
         mAuth = FirebaseAuth.getInstance();
@@ -93,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         // [END config_signin]
 
         statusTextView = (TextView) findViewById(R.id.status_textview);
+
         emailEdit = (EditText) findViewById(R.id.editEmail);
         passEdit = (EditText) findViewById(R.id.editPass);
         forgetButton = (Button) findViewById(R.id.forget_password_button);
@@ -116,6 +123,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         signUpButton.setOnClickListener(this);
         emailSignInButton.setOnClickListener(this);
+
+
 
         // [START auth_state_listener]
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -414,7 +423,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             findViewById(R.id.sign_out_button).setVisibility(View.GONE);
         }
     }
-
 
 
 
