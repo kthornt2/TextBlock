@@ -1,20 +1,13 @@
 package edu.oakland.textblock;
 
-import android.content.IntentSender;
-import android.content.SharedPreferences;
+import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.net.Uri;
-import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
-import android.Manifest;
-import android.content.Intent;
-import android.support.annotation.NonNull;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -23,10 +16,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
@@ -35,10 +26,7 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -48,8 +36,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
+    public final static int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0x1;
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
+    GoogleApiClient client;
+    LocationRequest mLocationRequest;
+    PendingResult<LocationSettingsResult> result;
     private SignInButton googleSignInButton;
     private Button signOutButton;
     private TextView statusTextView;
@@ -60,12 +52,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     //设置一个响应用户的登录状态变化的 AuthStateListener：
     private FirebaseAuth.AuthStateListener mAuthListener;
     private  String permission = "ACCESS_FINE_LOCATION";
-    public final static int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0x1;
     private Integer GPS_SETTINGS = 0x7;
-    GoogleApiClient client;
-    LocationRequest mLocationRequest;
-    PendingResult<LocationSettingsResult> result;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         // [START config_signin]
         // Configure email sign in
         mAuth = FirebaseAuth.getInstance();
-
+/*
         // Configure Google Sign In
         // specify sign in scope
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -98,13 +85,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         forgetButton = (Button) findViewById(R.id.forget_password_button);
         signUpButton = (Button) findViewById(R.id.sign_up_button);
         emailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-
+*/
         // create a Google api client
         // when the user click a sign-in button, here we create a sign-in intent and the activity for it.
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+//        mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */).addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+        //              .build();
 
 
         googleSignInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
