@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1042292202771",
+    "firebase_url": "https://tblogin2.firebaseio.com",
+    "project_id": "tblogin2",
+    "storage_bucket": "tblogin2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1042292202771:android:9e1fe36a3846683c",
+        "android_client_info": {
+          "package_name": "edu.oakland.textblock"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1042292202771-bfs8hf2k16fktr6tajtamjm0709qar64.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hejialin.tblogin",
+            "certificate_hash": "91D9DA78FAAB8A50359D247EA83E5593DA12D322"
+          }
+        },
+        {
+          "client_id": "1042292202771-sdoqf1905vs1u17advm309kk4dkibubj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDn-AaNUcrhiNzCrDI18ExPIn5kj3Vz0iw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1042292202771-sdoqf1905vs1u17advm309kk4dkibubj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

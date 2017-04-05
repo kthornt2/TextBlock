@@ -9,6 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:weightSum="1"
     tools:context="edu.oakland.textblock.MainActivity">
 
     <ImageView
@@ -17,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:src="@drawable/textblock"/>
+        android:src="@drawable/textblock" />
 
     <TextView
         android:id="@+id/welcome_textview"
@@ -31,9 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/logo"/>
-
-
+        android:src="@drawable/logo" />
 
 
     <TextView
@@ -58,7 +57,17 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Password"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        />
+    <EditText
+        android:id="@+id/edit_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint = "Enter Phone Number"
+        android:inputType="phone"
+        android:visibility="invisible"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -83,21 +92,15 @@
             android:layout_height="wrap_content"
             android:text="Sign up" />
 
-</LinearLayout>
-   <Button
+    </LinearLayout>
+
+    <Button
         android:id="@+id/sign_out_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-       android:layout_gravity="center_horizontal"
-       android:text="Sign Out" />
-
-
-
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/google_sign_in_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" />
+        android:layout_height="29dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.18"
+        android:text="Sign Out" />
 
 
 </LinearLayout>

@@ -1,20 +1,13 @@
 package edu.oakland.textblock;
 
-import android.content.IntentSender;
-import android.content.SharedPreferences;
+import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.net.Uri;
-import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
-import android.Manifest;
-import android.content.Intent;
-import android.support.annotation.NonNull;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -35,10 +27,7 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -54,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private Button signOutButton;
     private TextView statusTextView;
     private GoogleApiClient mGoogleApiClient;
-    private EditText emailEdit, passEdit;
+    private EditText emailEdit, passEdit, edit_phone;
     private Button forgetButton, signUpButton, emailSignInButton;
     private FirebaseAuth mAuth;
     //设置一个响应用户的登录状态变化的 AuthStateListener：
@@ -87,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         // Configure Google Sign In
         // specify sign in scope
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
+                //.requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         // [END config_signin]
@@ -95,20 +84,21 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         statusTextView = (TextView) findViewById(R.id.status_textview);
         emailEdit = (EditText) findViewById(R.id.editEmail);
         passEdit = (EditText) findViewById(R.id.editPass);
+
         forgetButton = (Button) findViewById(R.id.forget_password_button);
         signUpButton = (Button) findViewById(R.id.sign_up_button);
         emailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
 
         // create a Google api client
         // when the user click a sign-in button, here we create a sign-in intent and the activity for it.
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+       // mGoogleApiClient = new GoogleApiClient.Builder(this)
+                //.enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                //.addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+               // .build();
 
 
-        googleSignInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
-        googleSignInButton.setOnClickListener(this);
+        //googleSignInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
+        //googleSignInButton.setOnClickListener(this);
 
         signOutButton = (Button) findViewById(R.id.sign_out_button);
         signOutButton.setOnClickListener(this);
@@ -190,9 +180,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     public void onClick(View v) {
         int i = v.getId();
         switch (i) {
-            case R.id.google_sign_in_button:
-                googleSignIn();
-                break;
+            //case R.id.google_sign_in_button:
+                //googleSignIn();
+               // break;
             case R.id.sign_out_button:
                 signOut();
                 break;
@@ -200,7 +190,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 forgetPass(emailEdit.getText().toString());
                 break;
             case R.id.sign_up_button:
-                signUp(emailEdit.getText().toString(), passEdit.getText().toString());
+                if (edit_phone.getText()== null){
+                    edit_phone = (EditText) findViewById(R.id.edit_phone);
+                    edit_phone.setVisibility(View.VISIBLE);
+                } else {
+                signUp(emailEdit.getText().toString(), passEdit.getText().toString());}
                 break;
             case R.id.email_sign_in_button:
 
@@ -346,9 +340,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private void signUp(String email, String password) {
         // sign up
+
+
         if (!validateForm(1)) { // validate email address and password
             return;
         }
+
         //通过  mAuth.createUserWithEmailAndPassword(email, password);方法来进行用户注册
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
