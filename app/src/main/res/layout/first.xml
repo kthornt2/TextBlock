@@ -14,47 +14,47 @@
 
 
     <ImageButton
+        android:id="@+id/settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#00000000"
-        android:id="@+id/settings"
-        android:src="@drawable/s1"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="184dp" />
+        android:layout_marginBottom="184dp"
+        android:background="#00000000"
+        android:src="@drawable/s1" />
 
     <ImageView
         android:id="@+id/guardian_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/tbtitle"
         android:layout_below="@+id/welcome_textview"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/tbtitle" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/iii"
         android:layout_below="@+id/guardian_view"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/iii" />
 
     <ImageButton
+        android:id="@+id/guard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#00000000"
-        android:id="@+id/guard"
-        android:src="@drawable/g2"
-        android:layout_marginBottom="65dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignLeft="@+id/settings"
-        android:layout_alignStart="@+id/settings" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/settings"
+        android:layout_marginBottom="67dp"
+        android:background="#00000000"
+        android:src="@drawable/g2" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/tblogo"
         android:layout_marginTop="68dp"
-        android:layout_centerHorizontal="true" />
+        android:src="@drawable/tblogo" />
 </RelativeLayout>
