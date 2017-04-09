@@ -84,11 +84,11 @@ public class GpsServices extends Service
         if (gps_enabled) {
 
             checkPermission(this);
-            locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locListener);
+            locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,45,locListener);
             Log.v("Debug", "Enabled..");
         }
         if (network_enabled) {
-            locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,locListener);
+            locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,45,locListener);
             Log.v("Debug", "Disabled..");
         }
         Log.v("Debug", "in on create..3");
@@ -137,6 +137,7 @@ public class GpsServices extends Service
         double totalDistance = 0;
 
         @Override
+        //when GPS detects a significant change of distance (45m)....
         public void onLocationChanged(Location location) {
             Log.d("Myapp", "in onLocation changed..");
             if(location!=null){
@@ -166,7 +167,8 @@ public class GpsServices extends Service
 
                 if (isMyServiceRunning(PretendKiosk.class) == false) {
 
-                    if (totalDistance >= .01) {
+                    //if speed is greater than 3mph.  It's set slow for demo.
+                    if (speed >= 3) {
                         Intent startLock = new Intent(getApplicationContext(), PretendKiosk.class);
                         startService(startLock);
                     }

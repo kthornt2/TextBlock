@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .build();
 
 
-        googleSignInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
+        googleSignInButton = (SignInButton) findViewById(R.id.email_sign_in_button);
         googleSignInButton.setOnClickListener(this);
 
 
