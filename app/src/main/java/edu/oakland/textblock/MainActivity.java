@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private FirebaseAuth mAuth;
     //设置一个响应用户的登录状态变化的 AuthStateListener：
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private  String permission = "ACCESS_FINE_LOCATION";
+    private String permission = "ACCESS_FtoINE_LOCATION";
     private Integer GPS_SETTINGS = 0x7;
 
     @Override
@@ -86,9 +86,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         // create a Google api client
         // when the user click a sign-in button, here we create a sign-in intent and the activity for it.
-//        mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */).addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-        //              .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */).addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
 
 
         googleSignInButton = (SignInButton) findViewById(R.id.google_sign_in_button);

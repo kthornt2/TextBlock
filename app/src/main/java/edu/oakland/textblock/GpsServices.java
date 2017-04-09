@@ -1,5 +1,6 @@
 package edu.oakland.textblock;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Context;
@@ -15,42 +16,41 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
-import android.Manifest;
 
 public class GpsServices extends Service
 {
-    private LocationManager locManager;
-    private LocationListener locListener = new myLocationListener();
     static final Double EARTH_RADIUS = 6371.00;
-
     public static String
             DISTANCE_BROADCAST = GpsServices.class.getName() + "Location Broadcast",
             EXTRA_SPEED = "extra_speed",
             EXTRA_DISTANCE = "extra_distance";
-
-
-
+    Thread t;
+    private LocationManager locManager;
+    private LocationListener locListener = new myLocationListener();
     private boolean gps_enabled = false;
     private boolean network_enabled = false;
-
     private Handler handler = new Handler();
-    Thread t;
 
-    @Override
-    public IBinder onBind(Intent intent) {return null;}
-    @Override
-    public void onCreate() {
-    }
-    @Override
-    public void onDestroy() {}
-    @Override
-    public void onStart(Intent intent, int startid) {}
-    public static boolean checkPermission(final Context context){
+    public static boolean checkPermission(final Context context) {
         return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED;
     }
+
+    @Override
+    public IBinder onBind(Intent intent) {return null;}
+
+    @Override
+    public void onCreate() {
+    }
+
+    @Override
+    public void onDestroy() {}
+
+    @Override
+    public void onStart(Intent intent, int startid) {}
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
 
@@ -93,6 +93,39 @@ public class GpsServices extends Service
         }
         Log.v("Debug", "in on create..3");
     }
+
+    public double CalculationByDistance(double lat1, double lon1, double lat2, double lon2) {
+        double Radius = EARTH_RADIUS;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        return Radius * c;
+    }
+
+    private void sendBroadcastMessage(double distance, double speed) {
+
+        double roundedDistance = Math.round((distance * 100)) / 100.0d;
+        double roundedSpeed = Math.round((speed * 100)) / 100.0d;
+        Intent intent = new Intent(DISTANCE_BROADCAST);
+        intent.putExtra(EXTRA_DISTANCE, roundedDistance);
+        intent.putExtra(EXTRA_SPEED, roundedSpeed);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public class myLocationListener implements LocationListener
     {
         double lat_old = 0;
@@ -105,7 +138,7 @@ public class GpsServices extends Service
 
         @Override
         public void onLocationChanged(Location location) {
-            Log.v("Debug", "in onLocation changed..");
+            Log.d("Myapp", "in onLocation changed..");
             if(location!=null){
                 double distance;
 
@@ -126,7 +159,7 @@ public class GpsServices extends Service
 
 
                 Toast.makeText(getApplicationContext(), "Distance is: "
-                        +totalDistance(distance)+"\nSpeed is: "+speed , Toast.LENGTH_SHORT).show();
+                        + totalDistance(distance) + "\nSpeed is: " + speed, Toast.LENGTH_LONG).show();
                 lat_old=lat_new;
                 lon_old=lon_new;
                 sendBroadcastMessage(totalDistance(distance), speed);
@@ -160,37 +193,5 @@ public class GpsServices extends Service
         public void onProviderEnabled(String provider) {}
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {}
-    }
-
-    public double CalculationByDistance(double lat1, double lon1, double lat2, double lon2) {
-        double Radius = EARTH_RADIUS;
-        double dLat = Math.toRadians(lat2-lat1);
-        double dLon = Math.toRadians(lon2-lon1);
-        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-                        Math.sin(dLon/2) * Math.sin(dLon/2);
-        double c = 2 * Math.asin(Math.sqrt(a));
-        return Radius * c;
-    }
-
-    private void sendBroadcastMessage(double distance, double speed) {
-
-            double roundedDistance= Math.round((distance * 100)) / 100.0d;
-            double roundedSpeed= Math.round((speed * 100)) / 100.0d;
-            Intent intent = new Intent(DISTANCE_BROADCAST);
-            intent.putExtra(EXTRA_DISTANCE,roundedDistance);
-            intent.putExtra(EXTRA_SPEED,roundedSpeed);
-            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-
-    }
-
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
     }
 }

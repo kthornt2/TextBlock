@@ -44,7 +44,8 @@ public class NetworkUtilsTest {
             }
         }
         if (photo.isFile()) {
-            NetworkUtils.uploadPhoto(photo);
+            NetworkUtils networkUtils = new NetworkUtils();
+            networkUtils.uploadFileAsync(photo);
         }
 
     }

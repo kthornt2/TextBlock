@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/guardian_view"
@@ -33,10 +34,10 @@
            android:id="@+id/notification_button"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:layout_marginTop="20dp"
            android:layout_marginLeft="70dp"
-           android:src="@drawable/notifi"
+           android:layout_marginTop="20dp"
            android:background="#00000000"
+           android:src="@drawable/notifi"
            />
 
 
@@ -44,12 +45,11 @@
            android:id="@+id/settings_button"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:layout_marginTop="20dp"
            android:layout_marginLeft="20dp"
-           android:src="@drawable/setting"
+           android:layout_marginTop="20dp"
            android:background="#00000000"
+           android:src="@drawable/setting"
            />
-
 
 
    </LinearLayout>
@@ -62,20 +62,20 @@
             android:id="@+id/stats_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginLeft="70dp"
-            android:src="@drawable/stats"
+            android:layout_marginTop="20dp"
             android:background="#00000000"
+            android:src="@drawable/stats"
             />
 
         <ImageButton
             android:id="@+id/sign_out_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
-            android:src="@drawable/log_out"
+            android:layout_marginTop="20dp"
             android:background="#00000000"
+            android:src="@drawable/log_out"
             />
 
 
@@ -84,10 +84,10 @@
         android:id="@+id/slide_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/contact_chip_1"
+        android:layout_marginTop="20dp"
         android:background="#00000000"
+        android:src="@drawable/contact_chip_1"
         />
 
 </LinearLayout>
