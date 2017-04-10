@@ -17,6 +17,9 @@ import android.util.Log;
 import android.widget.Toast;
 import android.Manifest;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class GpsServices extends Service
 {
     private LocationManager locManager;
@@ -84,11 +87,11 @@ public class GpsServices extends Service
         if (gps_enabled) {
 
             checkPermission(this);
-            locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,45,locListener);
+            locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,10,locListener);
             Log.v("Debug", "Enabled..");
         }
         if (network_enabled) {
-            locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,45,locListener);
+            locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,10,locListener);
             Log.v("Debug", "Disabled..");
         }
         Log.v("Debug", "in on create..3");
@@ -102,50 +105,86 @@ public class GpsServices extends Service
         double time=10;
         double speed=0.0;
         double totalDistance = 0;
+        boolean isSlow = false;
 
         @Override
         //when GPS detects a significant change of distance (45m)....
         public void onLocationChanged(Location location) {
             Log.v("Debug", "in onLocation changed..");
-            if(location!=null){
+            if (location != null) {
                 double distance;
 
                 locManager.removeUpdates(locListener);
                 //String Speed = "Device Speed: " +location.getSpeed();
-                lat_new=location.getLongitude();
-                lon_new =location.getLatitude();
-                if(lat_old == 0){
+                lat_new = location.getLongitude();
+                lon_new = location.getLatitude();
+                if (lat_old == 0) {
                     distance = 0;
                     speed = 0;
                 } else {
 
 
                     distance = CalculationByDistance(lat_new, lon_new, lat_old, lon_old);
-                    speed = (distance/time) * 2.23694;
+                    speed = (distance / time) * 2.23694;
                 }
 
 
-
                 Toast.makeText(getApplicationContext(), "Distance is: "
-                        +totalDistance(distance)+"\nSpeed is: "+speed , Toast.LENGTH_SHORT).show();
-                lat_old=lat_new;
-                lon_old=lon_new;
+                        + totalDistance(distance) + "\nSpeed is: " + speed, Toast.LENGTH_SHORT).show();
+                lat_old = lat_new;
+                lon_old = lon_new;
                 sendBroadcastMessage(totalDistance(distance), speed);
 
                 if (isMyServiceRunning(PretendKiosk.class) == false) {
 
-                    //if speed is greater than 3mph.  It's set slow for demo.
-                    if (speed >= 3) {
+                    //if speed is greater than .5mph.  It's set slow for demo.
+                    if (speed >= .5) {
                         Intent startLock = new Intent(getApplicationContext(), PretendKiosk.class);
                         startService(startLock);
                     }
 
+                } else if (isMyServiceRunning(PretendKiosk.class) == true) {
+
+                    if (speed <= .5) {
+                        isSlow = true;
+                    } else {
+                        isSlow = false;
+                    }
+
+
+                    while (isSlow = true) {
+
+                        final Timer timer = new Timer();
+                        timer.schedule(new TimerTask() {
+                            private int i = 5;
+
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(),"Slow for" + i + "counts of 30",Toast.LENGTH_SHORT).show();
+                                if (--i < 1 && speed <= .5) {
+                                    timer.cancel();
+                                    Intent stopLock = new Intent(getApplicationContext(), PretendKiosk.class);
+                                    stopService(stopLock);
+
+                                } else {
+                                    i = 5;
+                                }
+
+
+                                }
+                            },30000);
+                        }
+                    }
+
+
                 }
-
-
-
             }
-        }
+
+
+
+
+
+
 
         public double totalDistance (double mdistance){
            totalDistance = totalDistance + (mdistance * .00062);

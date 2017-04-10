@@ -91,8 +91,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         //              .build();
 
 
-        googleSignInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
-        googleSignInButton.setOnClickListener(this);
+        //googleSignInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
+       // googleSignInButton.setOnClickListener(this);
 
 
         signOutButton.setOnClickListener(this);
@@ -176,9 +176,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     public void onClick(View v) {
         int i = v.getId();
         switch (i) {
-            case R.id.google_sign_in_button:
-                googleSignIn();
-                break;
+//
+//            case R.id.google_sign_in_button:
+//                googleSignIn();
+//                break;
+//
             case R.id.sign_out_button:
                 signOut();
                 break;
