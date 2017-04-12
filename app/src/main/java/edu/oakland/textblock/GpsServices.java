@@ -127,12 +127,12 @@ public class GpsServices extends Service
 
                     distance = CalculationByDistance(lat_new, lon_new, lat_old, lon_old);
                     //speed = (distance / time) * 2.23694;
-                    speed = location.getSpeed() *10;
+                    speed = location.getSpeed();
 
 
 
                 Toast.makeText(getApplicationContext(), "Distance is: "
-                        + distance + "\nSpeed is: " + speed, Toast.LENGTH_SHORT).show();
+                        + distance + "\nSpeed is: " + location.getSpeed(), Toast.LENGTH_LONG).show();
                 lat_old = lat_new;
                 lon_old = lon_new;
                 sendBroadcastMessage(distance, location.getSpeed());
@@ -140,7 +140,7 @@ public class GpsServices extends Service
                 if (isMyServiceRunning(PretendKiosk.class) == false) {
 
 
-                    if (speed >= 100) {
+                    if (speed >= 1.8) {
                         Intent startLock = new Intent(getApplicationContext(), PretendKiosk.class);
                         startService(startLock);
                     }
@@ -189,7 +189,7 @@ public class GpsServices extends Service
 
 
         public double totalDistance (double mdistance){
-           totalDistance = totalDistance + (mdistance * .00062);
+           totalDistance = totalDistance + mdistance;
 
             return totalDistance;
 
