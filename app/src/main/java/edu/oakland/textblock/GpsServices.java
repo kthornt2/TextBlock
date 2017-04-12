@@ -105,7 +105,7 @@ public class GpsServices extends Service
         double lat_new;
         double lon_new;
         double time=10;
-        double speed;
+        double speed = 0.0;
         double totalDistance = 0;
         boolean isSlow = false;
 
@@ -115,24 +115,24 @@ public class GpsServices extends Service
             Log.v("Debug", "in onLocation changed..");
             if (location != null) {
                 double distance;
-                checkPermission(getApplicationContext());
+                //checkPermission(getApplicationContext());
                 locManager.removeUpdates(locListener);
 
                 //String Speed = "Device Speed: " +location.getSpeed();
-                lat_new = location.getLongitude();
-                lon_new = location.getLatitude();
+                lat_new = location.getLatitude();
+                lon_new = location.getLongitude();
 
 
 
 
                     distance = CalculationByDistance(lat_new, lon_new, lat_old, lon_old);
-                    //speed = (distance / time) * 2.23694;
-                    speed = location.getSpeed();
+                    speed = (distance/ time);
+                    //speed = location.getSpeed();
 
 
 
                 Toast.makeText(getApplicationContext(), "Distance is: "
-                        + distance + "\nSpeed is: " + location.getSpeed(), Toast.LENGTH_LONG).show();
+                        + distance + "\nSpeed is: " + speed, Toast.LENGTH_LONG).show();
                 lat_old = lat_new;
                 lon_old = lon_new;
                 sendBroadcastMessage(distance, location.getSpeed());
