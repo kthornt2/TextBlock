@@ -12,6 +12,9 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
+    dexOptions{
+        javaMaxHeapSize "4g"
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -26,16 +29,19 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
-    })
 
-    // to use android volley
-    compile 'com.android.volley:volley:1.0.0'
-    compile 'com.android.support:design:25.1.0'
+    })
+    // to use android upload service
+    //solved compile issue by making all support libs 25.2.0
+    compile 'com.android.support:mediarouter-v7:25.2.0'
+    compile 'com.android.support:animated-vector-drawable:25.2.0'
+    compile 'com.android.support:support-v4:25.2.0'
+    compile 'com.android.support:design:25.2.0'
+    compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'net.gotev:uploadservice:2.1'
     compile 'com.google.firebase:firebase-auth:10.0.1'
     testCompile 'junit:junit:4.12'
     compile 'com.google.android.gms:play-services:10.0.1'
-
 }
 
 
