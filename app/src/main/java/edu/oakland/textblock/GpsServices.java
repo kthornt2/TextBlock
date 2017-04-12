@@ -75,8 +75,10 @@ public class GpsServices extends Service
     public void location(){
         locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+
         try{
             gps_enabled = locManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
         }
         catch(Exception ex){}
         try{
@@ -98,12 +100,12 @@ public class GpsServices extends Service
     }
     public class myLocationListener implements LocationListener
     {
-        double lat_old = 0;
-        double lon_old = 0;
+        double lat_old;
+        double lon_old;
         double lat_new = 0;
         double lon_new = 0;
         double time=10;
-        double speed=0.0;
+        double speed;
         double totalDistance = 0;
         boolean isSlow = false;
 
@@ -113,37 +115,37 @@ public class GpsServices extends Service
             Log.v("Debug", "in onLocation changed..");
             if (location != null) {
                 double distance;
-
+                checkPermission(getApplicationContext());
                 locManager.removeUpdates(locListener);
+
                 //String Speed = "Device Speed: " +location.getSpeed();
                 lat_new = location.getLongitude();
                 lon_new = location.getLatitude();
-                if (lat_old == 0) {
-                    distance = 0;
-                    speed = 0;
-                } else {
+
+
 
 
                     distance = CalculationByDistance(lat_new, lon_new, lat_old, lon_old);
-                    speed = (distance / time) * 2.23694;
-                }
+                    //speed = (distance / time) * 2.23694;
+                    speed = location.getSpeed() *10;
+
 
 
                 Toast.makeText(getApplicationContext(), "Distance is: "
                         + totalDistance(distance) + "\nSpeed is: " + speed, Toast.LENGTH_SHORT).show();
                 lat_old = lat_new;
                 lon_old = lon_new;
-                sendBroadcastMessage(totalDistance(distance), speed);
+                sendBroadcastMessage(totalDistance(distance), location.getSpeed());
 
                 if (isMyServiceRunning(PretendKiosk.class) == false) {
 
                     //if speed is greater than .5mph.  It's set slow for demo.
-                    if (speed >= .5) {
+                    if (speed >= 100) {
                         Intent startLock = new Intent(getApplicationContext(), PretendKiosk.class);
                         startService(startLock);
                     }
 
-                } else if (isMyServiceRunning(PretendKiosk.class) == true) {
+                } /*else if (isMyServiceRunning(PretendKiosk.class) == true) {
 
                     if (speed <= .5) {
                         isSlow = true;
@@ -172,9 +174,9 @@ public class GpsServices extends Service
 
 
                                 }
-                            },30000);
-                        }
-                    }
+                            },30000);*/
+                    //    }
+                   // }
 
 
                 }
