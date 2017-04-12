@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $photo_temp_name_on_sever=$_FILES['photo']['tmp_name'];
                 // $photo_name_on_client=$_FILES['photo']['name'];
                 $photo_type=$_FILES['photo']['type'];
-                $photo_extension=pathinfo($photo_name_on_client)['extension'];
+                $photo_extension=pathinfo($photoName)['extension'];
                 echo "Temporary name on server: ".$photo_temp_name_on_sever."\n";
                 echo "Original name on client: ".$photoName."\n";
                 echo "Type of file: ".$photo_type."\n";
@@ -20,6 +20,35 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 }else{
                         echo " Image failed to save.\n";
                 }
+
+                if(isset($_POST['IMEI'])){
+                        $IMEI=$_POST['IMEI'];
+                        echo $_POST['IMEI'];
+                }
+
+                // to update database about photos
+                $servername="localhost";
+                $username="root";
+                $password="TextblocK1!";
+                $dabname="TEXTBLOCK_DB";
+
+                $photo_datetime=date_create_from_format("Ymd_His",substr($photoName,4));
+                $photo_path=$savedPath;
+                $photo_url="52.41.167.226/".$savedPath;
+                $sql="INSERT INTO PHOTO("IMEI","PHOTO_DATETIME","PHOTO_PATH","PHOTO_URL") VALUES($IMEI,$photo_datetime,$photo_path,$photo_url)";
+                // create a connection
+                $connection=new mysqli($servername,$username,$password,$dabname);
+                if($connection->connect_error){
+                        die("connection failed: ".$connection->connect_error);
+                }
+
+                if($connection->query($sql)=== true){
+                        echo "update successfully";
+                }else{
+                        echo "update failed.";
+                }
+
+                $connection->close();
 //      }else{
 //              echo "Invalid request broke in.\n"
 //      }
