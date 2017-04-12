@@ -87,23 +87,23 @@ public class GpsServices extends Service
         catch(Exception ex){}
         Log.v("Debug", "in on create.. 2");
         if (gps_enabled) {
-
+            //updates every 10 seconds
             checkPermission(this);
-            locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,10,locListener);
+            locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,10000,0,locListener);
             Log.v("Debug", "Enabled..");
         }
         if (network_enabled) {
-            locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,10,locListener);
+            locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,10000,0,locListener);
             Log.v("Debug", "Disabled..");
         }
         Log.v("Debug", "in on create..3");
     }
     public class myLocationListener implements LocationListener
     {
-        double lat_old;
-        double lon_old;
-        double lat_new = 0;
-        double lon_new = 0;
+        double lat_old=0.0;
+        double lon_old=0.0;
+        double lat_new;
+        double lon_new;
         double time=10;
         double speed;
         double totalDistance = 0;
@@ -132,14 +132,14 @@ public class GpsServices extends Service
 
 
                 Toast.makeText(getApplicationContext(), "Distance is: "
-                        + totalDistance(distance) + "\nSpeed is: " + speed, Toast.LENGTH_SHORT).show();
+                        + distance + "\nSpeed is: " + speed, Toast.LENGTH_SHORT).show();
                 lat_old = lat_new;
                 lon_old = lon_new;
-                sendBroadcastMessage(totalDistance(distance), location.getSpeed());
+                sendBroadcastMessage(distance, location.getSpeed());
 
                 if (isMyServiceRunning(PretendKiosk.class) == false) {
 
-                    //if speed is greater than .5mph.  It's set slow for demo.
+
                     if (speed >= 100) {
                         Intent startLock = new Intent(getApplicationContext(), PretendKiosk.class);
                         startService(startLock);
