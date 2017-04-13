@@ -32,7 +32,7 @@ public class BlockActivity extends AppCompatActivity {
         MailButton     = (ImageButton) findViewById(R.id.mail);
         CameraButton   = (ImageButton) findViewById(R.id.camera);
         MapButton      = (ImageButton) findViewById(R.id.map);
-        drivingStatsTextView = (TextView) findViewById(R.id.drivingStatsTextView);
+        drivingStatsTextView = (TextView) findViewById(R.id.drivingStatusTextView);
 
         EmergencyCall.setOnClickListener(new Button.OnClickListener() {
             @Override
