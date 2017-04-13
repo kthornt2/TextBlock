@@ -61,8 +61,8 @@ public class GpsServices extends Service
         Toast.makeText(getBaseContext(), "Service Started", Toast.LENGTH_SHORT).show();
 
         final Runnable r = new Runnable()
-        {   public void run()
-        {
+        {   public void run(){
+
             Log.v("Debug", "Hello");
             location();
             handler.postDelayed(this, 5000);
@@ -89,11 +89,11 @@ public class GpsServices extends Service
         if (gps_enabled) {
             //updates every 10 seconds
             checkPermission(this);
-            locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,10000,0,locListener);
+            locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locListener);
             Log.v("Debug", "Enabled..");
         }
         if (network_enabled) {
-            locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,10000,0,locListener);
+            locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,locListener);
             Log.v("Debug", "Disabled..");
         }
         Log.v("Debug", "in on create..3");
@@ -114,7 +114,7 @@ public class GpsServices extends Service
         public void onLocationChanged(Location location) {
             Log.v("Debug", "in onLocation changed..");
             if (location != null) {
-                double distance;
+
                 //checkPermission(getApplicationContext());
                 locManager.removeUpdates(locListener);
 
@@ -125,17 +125,17 @@ public class GpsServices extends Service
 
 
 
-                    distance = CalculationByDistance(lat_new, lon_new, lat_old, lon_old);
-                    speed = (distance/ time);
-                    //speed = location.getSpeed();
+                    double distance = CalculationByDistance(lat_new, lon_new, lat_old, lon_old);
+                    speed = distance/ time;
+                    speed = location.getSpeed();
 
 
 
                 Toast.makeText(getApplicationContext(), "Distance is: "
-                        + distance + "\nSpeed is: " + speed, Toast.LENGTH_LONG).show();
+                        + distance + "\n CalcSpeed is: " + speed + "\n getSpeed is: " + location.getSpeed(), Toast.LENGTH_LONG).show();
                 lat_old = lat_new;
                 lon_old = lon_new;
-                sendBroadcastMessage(distance, location.getSpeed());
+                sendBroadcastMessage(totalDistance(distance), location.getSpeed());
 
                 if (isMyServiceRunning(PretendKiosk.class) == false) {
 
