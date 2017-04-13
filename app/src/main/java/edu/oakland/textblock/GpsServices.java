@@ -105,9 +105,11 @@ public class GpsServices extends Service
         double lat_new;
         double lon_new;
         double time=10;
-        double speed = 0.0;
+        double getSpeed = 0.0;
+        double calculatedSpeed = 0.0;
         double totalDistance = 0;
         boolean isSlow = false;
+
 
         @Override
         //when GPS detects a significant change of distance (45m)....
@@ -126,21 +128,26 @@ public class GpsServices extends Service
 
 
                     double distance = CalculationByDistance(lat_new, lon_new, lat_old, lon_old);
-                    speed = distance/ time;
-                    speed = location.getSpeed();
+                    totalDistance=totalDistance + distance;
+                    calculatedSpeed = (distance/ time);
+                    getSpeed = location.getSpeed();
 
 
 
-                Toast.makeText(getApplicationContext(), "Distance is: "
-                        + distance + "\n CalcSpeed is: " + speed + "\n getSpeed is: " + location.getSpeed(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),
+                        "Distance is: " + distance +
+                                "\n Total Distance is:" + totalDistance +
+                                "\n CalcSpeed is: " + calculatedSpeed +
+                                "\n getSpeed is: " + location.getSpeed()
+                                , Toast.LENGTH_LONG).show();
                 lat_old = lat_new;
                 lon_old = lon_new;
-                sendBroadcastMessage(totalDistance(distance), location.getSpeed());
+                sendBroadcastMessage(totalDistance, location.getSpeed());
 
                 if (isMyServiceRunning(PretendKiosk.class) == false) {
 
 
-                    if (speed >= 1.8) {
+                    if (calculatedSpeed >= 1.8) {
                         Intent startLock = new Intent(getApplicationContext(), PretendKiosk.class);
                         startService(startLock);
                     }
@@ -188,12 +195,12 @@ public class GpsServices extends Service
 
 
 
-        public double totalDistance (double mdistance){
+        /*public double totalDistance (double mdistance){
            totalDistance = totalDistance + mdistance;
 
             return totalDistance;
 
-        }
+        }*/
 
 
 
@@ -206,6 +213,7 @@ public class GpsServices extends Service
     }
 
     public double CalculationByDistance(double lat1, double lon1, double lat2, double lon2) {
+        if (lat2 != 0){
         double Radius = EARTH_RADIUS;
         double dLat = Math.toRadians(lat2-lat1);
         double dLon = Math.toRadians(lon2-lon1);
@@ -214,6 +222,11 @@ public class GpsServices extends Service
                         Math.sin(dLon/2) * Math.sin(dLon/2);
         double c = 2 * Math.asin(Math.sqrt(a));
         return Radius * c;
+        } else {
+            return 0.0;
+        }
+
+
     }
 
     private void sendBroadcastMessage(double distance, double speed) {
