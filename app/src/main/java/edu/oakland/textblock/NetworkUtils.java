@@ -19,10 +19,15 @@ import java.net.URL;
 
 public class NetworkUtils {
     // this URL is to upload photos
-    private static final String URL_UPLOAD_PHOTO_IN_PHP = "http://52.41.167.226/UploadPhoto.php";
+    private static final String URL_UPLOAD_PHOTO_IN_PHP = "http://52.41.167.226/UploadPhoto3.php";
     //    private static final String URI_UPLOAD_PHOTO_IN_JSP = "http://52.41.167.226/TextBlockServerSlideTest/UploadPhoto";
     private static int responseCode = 0;
     private static String responseMessage;
+    private String imei;
+
+    public NetworkUtils(String imei) {
+        this.imei = imei;
+    }
 
     public void uploadFileAsync(File photo) {
         UploadFileAsync uploadFileAsync = new UploadFileAsync();
@@ -32,7 +37,7 @@ public class NetworkUtils {
     private class UploadFileAsync extends AsyncTask<File, Integer, Long> {
         @Override
         protected Long doInBackground(File... params) {
-            final String URL_UPLOAD_PHOTO_IN_PHP = "http://52.41.167.226/UploadPhoto.php";
+            //final String URL_UPLOAD_PHOTO_IN_PHP = "http://52.41.167.226/UploadPhoto3.php";
             int responseCode = 0;
             String responseMessage;
             File photo = params[0];
@@ -46,7 +51,7 @@ public class NetworkUtils {
             String lineEnd = "\r\n";
             int byteRead, byteAvailable, bufferSize;
             byte[] buffer;
-            int maxBufferSize = 1024 * 1024 * 3; //3MB
+            int maxBufferSize = 1024 * 1024 * 3;//3Mb
 
             try {
                 destinationURL = new URL(URL_UPLOAD_PHOTO_IN_PHP);
@@ -86,13 +91,19 @@ public class NetworkUtils {
                     // here is the body of the request
                     {
                         // our first form data: fileName
-                        dataOutputStream.writeBytes("Content-disposition: form-data; name='fileName'" + lineEnd);
+                        dataOutputStream.writeBytes("Content-disposition: form-data; name='filename'" + lineEnd);
                         dataOutputStream.writeBytes(lineEnd);
                         dataOutputStream.writeBytes(photo.getName() + lineEnd);
                         dataOutputStream.writeBytes(delimiter + boundary + lineEnd);
 
+                        // our second form data: IMEI
+                        dataOutputStream.writeBytes("Content-disposition: form-data; name='IMEI'" + lineEnd);
+                        dataOutputStream.writeBytes(lineEnd);
+                        dataOutputStream.writeBytes(imei + lineEnd);
+                        dataOutputStream.writeBytes(delimiter + boundary + lineEnd);
+
                         {
-                            // our second form-data: image
+                            // our second form-data: photo
                             dataOutputStream.writeBytes("Content-disposition: form-data; name='photo'; filename=\'" + photo.getName() + "\'" + lineEnd);
                             dataOutputStream.writeBytes(lineEnd);
                             // to prepare to read from the image file and write into the body of the request
@@ -156,7 +167,7 @@ public class NetworkUtils {
                 httpURLConnection.disconnect();
 //            Log.d("MyApp:","ResCode="+responseCode);
                 if (responseCode == 200) {
-//                Toast.makeText(this,"Photos has been sent to your guardian,\nplease wait to be confirm.",Toast.LENGTH_LONG);
+//                Toast.makeText(this,"Photos has been sent to your guardian,\nplease wait to be confirm.",Toast.LENGTH_LONG).show();
                 }
 
 

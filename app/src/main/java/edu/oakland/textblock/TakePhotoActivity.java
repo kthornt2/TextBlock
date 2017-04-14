@@ -103,12 +103,14 @@ public class TakePhotoActivity extends AppCompatActivity {
 
             // to display the photo for user viewing
 //            showPhoto();
+            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            String IMEI = telephonyManager.getDeviceId();
 
-//            NetworkUtils networkUtils=new NetworkUtils();
-//            networkUtils.uploadFileAsync(photo);
+            NetworkUtils networkUtils = new NetworkUtils(IMEI);
+            networkUtils.uploadFileAsync(photo);
 
             // to upload photos
-            upload(photo);
+//            upload(photo);
 
             // then to open camera again to take another photo in opposite direction
             if (numbersOfPhoto++ < 1) {
