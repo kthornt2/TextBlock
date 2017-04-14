@@ -111,10 +111,10 @@ public class GpsServices extends Service
         double calculatedSpeed = 0.0;
         double totalDistance = 0;
         boolean isSlow = false;
-        long newTime = System.currentTimeMillis();
+        long newTime;
         long oldTime = 0;
         long timeElapsed = 0;
-
+        double doubleTimeElapsed = 0;
 
         @Override
         //when GPS detects a significant change of distance (45m)....
@@ -128,18 +128,27 @@ public class GpsServices extends Service
                 //String Speed = "Device Speed: " +location.getSpeed();
                 lat_new = location.getLatitude();
                 lon_new = location.getLongitude();
+                newTime = System.currentTimeMillis();
 
                 if (oldTime != 0) {
-                     timeElapsed = newTime - oldTime;
+                     timeElapsed = (newTime - oldTime);
+                    doubleTimeElapsed = timeElapsed * .001;
                 }
                 double distance = CalculationByDistance(lat_new, lon_new, lat_old, lon_old);
                 totalDistance = totalDistance + distance;
-                calculatedSpeed = (distance / timeElapsed);
+                if (timeElapsed != 0) {
+                    calculatedSpeed = distance / doubleTimeElapsed;
+                } else {
+                    calculatedSpeed = distance / 10;
+                }
 
                 NumberFormat formatter = new DecimalFormat("#0.000");
                 Toast.makeText(getApplicationContext(),
                                 "Lat is: " + lat_new + "\n Lon is: " + lon_new +
                                 "\n Distance is: " + formatter.format(distance) +
+                                        "\n Time Elasped is: " + doubleTimeElapsed +
+                                        "\n New Time is: " + newTime +
+                                        "\n Old Time is: " + oldTime +
                                 "\n Total Distance is:" + formatter.format(totalDistance) +
                                 "\n CalcSpeed is: " + formatter.format(calculatedSpeed) +
                                 "\n getSpeed is: " + formatter.format(location.getSpeed())
