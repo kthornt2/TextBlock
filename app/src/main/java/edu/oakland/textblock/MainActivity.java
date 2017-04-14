@@ -119,6 +119,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 }
                 // [START_EXCLUDE]
                 updateUI(user);
+
+
                 // [END_EXCLUDE]
             }
         };

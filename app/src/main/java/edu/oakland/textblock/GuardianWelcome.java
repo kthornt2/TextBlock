@@ -79,7 +79,7 @@ public class GuardianWelcome extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(GuardianWelcome.this, Settings.class);
+                Intent intent = new Intent(GuardianWelcome.this, edu.oakland.textblock.Settings.class);
                 startActivity(intent);
             }
         });

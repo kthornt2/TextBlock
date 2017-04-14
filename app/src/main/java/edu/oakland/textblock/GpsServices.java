@@ -17,6 +17,8 @@ import android.util.Log;
 import android.widget.Toast;
 import android.Manifest;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -76,23 +78,24 @@ public class GpsServices extends Service
         locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
 
-        try{
+        /*try{
             gps_enabled = locManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
         }
-        catch(Exception ex){}
+        catch(Exception ex){}*/
         try{
             network_enabled = locManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
         }
         catch(Exception ex){}
         Log.v("Debug", "in on create.. 2");
-        if (gps_enabled) {
+       /* if (gps_enabled) {
             //updates every 10 seconds
             checkPermission(this);
             locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locListener);
             Log.v("Debug", "Enabled..");
-        }
+        }*/
         if (network_enabled) {
+            checkPermission(this);
             locManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,locListener);
             Log.v("Debug", "Disabled..");
         }
@@ -105,10 +108,12 @@ public class GpsServices extends Service
         double lat_new;
         double lon_new;
         double time=10;
-        double getSpeed = 0.0;
         double calculatedSpeed = 0.0;
         double totalDistance = 0;
         boolean isSlow = false;
+        long newTime = System.currentTimeMillis();
+        long oldTime = 0;
+        long timeElapsed = 0;
 
 
         @Override
@@ -124,71 +129,62 @@ public class GpsServices extends Service
                 lat_new = location.getLatitude();
                 lon_new = location.getLongitude();
 
+                if (oldTime != 0) {
+                     timeElapsed = newTime - oldTime;
+                }
+                double distance = CalculationByDistance(lat_new, lon_new, lat_old, lon_old);
+                totalDistance = totalDistance + distance;
+                calculatedSpeed = (distance / timeElapsed);
 
-
-
-                    double distance = CalculationByDistance(lat_new, lon_new, lat_old, lon_old);
-                    totalDistance=totalDistance + distance;
-                    calculatedSpeed = (distance/ time);
-                    getSpeed = location.getSpeed();
-
-
-
+                NumberFormat formatter = new DecimalFormat("#0.000");
                 Toast.makeText(getApplicationContext(),
-                        "Distance is: " + distance +
-                                "\n Total Distance is:" + totalDistance +
-                                "\n CalcSpeed is: " + calculatedSpeed +
-                                "\n getSpeed is: " + location.getSpeed()
-                                , Toast.LENGTH_LONG).show();
+                                "Lat is: " + lat_new + "\n Lon is: " + lon_new +
+                                "\n Distance is: " + formatter.format(distance) +
+                                "\n Total Distance is:" + formatter.format(totalDistance) +
+                                "\n CalcSpeed is: " + formatter.format(calculatedSpeed) +
+                                "\n getSpeed is: " + formatter.format(location.getSpeed())
+                        , Toast.LENGTH_LONG).show();
                 lat_old = lat_new;
                 lon_old = lon_new;
-                sendBroadcastMessage(totalDistance, location.getSpeed());
+                oldTime = newTime;
+                sendBroadcastMessage(totalDistance, calculatedSpeed);
 
                 if (isMyServiceRunning(PretendKiosk.class) == false) {
 
 
-                    if (calculatedSpeed >= 1.8) {
+                    if (calculatedSpeed >= 0.5) {
                         Intent startLock = new Intent(getApplicationContext(), PretendKiosk.class);
                         startService(startLock);
                     }
 
                 } /*else if (isMyServiceRunning(PretendKiosk.class) == true) {
 
-                    if (speed <= .5) {
+                    if (calculatedSpeed <= 1.8) {
                         isSlow = true;
+                        Timer timer = new Timer ();
+                        TimerTask hourlyTask = new TimerTask () {
+                            @Override
+                            public void run () {
+                                if (calculatedSpeed >= 1.8) {
+                                    cancel();
+                                } else {
+                                    Intent stopLock = new Intent(getApplicationContext(), PretendKiosk.class);
+                                    stopService(stopLock);
+                                }
+                            }
+                        };
+
+
+                        timer.schedule (hourlyTask, 0l, 1000*60*60);   // 10 minutes
+
                     } else {
                         isSlow = false;
                     }
 
 
-                    while (isSlow = true) {
-
-                        final Timer timer = new Timer();
-                        timer.schedule(new TimerTask() {
-                            private int i = 5;
-
-                            @Override
-                            public void run() {
-                                Toast.makeText(getApplicationContext(),"Slow for" + i + "counts of 30",Toast.LENGTH_SHORT).show();
-                                if (--i < 1 && speed <= .5) {
-                                    timer.cancel();
-                                    Intent stopLock = new Intent(getApplicationContext(), PretendKiosk.class);
-                                    stopService(stopLock);
-
-                                } else {
-                                    i = 5;
-                                }
-
-
-                                }
-                            },30000);*/
-                    //    }
-                   // }
-
-
-                }
+                }*/
             }
-
+        }
 
 
 
