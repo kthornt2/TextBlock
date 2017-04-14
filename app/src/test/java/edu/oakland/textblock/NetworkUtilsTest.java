@@ -44,7 +44,7 @@ public class NetworkUtilsTest {
             }
         }
         if (photo.isFile()) {
-            NetworkUtils networkUtils = new NetworkUtils();
+            NetworkUtils networkUtils = new NetworkUtils("I am IMEI");
             networkUtils.uploadFileAsync(photo);
         }
 
