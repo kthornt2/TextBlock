@@ -191,8 +191,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             case forget_password_button:
                 forgetPass(emailEdit.getText().toString());
                 break;
-            case R.id.sign_up_button:
-                signUp(emailEdit.getText().toString(), passEdit.getText().toString());
+            case R.id.sign_up_button: {
+                String email = emailEdit.getText().toString();
+                String pwd = passEdit.getText().toString();
+                signUp(email, pwd);
+                // to sent the form data to our server
+                signUpInOurServer(email, pwd);
+            }
                 break;
             case R.id.email_sign_in_button:
 
@@ -203,6 +208,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         }
 
+    }
+
+    private void signUpInOurServer(String email, String pwd) {
+        //TODO
     }
 
 
