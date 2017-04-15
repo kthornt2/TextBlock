@@ -4,24 +4,29 @@ package edu.oakland.textblock;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.provider.Settings;
-import android.content.Intent;
-import android.net.Uri;
-import android.content.Context;
-import android.R.*;
-import android.Manifest;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.util.Hashtable;
+import java.util.Map;
 
 
 public class GuardianWelcome extends AppCompatActivity {
+    public final static int REQUEST_CODE = -1010101;
     private ImageButton signOutButton;
     private ImageButton NotifiButton;
     private ImageButton settingButton;
     private ImageButton statisButton;
-
-    public final static int REQUEST_CODE = -1010101;
 
 
     /*public void checkDrawOverlayPermission() {
@@ -41,7 +46,11 @@ public class GuardianWelcome extends AppCompatActivity {
         *//** check if received result code
          is equal our requested code for draw permission  *//*
         if (requestCode == REQUEST_CODE) {
-            *//** if so check once again if we have permission *//*
+            */
+
+    /**
+     * if so check once again if we have permission
+     *//*
             if (Settings.canDrawOverlays(this)) {
                 // continue here - permission was granted
             }
@@ -94,9 +103,53 @@ public class GuardianWelcome extends AppCompatActivity {
         });
 
 
+    }
+
+    public void getPhoto(View view) {
+        getPhotosFromSever();
+    }
+
+    private void getPhotosFromSever() {
+        final String URL_GETPHOTOS = "http://52.41.167.226/GetPhotos.php";
+        RequestQueue requestQueue;
+        requestQueue = Volley.newRequestQueue(this);
+
+        // instantiate a StringRequest to get photos' links
+        StringRequest getPhotosRequest;
+        getPhotosRequest = new StringRequest(Request.Method.POST, URL_GETPHOTOS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("MyApp Res", response);
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("MyApp ResErr", error.toString());
+
+            }
+        }) {
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new Hashtable<String, String>();
+                // add IMEI into the request
+//                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+//                String IMEI = telephonyManager.getDeviceId();
+//                Log.d("MyApp IMEI", IMEI);
+                params.put("IMEI", "860670027551265");
+                Log.d("MyApp IMEI", "860670027551265");
+                return params;
+            }
+        };
+        try {
+            Log.d("MyApp", getPhotosRequest.getBody().toString());
+        } catch (AuthFailureError authFailureError) {
+            authFailureError.printStackTrace();
         }
+        requestQueue.add(getPhotosRequest);
 
     }
+
+}
 
 
 
