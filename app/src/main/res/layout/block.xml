@@ -26,23 +26,9 @@
         android:layout_height="131dp"
         android:layout_marginTop="30dp">
 
-        <ImageButton
-            android:id="@+id/mail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:layout_marginTop="40dp"
-            android:background="#00000000"
-            android:src="@drawable/mail" />
 
-        <ImageButton
-            android:id="@+id/map"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="25dp"
-            android:background="#00000000"
-            android:src="@drawable/mapnew" />
+
+
 
 
         <ImageButton
@@ -58,15 +44,6 @@
     </LinearLayout>
 
     <ImageButton
-        android:id="@+id/emergency_call"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:background="#00000000"
-        android:src="@drawable/emergency" />
-
-    <ImageButton
         android:id="@+id/lock_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -76,11 +53,15 @@
         android:src="@drawable/lock"
         />
 
-    <TextView
-        android:id="@+id/drivingStatusTextView"
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName" />
+        android:text="Emergency Unlock"
+        android:id="@+id/emergency_unlock"
+        android:onClick="emergencyUnlock"
+        />
+
+
+
 
 </LinearLayout>

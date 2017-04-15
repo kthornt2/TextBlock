@@ -28,7 +28,7 @@ public class BlockActivity extends AppCompatActivity {
         setContentView(R.layout.block);
 
 
-        EmergencyCall  = (ImageButton) findViewById(R.id.emergency_call);
+//        EmergencyCall  = (ImageButton) findViewById(R.id.emergency_unlock);
         MailButton     = (ImageButton) findViewById(R.id.mail);
         CameraButton   = (ImageButton) findViewById(R.id.camera);
         MapButton      = (ImageButton) findViewById(R.id.map);
@@ -39,8 +39,11 @@ public class BlockActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 stopService(new Intent(BlockActivity.this, PretendKiosk.class));
+                stopService(new Intent(BlockActivity.this, GpsServices.class));
+
                 ImageButton btn = (ImageButton)findViewById(R.id.emergency_call);
                 btn.setImageResource(R.drawable.unlocked);
+                finish();
 
             }
         });
@@ -90,5 +93,12 @@ public class BlockActivity extends AppCompatActivity {
     public void unlockMyPhone(View view) {
         Intent takePhoto = new Intent(this, TakePhotoActivity.class);
         startActivity(takePhoto);
+    }
+
+    public void emergencyUnlock(View view) {
+        //// TODO: 4/15/2017
+        Intent unlock = new Intent(getApplicationContext(),PretendKiosk.class);
+        stopService(unlock);
+        finish();
     }
 }

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import java.util.List;
@@ -86,6 +87,10 @@ public class PretendKiosk extends Service {
 
                         return false;
                     }
+                    if (activeProcess.equals(MediaStore.ACTION_IMAGE_CAPTURE)) {
+
+                        return false;
+                    }
                 }
             }
         }
@@ -102,6 +107,7 @@ public class PretendKiosk extends Service {
         Intent i = new Intent(ctx, BlockActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         ctx.startActivity(i);
+
     }
 
     public boolean isKioskModeActive(final Context context) {
