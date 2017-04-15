@@ -1,6 +1,7 @@
 package edu.oakland.textblock;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +18,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -37,6 +46,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import java.util.Hashtable;
+import java.util.Map;
+
 import static edu.oakland.textblock.R.id.forget_password_button;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
@@ -56,8 +68,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private FirebaseAuth mAuth;
     //设置一个响应用户的登录状态变化的 AuthStateListener：
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private  String permission = "ACCESS_FINE_LOCATION";
+    private String permission = "ACCESS_FINE_LOCATION";
     private Integer GPS_SETTINGS = 0x7;
+
+    // for "sign up" on our server
+//    private String email;
+//    private String pwd;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
 
         //googleSignInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
-       // googleSignInButton.setOnClickListener(this);
+        // googleSignInButton.setOnClickListener(this);
 
 
         signOutButton.setOnClickListener(this);
@@ -136,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
                 //This is called if user has denied the permission before
                 //In this case I am just asking the permission again
-                ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
 
             } else {
 
@@ -145,14 +161,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         } else {
             Toast.makeText(this, "" + permission + " is already granted.", Toast.LENGTH_SHORT).show();
         }
-        startService(new Intent(this, GpsServices.class));    }
+        startService(new Intent(this, GpsServices.class));
+    }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch(requestCode) {
+        switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
 
                 } else {
@@ -161,18 +178,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 }
 
 
+            }
         }
 
-
-
-
-        }
-
-        }
-
-
-
-
+    }
 
 
     // 简单工厂模式
@@ -196,9 +205,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 String pwd = passEdit.getText().toString();
                 signUp(email, pwd);
                 // to sent the form data to our server
-                signUpInOurServer(email, pwd);
+                signUpOnOurServer(email, pwd);
             }
-                break;
+            break;
             case R.id.email_sign_in_button:
 
 
@@ -210,8 +219,47 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     }
 
-    private void signUpInOurServer(String email, String pwd) {
-        //TODO
+    private void signUpOnOurServer(final String email, final String pwd) {
+
+        final String URL_SIGNUP = "http://52.41.167.226/SignUp.php";
+        RequestQueue requestQueue;
+        requestQueue = Volley.newRequestQueue(this);
+
+        // instantiate a StringRequest to get photos' links
+        StringRequest getPhotosRequest;
+        getPhotosRequest = new StringRequest(Request.Method.POST, URL_SIGNUP, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("MyApp Res", response);
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("MyApp ResErr", error.toString());
+
+            }
+        }) {
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new Hashtable<String, String>();
+                // add IMEI into the request
+                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                String IMEI = telephonyManager.getDeviceId();
+                params.put("IMEI", IMEI);
+                params.put("email", email);
+                params.put("pwd", pwd);
+                Log.d("MyApp IMEI", "");
+                return params;
+            }
+        };
+        try {
+            Log.d("MyApp", getPhotosRequest.getBody().toString());
+        } catch (AuthFailureError authFailureError) {
+            authFailureError.printStackTrace();
+        }
+        requestQueue.add(getPhotosRequest);
+
+
     }
 
 
@@ -415,8 +463,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             findViewById(R.id.sign_out_button).setVisibility(View.GONE);
         }
     }
-
-
 
 
 }
