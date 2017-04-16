@@ -205,8 +205,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
             break;
             case R.id.email_sign_in_button:
-
-
                 //startService(new Intent(this, GpsServices.class));
                 emailSignIn(emailEdit.getText().toString(), passEdit.getText().toString());
                 break;
@@ -244,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 params.put("IMEI", IMEI);
                 params.put("email", email);
                 params.put("pwd", pwd);
-                Log.d("MyApp IMEI", "");
+                Log.d("MyApp IMEI", IMEI);
                 return params;
             }
         };

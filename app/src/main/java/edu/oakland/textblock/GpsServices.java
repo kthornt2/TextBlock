@@ -181,6 +181,7 @@ public class GpsServices extends Service implements
         }
 
         if (isMyServiceRunning(PretendKiosk.class) == false) {
+            //
             if (currentSpeed >= 2) {
                 Intent startLock = new Intent(getApplicationContext(), PretendKiosk.class);
                 startService(startLock);

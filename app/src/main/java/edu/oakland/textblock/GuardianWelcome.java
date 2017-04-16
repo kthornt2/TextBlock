@@ -1,9 +1,11 @@
 package edu.oakland.textblock;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -78,7 +80,7 @@ public class GuardianWelcome extends AppCompatActivity {
         NotifiButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                getPhotosFromSever();
                 Intent intent = new Intent(GuardianWelcome.this, Notifications.class);
                 startActivity(intent);
             }
@@ -105,10 +107,11 @@ public class GuardianWelcome extends AppCompatActivity {
 
     }
 
-    public void getPhoto(View view) {
-        getPhotosFromSever();
-    }
-
+    /*
+        public void getPhoto(View view) {
+            getPhotosFromSever();
+        }
+    */
     private void getPhotosFromSever() {
         final String URL_GETPHOTOS = "http://52.41.167.226/GetPhotos.php";
         RequestQueue requestQueue;
@@ -122,7 +125,6 @@ public class GuardianWelcome extends AppCompatActivity {
                 Log.d("MyApp Res", response);
             }
         }, new Response.ErrorListener() {
-
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("MyApp ResErr", error.toString());
@@ -132,10 +134,10 @@ public class GuardianWelcome extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new Hashtable<String, String>();
                 // add IMEI into the request
-//                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-//                String IMEI = telephonyManager.getDeviceId();
-//                Log.d("MyApp IMEI", IMEI);
-                params.put("IMEI", "860670027551265");
+                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                String IMEI = telephonyManager.getDeviceId();
+                Log.d("MyApp IMEI", IMEI);
+                params.put("IMEI", IMEI);
                 Log.d("MyApp IMEI", "860670027551265");
                 return params;
             }
