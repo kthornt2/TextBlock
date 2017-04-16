@@ -2,7 +2,6 @@ package edu.oakland.textblock;
 
 import android.app.ActivityManager;
 import android.app.Service;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,14 +11,12 @@ import android.provider.MediaStore;
 import android.util.Log;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Remzorz on 3/10/2017.
  */
 
 public class PretendKiosk extends Service {
-
     //private static final long INTERVAL = TimeUnit.SECONDS.toMillis(1); // periodic interval to check in seconds -> 1 seconds
     private static final String TAG = PretendKiosk.class.getSimpleName();
     private static final String PREF_KIOSK_MODE = "pref_kiosk_mode";
@@ -33,7 +30,7 @@ public class PretendKiosk extends Service {
 
         //clean up for app closing
         Log.i(TAG, "Stopping service 'LockMode'");
-        running =false;
+        running = false;
         super.onDestroy();
     }
 
@@ -56,7 +53,7 @@ public class PretendKiosk extends Service {
                     } catch (InterruptedException e) {
                         Log.i(TAG, "Thread interrupted: 'LockMode'");
                     }
-                }while(running);
+                } while (running);
                 //stop thread
                 stopSelf();
             }
@@ -68,9 +65,9 @@ public class PretendKiosk extends Service {
 
     private void handleKioskMode() {
         // checks if the kiosk mode is active
-        if(isKioskModeActive(this)) {
+        if (isKioskModeActive(this)) {
             // by looking at the list of tasks.  Is it the front task? If not...
-            if(isInBackground()== true) {
+            if (isInBackground() == true) {
                 //restore the app
                 restoreApp(); // restore!
             }
@@ -84,17 +81,14 @@ public class PretendKiosk extends Service {
             if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
                 for (String activeProcess : processInfo.pkgList) {
                     if (activeProcess.equals(ctx.getPackageName())) {
-
                         return false;
                     }
                     if (activeProcess.equals(MediaStore.ACTION_IMAGE_CAPTURE)) {
-
                         return false;
                     }
                 }
             }
         }
-
 
         return true;
         /*List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);

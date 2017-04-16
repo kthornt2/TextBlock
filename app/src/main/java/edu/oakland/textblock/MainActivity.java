@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        askForPermission();
+//        askForPermission();
         FirebaseApp.initializeApp(this);
 
         // [START config_signin]
@@ -146,20 +146,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private void askForPermission() {
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-
                 //This is called if user has denied the permission before
                 //In this case I am just asking the permission again
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-
             } else {
-
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
             }
         } else {
-            Toast.makeText(this, "" + permission + " is already granted.", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "" + permission + " is already granted.", Toast.LENGTH_SHORT).show();
         }
         startService(new Intent(this, GpsServices.class));
     }

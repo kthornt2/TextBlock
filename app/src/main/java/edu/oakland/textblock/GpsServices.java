@@ -1,7 +1,6 @@
 package edu.oakland.textblock;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Context;
@@ -13,7 +12,6 @@ import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,26 +37,23 @@ public class GpsServices extends Service implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    private double EARTH_RADIUS = 6371000.000;
+    private static final String TAG = "LocationActivity";
+    private static final long INTERVAL = 1000 * 10;
+    private static final long FASTEST_INTERVAL = 1000 * 5;
     public static String
             DISTANCE_BROADCAST = GpsServices.class.getName() + "Location Broadcast",
             EXTRA_SPEED = "extra_speed",
             EXTRA_DISTANCE = "extra_distance";
-
-    private static final String TAG = "LocationActivity";
-    private static final long INTERVAL = 1000 * 10;
-    private static final long FASTEST_INTERVAL = 1000 * 5;
     Button btnFusedLocation;
     TextView tvLocation;
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
     Location mCurrentLocation;
     String mLastUpdateTime;
-
     double lat1=0.0;
     double lon1=0.0;
-    double lat2;
-    double lon2;
+    double lat2 = 0.0;
+    double lon2 = 0.0;
     double time=10;
     double calculatedSpeed = 0.0;
     double totalDistance = 0;
@@ -68,6 +63,14 @@ public class GpsServices extends Service implements
     long timeElapsed = 0;
     double doubleTimeElapsed = 0;
     double currentSpeed;
+    private double EARTH_RADIUS = 6371000.000;
+
+    public static boolean checkPermission(final Context context) {
+        return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED;
+    }
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
@@ -91,26 +94,19 @@ public class GpsServices extends Service implements
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
-
-
     }
-
 
     @Override
     public void onStart(Intent intent, int startid) {
-
         Log.d(TAG, "onStart fired ..............");
         mGoogleApiClient.connect();
     }
-
-
 
     private boolean isGooglePlayServicesAvailable() {
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (ConnectionResult.SUCCESS == status) {
             return true;
         } else {
-
             return false;
         }
     }
@@ -122,7 +118,6 @@ public class GpsServices extends Service implements
     }
 
     protected void startLocationUpdates() {
-
         checkPermission(this);
         PendingResult<Status> pendingResult = LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
@@ -131,14 +126,6 @@ public class GpsServices extends Service implements
 
     @Override
     public void onConnectionSuspended(int i) {
-
-    }
-
-    public static boolean checkPermission(final Context context){
-        return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
@@ -155,7 +142,6 @@ public class GpsServices extends Service implements
     }
 
     private void updateUI() {
-
         Log.d(TAG, "UI update initiated .............");
         if (null != mCurrentLocation) {
             currentSpeed = mCurrentLocation.getSpeed();
@@ -195,16 +181,10 @@ public class GpsServices extends Service implements
         }
 
         if (isMyServiceRunning(PretendKiosk.class) == false) {
-
-
             if (currentSpeed >= 2) {
                 Intent startLock = new Intent(getApplicationContext(), PretendKiosk.class);
                 startService(startLock);
-
-            }
-
-                else if (isMyServiceRunning(PretendKiosk.class) == true) {
-
+            } else if (isMyServiceRunning(PretendKiosk.class) == true) {
                     if (mCurrentLocation.getSpeed() <= 2) {
                         isSlow = true;
                         Timer timer = new Timer();
@@ -222,9 +202,7 @@ public class GpsServices extends Service implements
                         timer.schedule(hourlyTask, 01, 1000 * 60 * 60);
                     }
                 }
-
             }
-
         }
 
 
@@ -251,12 +229,7 @@ public class GpsServices extends Service implements
         } else {
             return 0.0;
         }
-
-
     }
-
-
-
 
     protected void stopLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(
@@ -265,15 +238,11 @@ public class GpsServices extends Service implements
     }
 
     private void sendBroadcastMessage(double distance, double speed) {
-
         double roundedDistance= Math.round((distance * 100)) / 100.0d;
         double roundedSpeed= Math.round((speed * 100)) / 100.0d;
         Intent intent = new Intent(DISTANCE_BROADCAST);
         intent.putExtra(EXTRA_DISTANCE,roundedDistance);
         intent.putExtra(EXTRA_SPEED,roundedSpeed);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-
     }
-
-
 }

@@ -21,28 +21,23 @@ public class BlockActivity extends AppCompatActivity {
     private ImageButton MapButton;
     private TextView drivingStatsTextView;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.block);
-
-
 //        EmergencyCall  = (ImageButton) findViewById(R.id.emergency_unlock);
-        MailButton     = (ImageButton) findViewById(R.id.mail);
-        CameraButton   = (ImageButton) findViewById(R.id.camera);
-        MapButton      = (ImageButton) findViewById(R.id.map);
-        drivingStatsTextView = (TextView) findViewById(R.id.drivingStatusTextView);
+//        MailButton     = (ImageButton) findViewById(R.id.mail);
+        CameraButton = (ImageButton) findViewById(R.id.camera);
+//        MapButton      = (ImageButton) findViewById(R.id.map);
+//        drivingStatsTextView = (TextView) findViewById(R.id.drivingStatusTextView);
 
         EmergencyCall.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 stopService(new Intent(BlockActivity.this, PretendKiosk.class));
                 stopService(new Intent(BlockActivity.this, GpsServices.class));
-
-                ImageButton btn = (ImageButton)findViewById(R.id.emergency_call);
-                btn.setImageResource(R.drawable.unlocked);
+//                ImageButton btn = (ImageButton)findViewById(R.id.emergency_call);
+//                btn.setImageResource(R.drawable.unlocked);
                 finish();
 
             }
@@ -68,7 +63,7 @@ public class BlockActivity extends AppCompatActivity {
             }
         });
 
-       CameraButton.setOnClickListener(new Button.OnClickListener() {
+        CameraButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -97,7 +92,7 @@ public class BlockActivity extends AppCompatActivity {
 
     public void emergencyUnlock(View view) {
         //// TODO: 4/15/2017
-        Intent unlock = new Intent(getApplicationContext(),PretendKiosk.class);
+        Intent unlock = new Intent(getApplicationContext(), PretendKiosk.class);
         stopService(unlock);
         finish();
     }
