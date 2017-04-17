@@ -30,6 +30,7 @@ public class PretendKiosk extends Service {
         //clean up for app closing
         Log.i(TAG, "Stopping service 'LockMode'");
         running = false;
+        t.interrupt();
         super.onDestroy();
     }
 
