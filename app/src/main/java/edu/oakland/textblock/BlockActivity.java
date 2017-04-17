@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -19,7 +20,9 @@ public class BlockActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.block);
+
 //        EmergencyCall  = (ImageButton) findViewById(R.id.emergency_unlock);
 //        MailButton     = (ImageButton) findViewById(R.id.mail);
         CameraButton = (ImageButton) findViewById(R.id.camera);
@@ -104,11 +107,12 @@ public class BlockActivity extends AppCompatActivity {
 
     public void emergencyUnlock(View view) {
         //// TODO: 4/15/2017
-        GpsServices mGPSServices = new GpsServices();
-        mGPSServices.stopLocationUpdates();
-        Intent unlock = new Intent(getApplicationContext(), PretendKiosk.class);
+        Intent unlock = new Intent(this, PretendKiosk.class);
+//        unbindService(unlock):
+
         stopService(unlock);
-        Intent stopGPS = new Intent(getApplicationContext(), GpsServices.class);
-        finish();
+        Intent stopGPS = new Intent(this, GpsServices.class);
+        stopService(stopGPS);
+//        finish();
     }
 }
