@@ -29,8 +29,6 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class GpsServices extends Service implements
         LocationListener,
@@ -148,7 +146,7 @@ public class GpsServices extends Service implements
             lat2 = mCurrentLocation.getLatitude();
             lon2 = mCurrentLocation.getLongitude();
             newTime = System.currentTimeMillis();
-            System.out.println("Lat2: " + lat2 + "Lon2: " + lon2);
+//            System.out.println("Lat2: " + lat2 + "Lon2: " + lon2);
             Log.d("Lat2", String.valueOf(lat2));
             Log.d("Lon2", String.valueOf(lon2));
             if (oldTime != 0) {
@@ -182,17 +180,19 @@ public class GpsServices extends Service implements
 
         if (isMyServiceRunning(PretendKiosk.class) == false) {
             //
-            if (currentSpeed >= 2) {
+            final double criticalSpeed = 0.0;
+            if (mCurrentLocation.getSpeed() >= criticalSpeed || calculatedSpeed >= criticalSpeed) {
+                Log.d(TAG, "Lock is triggering");
                 Intent startLock = new Intent(getApplicationContext(), PretendKiosk.class);
                 startService(startLock);
-            } else if (isMyServiceRunning(PretendKiosk.class) == true) {
-                    if (currentSpeed <= 2 || calculatedSpeed <= 2) {
+            }/* else if (isMyServiceRunning(PretendKiosk.class) == true) {
+                    if (mCurrentLocation.getSpeed() <= criticalSpeed || calculatedSpeed <= criticalSpeed) {
                         isSlow = true;
                         Timer timer = new Timer();
                         TimerTask hourlyTask = new TimerTask() {
                             @Override
                             public void run() {
-                                if (currentSpeed >= 2 || calculatedSpeed >= 2 ) {
+                                if (mCurrentLocation.getSpeed() >= criticalSpeed ) {
                                     cancel();
                                 } else {
                                     Intent stopLock = new Intent(getApplicationContext(), PretendKiosk.class);
@@ -202,7 +202,7 @@ public class GpsServices extends Service implements
                         };
                         timer.schedule(hourlyTask, 01, 1000 * 60 * 60);
                     }
-                }
+                }*/
             }
         }
 
@@ -245,5 +245,15 @@ public class GpsServices extends Service implements
         intent.putExtra(EXTRA_DISTANCE,roundedDistance);
         intent.putExtra(EXTRA_SPEED,roundedSpeed);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    @Override
+    public void onDestroy() {
+
+        //clean up for app closing
+        stopSelf();
+        Log.i(TAG, "Stopping service 'GPSServices'");
+
+        super.onDestroy();
     }
 }

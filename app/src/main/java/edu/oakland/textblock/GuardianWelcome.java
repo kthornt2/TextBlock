@@ -80,7 +80,7 @@ public class GuardianWelcome extends AppCompatActivity {
         NotifiButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getPhotosFromSever();
+                //getPhotosFromSever();
                 Intent intent = new Intent(GuardianWelcome.this, Notifications.class);
                 startActivity(intent);
             }

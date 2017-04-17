@@ -116,7 +116,9 @@ public class TakePhotoActivity extends AppCompatActivity {
             if (numbersOfPhoto++ < 1) {
                 openAnCamera();
             } else {
-                Log.d("MyAPP", "User has cancel to take a picture.\n then we should return to the statue activity");
+                Log.d("MyAPP", "User has finished taking pictures.\n then we should return to the block activity");
+                Intent gpsServices = new Intent(getApplicationContext(), GpsServices.class);
+                startService(gpsServices);
                 Intent returnToStatueActivity = new Intent(this, BlockActivity.class);
             }
         } else {

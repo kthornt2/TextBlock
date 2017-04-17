@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/guardian_view"
@@ -17,22 +18,22 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="6dp"
-        android:text="Notifications" />
+        android:text="History of Photos" />
 
     <Button
         android:id="@+id/test_button"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
         android:text="test"
         />
 
     <ListView
+        android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:divider="#b5b5b5"
         android:dividerHeight="1dp"
-        android:id="@android:id/list"
         />
 </LinearLayout>
