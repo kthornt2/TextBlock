@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -77,19 +76,18 @@ public class Notifications extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 Log.d("MyApp Res", response);
-                String[] result = response.split("'\n'");
+                String[] result = response.split(";");
                 int numberOfRow = 0;
-
-                numberOfRow = Integer.valueOf(result[0].substring(0, result[0].indexOf('\n')));
+                numberOfRow = Integer.valueOf(result[0]);
                 if (numberOfRow > 0) {
                     List photoURLs = new ArrayList<String>();
-                    listAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.notifications, photoURLs);
+                    /*
+                    listAdapter = new ArrayAdapter<String>(getApplicationContext(), R.id.list, photoURLs);
                     for (int i = 1; i < numberOfRow; i++) {
                         photoURLs.add(result[i]);
                     }
                     listView.setAdapter(listAdapter);
-//                int numberOfResult=response.split()
-//                listView.addView();
+                    */
                 }
             }
         }, new Response.ErrorListener() {

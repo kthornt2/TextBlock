@@ -12,15 +12,26 @@ public class ExampleUnitTest {
     public void addition_isCorrect() throws Exception {
         String response = "4\nURL: http:xxxxx\nURL: http:xxxxx\n";
         response = "0\n";
-        String[] result = response.split("'\n'");
-        System.out.println(result[0].indexOf('\n'));
-
+        response = "4;" + "URL: 52.41.167.226/photos/IMG_20170414_162429.jpg;" +
+                "URL: 52.41.167.226/photos/IMG_20170414_162437.jpg;" +
+                "URL: 52.41.167.226/photos/IMG_20170414_162618.jpg;";
+        String[] result = response.split(";");
+        System.out.println(result[0].indexOf(";"));
+        System.out.println("Length: " + result.length);
 //        if (result.length > 1) {
-        int numberOfResult = Integer.valueOf(result[0].substring(0, result[0].indexOf('\n')));
+        int numberOfResult = Integer.valueOf(result[0]);
         System.out.println(numberOfResult);
         for (String element : result) {
-            System.out.println(element);
+            System.out.print(element);
         }
+
+        String string = "abcbdbebfb";
+        String[] bString = string.split("b");
+        for (String e : bString) {
+            System.out.print(e);
+        }
+        System.out.print(bString.length);
+
 //        }
     }
 }
