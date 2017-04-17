@@ -35,6 +35,7 @@ public class GpsServices extends Service implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
+    public static boolean lockIsListening = true;
     private static final String TAG = "LocationActivity";
     private static final long INTERVAL = 1000 * 10;
     private static final long FASTEST_INTERVAL = 1000 * 5;
@@ -181,7 +182,7 @@ public class GpsServices extends Service implements
         if (isMyServiceRunning(PretendKiosk.class) == false) {
             //
             final double criticalSpeed = 1;
-            if (mCurrentLocation.getSpeed() >= criticalSpeed) {
+            if (mCurrentLocation.getSpeed() >= criticalSpeed  && lockIsListening) {
                 Log.d(TAG, "Lock is triggering");
                 Intent startLock = new Intent(getApplicationContext(), PretendKiosk.class);
                 startService(startLock);

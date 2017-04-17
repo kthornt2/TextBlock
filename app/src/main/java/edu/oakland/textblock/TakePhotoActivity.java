@@ -123,6 +123,8 @@ public class TakePhotoActivity extends AppCompatActivity {
                 Intent gpsServices = new Intent(getApplicationContext(), GpsServices.class);
                 startService(gpsServices);
                 Intent returnToStatueActivity = new Intent(this, FirstActivity.class);
+                GpsServices.lockIsListening = true;
+                
                 startActivity(returnToStatueActivity);
                 Toast.makeText(getApplicationContext(), "Your Photos have been automatically sent.\n please wait for your guardian to unlock your phone.", Toast.LENGTH_LONG);
             }
