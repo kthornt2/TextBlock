@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.util.Log;
 
 import java.util.List;
@@ -36,32 +35,34 @@ public class PretendKiosk extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         running = true;
         ctx = this;
-
         // start a thread that periodically checks if your app is in the foreground
         t = new Thread(new Runnable() {
             @Override
             public void run() {
                 do {
-                    //start of thread: run methods to check if Kiosk mode active, if not, restore kiosk
-                    handleKioskMode();
-                    try {
-                        //do the thread every half second.  I may increase this later, so the phone doesnt explode
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        Log.i(TAG, "Thread interrupted: 'LockMode'");
+                    if (running = true) {
+                        handleKioskMode();
+                        try {
+                            //do the thread every half second.  I may increase this later, so the phone doesnt explode
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            Log.i(TAG, "Thread interrupted: 'LockMode'");
+                        }
+                    } else {
+                        break;
                     }
                 } while (running);
                 //stop thread
                 stopSelf();
             }
-        });
-
+        }
+        );
         t.start();
         return Service.START_NOT_STICKY;
     }
+
 
     private void handleKioskMode() {
         // checks if the kiosk mode is active
@@ -81,9 +82,6 @@ public class PretendKiosk extends Service {
             if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
                 for (String activeProcess : processInfo.pkgList) {
                     if (activeProcess.equals(ctx.getPackageName())) {
-                        return false;
-                    }
-                    if (activeProcess.equals(MediaStore.ACTION_IMAGE_CAPTURE)) {
                         return false;
                     }
                 }
