@@ -26,11 +26,14 @@ public class PretendKiosk extends Service {
 
     @Override
     public void onDestroy() {
-
         //clean up for app closing
         Log.i(TAG, "Stopping service 'LockMode'");
         running = false;
-        t.interrupt();
+
+        if (t.isAlive()) {
+            Log.d("MyApp", "the thread is alive. now we are going to kill it.");
+            t.interrupt();
+        }
         super.onDestroy();
     }
 
@@ -43,7 +46,6 @@ public class PretendKiosk extends Service {
             @Override
             public void run() {
                 do {
-                    if (running = true) {
                         handleKioskMode();
                         try {
                             //do the thread every half second.  I may increase this later, so the phone doesnt explode
@@ -51,12 +53,9 @@ public class PretendKiosk extends Service {
                         } catch (InterruptedException e) {
                             Log.i(TAG, "Thread interrupted: 'LockMode'");
                         }
-                    } else {
-                        break;
-                    }
                 } while (running);
                 //stop thread
-                stopSelf();
+//                stopSelf();
             }
         }
         );

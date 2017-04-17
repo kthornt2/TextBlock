@@ -190,7 +190,7 @@ public class GpsServices extends Service implements
                         isSlow = true;
                         Timer timer = new Timer();
                         TimerTask hourlyTask = new TimerTask() {
-                            @Override
+                            @   Override
                             public void run() {
                                 if (mCurrentLocation.getSpeed() >= criticalSpeed ) {
                                     cancel();
