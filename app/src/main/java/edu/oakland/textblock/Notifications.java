@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -81,13 +82,13 @@ public class Notifications extends AppCompatActivity {
                 numberOfRow = Integer.valueOf(result[0]);
                 if (numberOfRow > 0) {
                     List photoURLs = new ArrayList<String>();
-                    /*
-                    listAdapter = new ArrayAdapter<String>(getApplicationContext(), R.id.list, photoURLs);
+
+                    listAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.textview_for_listview, photoURLs);
                     for (int i = 1; i < numberOfRow; i++) {
                         photoURLs.add(result[i]);
                     }
                     listView.setAdapter(listAdapter);
-                    */
+
                 }
             }
         }, new Response.ErrorListener() {

@@ -16,6 +16,7 @@ import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Cache;
@@ -108,6 +109,8 @@ public class TakePhotoActivity extends AppCompatActivity {
 
             NetworkUtils networkUtils = new NetworkUtils(IMEI);
             networkUtils.uploadFileAsync(photo);
+            // to prompt users
+            Toast.makeText(getApplicationContext(), "Photo has been automatically sent.\n now to switch the len and take another", Toast.LENGTH_LONG);
 
             // to upload photos
 //            upload(photo);
@@ -120,6 +123,8 @@ public class TakePhotoActivity extends AppCompatActivity {
                 Intent gpsServices = new Intent(getApplicationContext(), GpsServices.class);
                 startService(gpsServices);
                 Intent returnToStatueActivity = new Intent(this, BlockActivity.class);
+                startActivity(returnToStatueActivity);
+                Toast.makeText(getApplicationContext(), "Your Photos have been automatically sent.\n please wait for your guardian to unlock your phone.", Toast.LENGTH_LONG);
             }
         } else {
             Log.d("MyAPP", "User has cancel to take a picture.\n then we should return to the statue activity");
