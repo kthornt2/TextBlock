@@ -93,6 +93,8 @@ public class BlockActivity extends AppCompatActivity {
 
     public void unlockMyPhone(View view) {
         // to stop GPS so that we can open a camera without being locked
+        GpsServices mGpsServices = new GpsServices();
+        mGpsServices.stopLocationUpdates();
         Intent gpsService = new Intent(getApplicationContext(), GpsServices.class);
         stopService(gpsService);
         Log.d("BlockActivity", "THIS SHOULD STOP GPS..........................");
