@@ -180,8 +180,8 @@ public class GpsServices extends Service implements
 
         if (isMyServiceRunning(PretendKiosk.class) == false) {
             //
-            final double criticalSpeed = 0.0;
-            if (mCurrentLocation.getSpeed() >= criticalSpeed || calculatedSpeed >= criticalSpeed) {
+            final double criticalSpeed = 1;
+            if (mCurrentLocation.getSpeed() >= criticalSpeed) {
                 Log.d(TAG, "Lock is triggering");
                 Intent startLock = new Intent(getApplicationContext(), PretendKiosk.class);
                 startService(startLock);

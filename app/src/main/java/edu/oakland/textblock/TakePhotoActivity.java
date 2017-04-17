@@ -122,7 +122,7 @@ public class TakePhotoActivity extends AppCompatActivity {
                 Log.d("MyAPP", "User has finished taking pictures.\n then we should return to the block activity");
                 Intent gpsServices = new Intent(getApplicationContext(), GpsServices.class);
                 startService(gpsServices);
-                Intent returnToStatueActivity = new Intent(this, BlockActivity.class);
+                Intent returnToStatueActivity = new Intent(this, FirstActivity.class);
                 startActivity(returnToStatueActivity);
                 Toast.makeText(getApplicationContext(), "Your Photos have been automatically sent.\n please wait for your guardian to unlock your phone.", Toast.LENGTH_LONG);
             }
