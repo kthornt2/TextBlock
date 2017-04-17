@@ -66,6 +66,8 @@ public class BlockActivity extends AppCompatActivity {
         CameraButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent pretendKiosk = new Intent(getApplicationContext(), PretendKiosk.class);
+                stopService(pretendKiosk);
                 Intent intent = new Intent();
                 intent.setAction("android.media.action.STILL_IMAGE_CAMERA");
                 startActivity(intent);

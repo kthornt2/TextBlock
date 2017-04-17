@@ -186,13 +186,13 @@ public class GpsServices extends Service implements
                 Intent startLock = new Intent(getApplicationContext(), PretendKiosk.class);
                 startService(startLock);
             } else if (isMyServiceRunning(PretendKiosk.class) == true) {
-                    if (mCurrentLocation.getSpeed() <= 2) {
+                    if (currentSpeed <= 2 || calculatedSpeed <= 2) {
                         isSlow = true;
                         Timer timer = new Timer();
                         TimerTask hourlyTask = new TimerTask() {
                             @Override
                             public void run() {
-                                if (currentSpeed>= 1.8) {
+                                if (currentSpeed >= 2 || calculatedSpeed >= 2 ) {
                                     cancel();
                                 } else {
                                     Intent stopLock = new Intent(getApplicationContext(), PretendKiosk.class);
