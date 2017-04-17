@@ -104,6 +104,8 @@ public class BlockActivity extends AppCompatActivity {
 
     public void emergencyUnlock(View view) {
         //// TODO: 4/15/2017
+        GpsServices mGPSServices = new GpsServices();
+        mGPSServices.stopLocationUpdates();
         Intent unlock = new Intent(getApplicationContext(), PretendKiosk.class);
         stopService(unlock);
         Intent stopGPS = new Intent(getApplicationContext(), GpsServices.class);

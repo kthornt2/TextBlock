@@ -32,6 +32,7 @@ public class PretendKiosk extends Service {
         running = false;
         t.interrupt();
         super.onDestroy();
+
     }
 
     @Override
@@ -107,6 +108,7 @@ public class PretendKiosk extends Service {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         return sp.getBoolean(PREF_KIOSK_MODE, true);
     }
+
 
     @Override
     public IBinder onBind(Intent intent) {
