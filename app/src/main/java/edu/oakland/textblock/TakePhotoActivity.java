@@ -7,6 +7,7 @@ package edu.oakland.textblock;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,6 +17,7 @@ import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -58,7 +60,7 @@ public class TakePhotoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_take_photo);
+        setContentView(R.layout.block);
 
         // set the imageView
         imageView = (ImageView) findViewById(R.id.photoView);
@@ -122,9 +124,15 @@ public class TakePhotoActivity extends AppCompatActivity {
                 Log.d("MyAPP", "User has finished taking pictures.\n then we should return to the block activity");
                 Intent gpsServices = new Intent(getApplicationContext(), GpsServices.class);
                 startService(gpsServices);
-                Intent returnToStatueActivity = new Intent(this, FirstActivity.class);
+                Intent returnToStatueActivity = new Intent(this, BlockActivity.class);
                 startActivity(returnToStatueActivity);
                 Toast.makeText(getApplicationContext(), "Your Photos have been automatically sent.\n please wait for your guardian to unlock your phone.", Toast.LENGTH_LONG);
+                // to update status of the user on block screen.
+                TextView status = (TextView) findViewById(R.id.textView2);
+                status.setText("Wait for unlock confirm from your guardian.");
+                status.setTextColor(Color.RED);
+
+
             }
         } else {
             Log.d("MyAPP", "User has cancel to take a picture.\n then we should return to the statue activity");
