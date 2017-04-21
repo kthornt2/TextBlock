@@ -93,9 +93,15 @@ public class BlockActivity extends AppCompatActivity {
 
     public void unlockMyPhone(View view) {
         // to stop GPS so that we can open a camera without being locked
-        Intent gpsService = new Intent(getApplicationContext(), GpsServices.class);
-        stopService(gpsService);
+            //to stop GPS Listener
+       // GpsServices mGpsServices = new GpsServices();
+       // mGpsServices.stopLocationUpdates();
+
+
+        //Intent gpsService = new Intent(getApplicationContext(), GpsServices.class);
+       // stopService(gpsService);
         Log.d("BlockActivity", "THIS SHOULD STOP GPS..........................");
+        GpsServices.lockIsListening = false;
         Intent pretendKiosk = new Intent(getApplicationContext(), PretendKiosk.class);
         Log.d("BlockActivit", "AND THIS SHOULD STOP KIOSKSERVICE");
         stopService(pretendKiosk);
@@ -111,8 +117,9 @@ public class BlockActivity extends AppCompatActivity {
 //        unbindService(unlock):
 
         stopService(unlock);
-        Intent stopGPS = new Intent(this, GpsServices.class);
-        stopService(stopGPS);
+        GpsServices.lockIsListening = false;
+      //  Intent stopGPS = new Intent(this, GpsServices.class);
+       // stopService(stopGPS);
 //        finish();
     }
 }
