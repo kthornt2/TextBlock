@@ -20,7 +20,8 @@ public class PretendKiosk extends Service {
     private static final String TAG = PretendKiosk.class.getSimpleName();
     private static final String PREF_KIOSK_MODE = "pref_kiosk_mode";
 
-    private Thread t = null;
+    private Thread kioskThread = null;
+    private Thread approvalCheckThread = null;
     private Context ctx = null;
     private boolean running = false;
 
@@ -30,9 +31,9 @@ public class PretendKiosk extends Service {
         Log.i(TAG, "Stopping service 'LockMode'");
         running = false;
 
-        if (t.isAlive()) {
+        if (kioskThread.isAlive()) {
             Log.d("MyApp", "the thread is alive. now we are going to kill it.");
-            t.interrupt();
+            kioskThread.interrupt();
         }
         super.onDestroy();
 
@@ -43,7 +44,7 @@ public class PretendKiosk extends Service {
         running = true;
         ctx = this;
         // start a thread that periodically checks if your app is in the foreground
-        t = new Thread(new Runnable() {
+        kioskThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 do {
@@ -56,11 +57,31 @@ public class PretendKiosk extends Service {
                         }
                 } while (running);
                 //stop thread
-//                stopSelf();
+               stopSelf();
             }
         }
+
         );
-        t.start();
+
+        approvalCheckThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                do {
+                    //checkDatabaseForApproval()
+                    try {
+                        //do the thread every half second.  I may increase this later, so the phone doesnt explode
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        Log.i(TAG, "Thread interrupted: 'LockMode'");
+                    }
+                } while (running);
+                //stop thread
+              stopSelf();
+            }
+        }
+
+        );
+        kioskThread.start();
         return Service.START_NOT_STICKY;
     }
 
