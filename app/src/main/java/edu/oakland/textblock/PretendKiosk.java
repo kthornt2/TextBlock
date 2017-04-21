@@ -7,9 +7,24 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Remzorz on 3/10/2017.
@@ -67,9 +82,9 @@ public class PretendKiosk extends Service {
             @Override
             public void run() {
                 do {
-                    //checkDatabaseForApproval()
+                    checkDatabaseForApproval();
                     try {
-                        //do the thread every half second.  I may increase this later, so the phone doesnt explode
+
                         Thread.sleep(5000);
                     } catch (InterruptedException e) {
                         Log.i(TAG, "Thread interrupted: 'LockMode'");
@@ -84,7 +99,49 @@ public class PretendKiosk extends Service {
         kioskThread.start();
         return Service.START_NOT_STICKY;
     }
+private void checkDatabaseForApproval()
+{
+    final String URL_GETPHOTOS = "http://52.41.167.226/Approvals.php";
+    RequestQueue requestQueue;
+    requestQueue = Volley.newRequestQueue(this);
 
+    // instantiate a StringRequest to get photos' links
+    StringRequest getPhotosRequest;
+    getPhotosRequest = new StringRequest(Request.Method.POST, URL_GETPHOTOS, new Response.Listener<String>() {
+        @Override
+        public void onResponse(String response) {
+            Log.d("MyApp Res", response);
+            if(response.contains("1")){
+                Log.d("PretendKiosk", "The phone was unlocked via Guardian Approval");
+                Toast.makeText(getApplicationContext(), "Lock has been lifted via Guardian Approval",Toast.LENGTH_LONG);
+                GpsServices.lockIsListening = false;
+                GpsServices.showGPSDialogue = false;
+                stopSelf();
+
+            }
+            // TODO
+        }
+    }, new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Log.d("MyApp ResErr", error.toString());
+
+        }
+    }) {
+        protected Map<String, String> getParams() throws AuthFailureError {
+            Map<String, String> params = new Hashtable<String, String>();
+            // add IMEI into the request
+            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            String IMEI = telephonyManager.getDeviceId();
+            Log.d("MyApp IMEI", IMEI);
+            params.put("IMEI", IMEI);
+            return params;
+        }
+    };
+    requestQueue.add(getPhotosRequest);
+
+
+}
 
     private void handleKioskMode() {
         // checks if the kiosk mode is active

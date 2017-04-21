@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
@@ -63,7 +64,15 @@ public class Notifications extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.list);
         getPhotosFromSever(listView);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //TODO
+            }
+        });
+
     }
+
 
 
     private void getPhotosFromSever(final ListView listView) {
@@ -116,6 +125,8 @@ public class Notifications extends AppCompatActivity {
         requestQueue.add(getPhotosRequest);
 
     }
+
+
 
 }
 
