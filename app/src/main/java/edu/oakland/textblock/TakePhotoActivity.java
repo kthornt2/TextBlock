@@ -21,16 +21,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.Cache;
-import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -63,7 +59,7 @@ public class TakePhotoActivity extends AppCompatActivity {
         setContentView(R.layout.block);
 
         // set the imageView
-        imageView = (ImageView) findViewById(R.id.photoView);
+//        imageView = (ImageView) findViewById(R.id.photoView);
 
         openAnCamera();
     }
@@ -74,20 +70,24 @@ public class TakePhotoActivity extends AppCompatActivity {
 
         // to store the picture
         photo = generatePhotoPath();
+
         if (photo != null) {
             // to decide to open which camera, front-facing or back-facing camera
-//            takePhoto.
 
             // to pass a parameter which comprises the photo
             takePhoto.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
 
+            // start to invoke a existed camera app
+            if (takePhoto.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(takePhoto, REQUEST_PICTURE_CAPTURE);
+            }
         } else {
             Log.d("MyApp saveFile", "Failed to save the photo for photo is null");
+            // to make sure it is under monitor.
+            GpsServices.lockIsListening = true;
         }
-        // start to invoke a existed camera app
-        if (takePhoto.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePhoto, REQUEST_PICTURE_CAPTURE);
-        }
+
+
     }
 
     /**
@@ -104,38 +104,42 @@ public class TakePhotoActivity extends AppCompatActivity {
             // to add the photo for system gallery
             addPhotoToGallery();
 
-            // to display the photo for user viewing
-//            showPhoto();
             TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             String IMEI = telephonyManager.getDeviceId();
 
-            NetworkUtils networkUtils = new NetworkUtils(IMEI);
-            networkUtils.uploadFileAsync(photo);
-            // to prompt users
-            Toast.makeText(getApplicationContext(), "Photo has been automatically sent.\n now to switch the len and take another", Toast.LENGTH_LONG);
+//          NetworkUtils networkUtils = new NetworkUtils(IMEI);
+//          networkUtils.uploadFileAsync(photo);
 
-            // to upload photos
-//            upload(photo);
+            // to prompt users
+            Toast.makeText(getApplicationContext(), "Photo has been automatically sent.\n now please switch the len and take another", Toast.LENGTH_LONG);
+
+            // to upload photo
+            upload(photo);
 
             // then to open camera again to take another photo in opposite direction
             if (numbersOfPhoto++ < 1) {
                 openAnCamera();
             } else {
                 Log.d("MyAPP", "User has finished taking pictures.\n then we should return to the block activity");
-                Intent gpsServices = new Intent(getApplicationContext(), GpsServices.class);
-                startService(gpsServices);
-                Intent returnToStatueActivity = new Intent(this, BlockActivity.class);
-                startActivity(returnToStatueActivity);
+//                Intent gpsServices = new Intent(getApplicationContext(), GpsServices.class);
+//                startService(gpsServices);
+                Intent returnToBlockActivity = new Intent(this, BlockActivity.class);
+                startActivity(returnToBlockActivity);
+                // keep locking the phone as soon as finish taking photo
+                GpsServices.lockIsListening = true;
                 Toast.makeText(getApplicationContext(), "Your Photos have been automatically sent.\n please wait for your guardian to unlock your phone.", Toast.LENGTH_LONG);
                 // to update status of the user on block screen.
                 TextView status = (TextView) findViewById(R.id.textView2);
-                status.setText("Wait for unlock confirm from your guardian.");
+                status.setText("Please wait for unlochk approval.");
                 status.setTextColor(Color.RED);
+
 
 
             }
         } else {
             Log.d("MyAPP", "User has cancel to take a picture.\n then we should return to the statue activity");
+            // keep locking the phone if user cancel taking photo
+            GpsServices.lockIsListening = true;
             Intent returnToStatueActivity = new Intent(this, BlockActivity.class);
         }
 
@@ -209,47 +213,47 @@ public class TakePhotoActivity extends AppCompatActivity {
     }
 
     private void upload(final File photo) {
-        // instantiate the request Queue
         RequestQueue requestQueue;
-        Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024);
-        Network network = new BasicNetwork(new HurlStack());
-        requestQueue = new RequestQueue(cache, network);
+        requestQueue = Volley.newRequestQueue(this);
 
-        // instantiate a StringRequest to upload photo
-        StringRequest uploadPhotoRequest;
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
+        // instantiate a StringRequest to get photos' links
+        StringRequest getPhotosRequest;
+
+        getPhotosRequest = new StringRequest(Request.Method.POST, URL_UPLOAD_PHOTO_IN_PHP, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("MyApp", response);
+                Log.d("MyApp Res", response);
             }
-        };
-        Response.ErrorListener responseErrorListener = new Response.ErrorListener() {
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("MyApp", "request error");
-                Log.d("MyApp", error.toString());
+                Log.d("MyApp ResErr", error.toString());
 
             }
-        };
-        uploadPhotoRequest = new StringRequest(Request.Method.POST, URL_UPLOAD_PHOTO_IN_PHP, responseListener, responseErrorListener) {
+        }) {
             protected Map<String, String> getParams() throws AuthFailureError {
                 // converting Bitmap to string
                 String photoString = getStringFromPhoto();
 
                 Map<String, String> params = new Hashtable<String, String>();
-                params.put("filename", photo.getName());
-                // add photo into the request
-                params.put("photo", photoString);
-
                 // add IMEI into the request
                 TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                 String IMEI = telephonyManager.getDeviceId();
-                Log.d("MyApp", IMEI);
                 params.put("IMEI", IMEI);
+                params.put("filename", photo.getName());
+                // add photo into the request
+                params.put("photo", photoString);
+                Log.d("MyApp photo", photoString);
                 return params;
             }
         };
-        requestQueue.add(uploadPhotoRequest);
+        try {
+            Log.d("MyApp", getPhotosRequest.getBody().toString());
+        } catch (AuthFailureError authFailureError) {
+            authFailureError.printStackTrace();
+        }
+        requestQueue.add(getPhotosRequest);
+
     }
 
     private String getStringFromPhoto() {
