@@ -35,10 +35,10 @@ public class GpsServices extends Service implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    public static boolean lockIsListening = true;
     private static final String TAG = "LocationActivity";
     private static final long INTERVAL = 1000 * 10;
     private static final long FASTEST_INTERVAL = 1000 * 5;
+    public static boolean lockIsListening = true;
     public static String
             DISTANCE_BROADCAST = GpsServices.class.getName() + "Location Broadcast",
             EXTRA_SPEED = "extra_speed",

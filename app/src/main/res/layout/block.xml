@@ -13,8 +13,8 @@
         android:layout_below="@+id/welcome_textview"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/tbtitle"
-        android:layout_weight="0.39" />
+        android:layout_weight="0.39"
+        android:src="@drawable/tbtitle" />
     <TextView
         android:id="@+id/welcome_textview"
         android:layout_width="wrap_content"
@@ -52,9 +52,9 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Safety Lock Is Active"
-            android:textSize="20dp"
-            android:layout_marginTop="45dp"/>
+            android:layout_marginTop="45dp"
+            android:text="Safety Lock Is Active\n Please focus on DRIVING."
+            android:textSize="20dp" />
 
     </LinearLayout>
 
@@ -65,16 +65,16 @@
             android:layout_height="74dp"
             android:layout_marginLeft="150dp"
             android:layout_marginTop="2dp"
+        android:layout_weight="0.03"
             android:background="#00000000"
             android:onClick="unlockMyPhone"
-            android:src="@drawable/cameranew"
-            android:layout_weight="0.03" />
+        android:src="@drawable/cameranew" />
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Unlock Request"
+        android:text="Click on the camera above to unlock"
         android:textSize="20dp"
         />
 
@@ -83,8 +83,8 @@
         android:id="@+id/emergency_unlock"
         android:layout_width="276dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
         android:background="#b91c39"
         android:onClick="emergencyUnlock"
         android:text="Emergency Unlock" />
