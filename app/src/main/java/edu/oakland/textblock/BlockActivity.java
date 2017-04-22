@@ -18,12 +18,19 @@ public class BlockActivity extends AppCompatActivity {
     private ImageButton MapButton;
     private TextView drivingStatsTextView;
 
+    private Button emergencyUnlockButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.block);
-
+        emergencyUnlockButton = (Button) findViewById(R.id.emergency_unlock);
         CameraButton = (ImageButton) findViewById(R.id.camera);
+        if (!FirstActivity.isEmergencyMode) {
+            emergencyUnlockButton.setBackgroundColor(Color.RED);
+        }
+
+
     }
 
 
@@ -50,11 +57,11 @@ public class BlockActivity extends AppCompatActivity {
         stopService(unlock);
         // to keep it from being locked
         GpsServices.lockIsListening = false;
-        // return to first screen
-        Button emergencyUnlockButton = (Button) findViewById(R.id.emergency_unlock);
         emergencyUnlockButton.setBackgroundColor(Color.GREEN);
-        Intent firstActivity = new Intent(this, FirstActivity.class);
-        startActivity(firstActivity);
 
+        // return to first screen
+        Intent firstActivity = new Intent(this, FirstActivity.class);
+        FirstActivity.isEmergencyMode = true;
+        startActivity(firstActivity);
     }
 }

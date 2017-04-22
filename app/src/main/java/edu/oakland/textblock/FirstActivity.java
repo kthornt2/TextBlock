@@ -3,35 +3,48 @@ package edu.oakland.textblock;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 public class FirstActivity extends AppCompatActivity {
     // for GPS
     public final static int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0x1;
+    public static boolean isEmergencyMode = false;
     private ImageButton settingButton;
     private ImageButton guardianButton;
     private String permission = "ACCESS_FINE_LOCATION";
     private Integer GPS_SETTINGS = 0x7;
+    private Button indicator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.first);
 
-        settingButton=(ImageButton)findViewById(R.id.settings);
-        guardianButton=(ImageButton)findViewById(R.id.guard);
-        settingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(FirstActivity.this,Settings.class);
-                startActivity(intent);
-            }
-        });
+        indicator = (Button) findViewById(R.id.indicator);
+       /* Intent sender=getIntent();
+        boolean isEmergencyMode=sender.getBooleanExtra("setEmergencyMode",false);*/
+        if (isEmergencyMode) {
+            indicator.setText("Emergency Mode On");
+            indicator.setBackgroundColor(Color.RED);
+            indicator.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    GpsServices.lockIsListening = true;
+                    GpsServices.showGPSDialogue = true;
+                    indicator.setText("");
+                    indicator.setBackgroundColor(Color.TRANSPARENT);
+                }
+            });
+        }
 
+        guardianButton=(ImageButton)findViewById(R.id.guard);
         guardianButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,4 +75,9 @@ public class FirstActivity extends AppCompatActivity {
         startService(new Intent(this, GpsServices.class));
     }
 
+
+    public View getIndicator() {
+        indicator = (Button) findViewById(R.id.indicator);
+        return indicator;
+    }
 }
