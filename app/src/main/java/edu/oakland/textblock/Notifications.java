@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
@@ -23,10 +24,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+
+import static android.os.Environment.getExternalStorageDirectory;
+import static edu.oakland.textblock.R.string.app_name;
 
 
 public class Notifications extends AppCompatActivity {
@@ -91,13 +96,38 @@ public class Notifications extends AppCompatActivity {
                 numberOfRow = Integer.valueOf(result[0]);
                 if (numberOfRow > 0) {
                     List photoURLs = new ArrayList<String>();
-
                     listAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.textview_for_listview, photoURLs);
                     for (int i = 1; i < numberOfRow; i++) {
                         photoURLs.add(result[i]);
                     }
                     listView.setAdapter(listAdapter);
-
+/*
+                    // to save them into a txt file.
+                    File photos=new File(getFileDirectory(),"photoURLs");
+                    if(!photos.exists()){
+                        try {
+                            photos.createNewFile();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    FileWriter saveURLs=null;
+                    try {
+                        saveURLs=new FileWriter(photos.getAbsolutePath());
+                        saveURLs.write(response);
+                        saveURLs.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }finally {
+                        if(saveURLs!=null){
+                            try {
+                                saveURLs.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+*/
                 }
             }
         }, new Response.ErrorListener() {
@@ -124,6 +154,34 @@ public class Notifications extends AppCompatActivity {
         }
         requestQueue.add(getPhotosRequest);
 
+    }
+
+    private File getFileDirectory() {
+        File photoURLsDirectory = null;
+        // if there is any external storage mounted
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            // to create a parent directory for our app in external storage
+            File myAppExternalStorage = new File(getExternalStorageDirectory(), getString(app_name));
+            if (!myAppExternalStorage.exists()) {
+                myAppExternalStorage.mkdir();
+            }
+            //  to print to debug
+            Log.d("MyApp ExternalStorage", myAppExternalStorage.getAbsolutePath());
+
+            // to create a album directory for your photos
+            File photoURLs = new File(myAppExternalStorage, "URLs");
+            if (!photoURLs.exists()) {
+                photoURLs.mkdir();
+            }
+
+            // to print to debug
+            Log.d("MyApp myAlbum", photoURLs.getAbsolutePath());
+            photoURLsDirectory = photoURLs;
+        } else {
+            // else return the internal storage for the app
+            photoURLsDirectory = getFilesDir();
+        }
+        return photoURLsDirectory;
     }
 
 
