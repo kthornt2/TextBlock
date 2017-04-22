@@ -12,24 +12,32 @@ import android.widget.TextView;
 
 
 public class BlockActivity extends AppCompatActivity {
+    public static TextView speedTextview2;
     private ImageButton EmergencyCall;
     private ImageButton MailButton;
     private ImageButton CameraButton;
     private ImageButton MapButton;
     private TextView drivingStatsTextView;
-
     private Button emergencyUnlockButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.block);
+        speedTextview2 = (TextView) findViewById(R.id.speedTextView2);
         emergencyUnlockButton = (Button) findViewById(R.id.emergency_unlock);
         CameraButton = (ImageButton) findViewById(R.id.camera);
         if (!FirstActivity.isEmergencyMode) {
             emergencyUnlockButton.setBackgroundColor(Color.RED);
         }
-
+        // if it is from takePhoto Activity, then change the tip message
+        Intent getIntent = getIntent();
+        if (getIntent.getBooleanExtra("isWaitingForApproval", false)) {
+            // to update status of the user on block screen.
+            TextView status = (TextView) findViewById(R.id.textView2);
+            status.setText("Please wait for unlock approval.");
+            status.setTextColor(Color.RED);
+        }
 
     }
 

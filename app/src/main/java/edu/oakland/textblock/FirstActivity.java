@@ -11,21 +11,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class FirstActivity extends AppCompatActivity {
     // for GPS
     public final static int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0x1;
     public static boolean isEmergencyMode = false;
+    // for showing speed
+    public static TextView speedTextview;
     private ImageButton settingButton;
     private ImageButton guardianButton;
     private String permission = "ACCESS_FINE_LOCATION";
     private Integer GPS_SETTINGS = 0x7;
+    // for emergency mode
     private Button indicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.first);
+
+        speedTextview = (TextView) findViewById(R.id.speedTextview);
 
         indicator = (Button) findViewById(R.id.indicator);
        /* Intent sender=getIntent();

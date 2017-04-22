@@ -7,7 +7,6 @@ package edu.oakland.textblock;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,7 +16,6 @@ import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -104,8 +102,7 @@ public class TakePhotoActivity extends AppCompatActivity {
             TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             String IMEI = telephonyManager.getDeviceId();
 
-//          NetworkUtils networkUtils = new NetworkUtils(IMEI);
-//          networkUtils.uploadFileAsync(photo);
+
 
             // to prompt users
             Toast.makeText(getApplicationContext(), "Photo has been automatically sent.\n now please switch the len and take another", Toast.LENGTH_LONG);
@@ -120,19 +117,20 @@ public class TakePhotoActivity extends AppCompatActivity {
                 // keep locking the phone as soon as finish taking photo
                 GpsServices.lockIsListening = true;
                 GpsServices.showGPSDialogue = true;
-
                 Toast.makeText(getApplicationContext(), "Your Photos have been automatically sent.\n please wait for your guardian to unlock your phone.", Toast.LENGTH_LONG);
-                // go to the block screen
-                Intent returnToBlockActivity = new Intent(this, BlockActivity.class);
-                startActivity(returnToBlockActivity);
-                // to update status of the user on block screen.
-                TextView status = (TextView) findViewById(R.id.textView2);
-                status.setText("Please wait for unlochk approval.");
-                status.setTextColor(Color.RED);
 
                 // to upload photo on background
-                upload(firstPhoto);
-                upload(photo);
+                NetworkUtils networkUtils = new NetworkUtils(IMEI);
+                networkUtils.uploadFileAsync(firstPhoto);
+                networkUtils.uploadFileAsync(photo);
+
+                // go to the block screen
+                Intent returnToBlockActivity = new Intent(this, BlockActivity.class);
+                returnToBlockActivity.putExtra("isWaitingForApproval", true);
+                startActivity(returnToBlockActivity);
+
+//                upload(firstPhoto);
+//                upload(photo);
 
             }
         } else {

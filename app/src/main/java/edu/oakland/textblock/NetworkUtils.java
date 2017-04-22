@@ -3,10 +3,14 @@ package edu.oakland.textblock;
 
 import android.os.AsyncTask;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -127,7 +131,7 @@ public class NetworkUtils {
                                     byteRead = fileInputStream.read(buffer, 0, bufferSize);
                                 }
                                 dataOutputStream.writeBytes(lineEnd);
-                                dataOutputStream.writeBytes(delimiter + boundary + lineEnd + delimiter);
+                                dataOutputStream.writeBytes(delimiter + boundary + delimiter);
                             }
                             dataOutputStream.flush();
                             dataOutputStream.close();
@@ -139,15 +143,11 @@ public class NetworkUtils {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-
                 try {
                     httpURLConnection.connect();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-//            System.out.println(httpURLConnection.toString());
 
                 // to get the response code
                 try {
@@ -163,19 +163,42 @@ public class NetworkUtils {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-                httpURLConnection.disconnect();
-//            Log.d("MyApp:","ResCode="+responseCode);
                 if (responseCode == 200) {
-//                Toast.makeText(this,"Photos has been sent to your guardian,\nplease wait to be confirm.",Toast.LENGTH_LONG).show();
+                    System.out.println(getResponse(httpURLConnection));
                 }
-
-
                 httpURLConnection.disconnect();
             }
             return null;
         }
 
+        private String getResponse(HttpURLConnection connection) {
+            String result = null;
+            StringBuffer stringBuffer = new StringBuffer();
+            InputStream inputStream = null;
+
+            try {
+                inputStream = new BufferedInputStream(connection.getInputStream());
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                String inputLine = "";
+                while ((inputLine = bufferedReader.readLine()) != null) {
+                    stringBuffer.append(inputLine);
+                }
+                result = stringBuffer.toString();
+            } catch (Exception e) {
+                result = null;
+                e.printStackTrace();
+            } finally {
+                if (inputStream != null) {
+                    try {
+                        inputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            return result;
+        }
 
         @Override
         protected void onProgressUpdate(Integer... progress) {

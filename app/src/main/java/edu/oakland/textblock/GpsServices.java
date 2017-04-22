@@ -163,7 +163,7 @@ public class GpsServices extends Service implements
                 calculatedSpeed = distance / 10;
             }
 
-            NumberFormat formatter = new DecimalFormat("#0.000");
+            NumberFormat formatter = new DecimalFormat("#0.0");
             if (showGPSDialogue == true) {
                 Toast.makeText(getApplicationContext(),
                         "Lat is: " + lat2 + "\n Lon is: " + lon2 +
@@ -174,6 +174,8 @@ public class GpsServices extends Service implements
                                 "\n getSpeed is: " + formatter.format(currentSpeed)
                         , Toast.LENGTH_LONG).show();
             }
+//            FirstActivity.speedTextview.setText("Speed: "+formatter.format(currentSpeed)+" km/h");
+//            BlockActivity.speedTextview2.setText("Speed:"+formatter.format(currentSpeed)+" km/h");
             lat1 = lat2;
             lon1 = lon2;
             oldTime = newTime;
