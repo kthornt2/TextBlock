@@ -1,10 +1,12 @@
 package edu.oakland.textblock;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -35,6 +37,9 @@ public class BlockActivity extends AppCompatActivity {
         // to unlock the phone only when taking phones, in other word, to keep it from being locked.
         // it needs to be locked as soon as finish taking photo unless automatically unlock mode is open.
         GpsServices.lockIsListening = false;
+        // to block GPS information popping up
+        GpsServices.showGPSDialogue = false;
+
         // to open a camera
         Intent takePhoto = new Intent(this, TakePhotoActivity.class);
         startActivity(takePhoto);
@@ -42,12 +47,14 @@ public class BlockActivity extends AppCompatActivity {
 
     public void emergencyUnlock(View view) {
         Intent unlock = new Intent(this, PretendKiosk.class);
-//        unbindService(unlock):
-
         stopService(unlock);
+        // to keep it from being locked
         GpsServices.lockIsListening = false;
-      //  Intent stopGPS = new Intent(this, GpsServices.class);
-       // stopService(stopGPS);
-//        finish();
+        // return to first screen
+        Button emergencyUnlockButton = (Button) findViewById(R.id.emergency_unlock);
+        emergencyUnlockButton.setBackgroundColor(Color.GREEN);
+        Intent firstActivity = new Intent(this, FirstActivity.class);
+        startActivity(firstActivity);
+
     }
 }
