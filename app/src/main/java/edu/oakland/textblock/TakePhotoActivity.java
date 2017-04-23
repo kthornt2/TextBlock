@@ -7,7 +7,6 @@ package edu.oakland.textblock;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,7 +16,6 @@ import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -51,6 +49,7 @@ public class TakePhotoActivity extends AppCompatActivity {
     private ImageView imageView;
     private Bitmap imageBitmap;
     private File photo;
+    private File firstPhoto;
     private int numbersOfPhoto = 0;
 
     @Override
@@ -70,13 +69,11 @@ public class TakePhotoActivity extends AppCompatActivity {
 
         // to store the picture
         photo = generatePhotoPath();
-
         if (photo != null) {
             // to decide to open which camera, front-facing or back-facing camera
 
             // to pass a parameter which comprises the photo
             takePhoto.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-
             // start to invoke a existed camera app
             if (takePhoto.resolveActivity(getPackageManager()) != null) {
                 startActivityForResult(takePhoto, REQUEST_PICTURE_CAPTURE);
@@ -86,8 +83,6 @@ public class TakePhotoActivity extends AppCompatActivity {
             // to make sure it is under monitor.
             GpsServices.lockIsListening = true;
         }
-
-
     }
 
     /**
@@ -107,40 +102,45 @@ public class TakePhotoActivity extends AppCompatActivity {
             TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             String IMEI = telephonyManager.getDeviceId();
 
-//          NetworkUtils networkUtils = new NetworkUtils(IMEI);
-//          networkUtils.uploadFileAsync(photo);
+
 
             // to prompt users
             Toast.makeText(getApplicationContext(), "Photo has been automatically sent.\n now please switch the len and take another", Toast.LENGTH_LONG);
 
-            // to upload photo
-            upload(photo);
 
             // then to open camera again to take another photo in opposite direction
             if (numbersOfPhoto++ < 1) {
+                firstPhoto = photo;
                 openAnCamera();
             } else {
                 Log.d("MyAPP", "User has finished taking pictures.\n then we should return to the block activity");
-//                Intent gpsServices = new Intent(getApplicationContext(), GpsServices.class);
-//                startService(gpsServices);
-                Intent returnToBlockActivity = new Intent(this, BlockActivity.class);
-                startActivity(returnToBlockActivity);
                 // keep locking the phone as soon as finish taking photo
                 GpsServices.lockIsListening = true;
+                GpsServices.showGPSDialogue = true;
                 Toast.makeText(getApplicationContext(), "Your Photos have been automatically sent.\n please wait for your guardian to unlock your phone.", Toast.LENGTH_LONG);
-                // to update status of the user on block screen.
-                TextView status = (TextView) findViewById(R.id.textView2);
-                status.setText("Please wait for unlochk approval.");
-                status.setTextColor(Color.RED);
 
+                // to upload photo on background
+                NetworkUtils networkUtils = new NetworkUtils(IMEI);
+                networkUtils.uploadFileAsync(firstPhoto);
+                networkUtils.uploadFileAsync(photo);
 
+                // go to the block screen
+                Intent returnToBlockActivity = new Intent(this, BlockActivity.class);
+                returnToBlockActivity.putExtra("isWaitingForApproval", true);
+                startActivity(returnToBlockActivity);
+
+//                upload(firstPhoto);
+//                upload(photo);
 
             }
         } else {
             Log.d("MyAPP", "User has cancel to take a picture.\n then we should return to the statue activity");
             // keep locking the phone if user cancel taking photo
             GpsServices.lockIsListening = true;
+            GpsServices.showGPSDialogue = true;
+
             Intent returnToStatueActivity = new Intent(this, BlockActivity.class);
+            startActivity(returnToStatueActivity);
         }
 
     }
@@ -233,7 +233,7 @@ public class TakePhotoActivity extends AppCompatActivity {
         }) {
             protected Map<String, String> getParams() throws AuthFailureError {
                 // converting Bitmap to string
-                String photoString = getStringFromPhoto();
+                String photoString = getStringFromPhoto(photo);
 
                 Map<String, String> params = new Hashtable<String, String>();
                 // add IMEI into the request
@@ -256,7 +256,7 @@ public class TakePhotoActivity extends AppCompatActivity {
 
     }
 
-    private String getStringFromPhoto() {
+    private String getStringFromPhoto(File photo) {
         Uri photoUri = Uri.fromFile(photo);
         try {
             imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), photoUri);
@@ -265,9 +265,13 @@ public class TakePhotoActivity extends AppCompatActivity {
         }
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+
         byte[] imageBytes = byteArrayOutputStream.toByteArray();
         String encodeImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        imageBitmap.recycle();
         return encodeImage;
     }
 
 }
+
+

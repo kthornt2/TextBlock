@@ -1,110 +1,59 @@
 package edu.oakland.textblock;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 
 public class BlockActivity extends AppCompatActivity {
+    public static TextView speedTextview2;
     private ImageButton EmergencyCall;
     private ImageButton MailButton;
     private ImageButton CameraButton;
     private ImageButton MapButton;
     private TextView drivingStatsTextView;
+    private Button emergencyUnlockButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.block);
-
-//        EmergencyCall  = (ImageButton) findViewById(R.id.emergency_unlock);
-//        MailButton     = (ImageButton) findViewById(R.id.mail);
+        speedTextview2 = (TextView) findViewById(R.id.speedTextView2);
+        emergencyUnlockButton = (Button) findViewById(R.id.emergency_unlock);
         CameraButton = (ImageButton) findViewById(R.id.camera);
-//        MapButton      = (ImageButton) findViewById(R.id.map);
-//        drivingStatsTextView = (TextView) findViewById(R.id.drivingStatusTextView);
-/*
-        EmergencyCall.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopService(new Intent(BlockActivity.this, PretendKiosk.class));
-                stopService(new Intent(BlockActivity.this, GpsServices.class));
-//                ImageButton btn = (ImageButton)findViewById(R.id.emergency_call);
-//                btn.setImageResource(R.drawable.unlocked);
-                finish();
+        if (!FirstActivity.isEmergencyMode) {
+            emergencyUnlockButton.setBackgroundColor(Color.RED);
+        }
+        // if it is from takePhoto Activity, then change the tip message
+        Intent getIntent = getIntent();
+        if (getIntent.getBooleanExtra("isWaitingForApproval", false)) {
+            // to update status of the user on block screen.
+            TextView status = (TextView) findViewById(R.id.textView2);
+            status.setText("Please wait for unlock approval.");
+            status.setTextColor(Color.RED);
+        }
 
-            }
-        });
-
-        MailButton.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                 intent.setType("vnd.android-dir/mms-sms");
-                startActivity(intent);
-            }
-        });
-
-        MapButton.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setComponent(new ComponentName("com.google.android.apps.maps",
-                        "com.google.android.maps.MapsActivity"));
-                startActivity(intent);
-            }
-        });
-
-        // this is a listener
-        CameraButton.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent pretendKiosk = new Intent(getApplicationContext(), PretendKiosk.class);
-                stopService(pretendKiosk);
-
-
-                Intent intent = new Intent();
-                intent.setAction("android.media.action.STILL_IMAGE_CAMERA");
-                startActivity(intent);
-
-
-            }
-        });
-
-        */
-       /* LocalBroadcastManager.getInstance(this).registerReceiver(
-                new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-                        double distance = intent.getDoubleExtra(GpsServices.EXTRA_DISTANCE, 0);
-                        double speed = intent.getDoubleExtra(GpsServices.EXTRA_SPEED, 0);
-                        drivingStatsTextView.setText("Distance: " + distance + " miles" + " " + "Speed: " + speed + " mph");
-                    }
-
-                }, new IntentFilter(GpsServices.DISTANCE_BROADCAST)
-        );*/
     }
 
 
     public void unlockMyPhone(View view) {
-        // to stop GPS so that we can open a camera without being locked
-            //to stop GPS Listener
-       // GpsServices mGpsServices = new GpsServices();
-       // mGpsServices.stopLocationUpdates();
 
-
-        //Intent gpsService = new Intent(getApplicationContext(), GpsServices.class);
-       // stopService(gpsService);
         Log.d("BlockActivity", "THIS SHOULD STOP GPS..........................");
         GpsServices.lockIsListening = false;
         Intent pretendKiosk = new Intent(getApplicationContext(), PretendKiosk.class);
         Log.d("BlockActivit", "AND THIS SHOULD STOP KIOSKSERVICE");
         stopService(pretendKiosk);
+        // to unlock the phone only when taking phones, in other word, to keep it from being locked.
+        // it needs to be locked as soon as finish taking photo unless automatically unlock mode is open.
+        GpsServices.lockIsListening = false;
+        // to block GPS information popping up
+        GpsServices.showGPSDialogue = false;
 
         // to open a camera
         Intent takePhoto = new Intent(this, TakePhotoActivity.class);
@@ -112,14 +61,15 @@ public class BlockActivity extends AppCompatActivity {
     }
 
     public void emergencyUnlock(View view) {
-        //// TODO: 4/15/2017
         Intent unlock = new Intent(this, PretendKiosk.class);
-//        unbindService(unlock):
-
         stopService(unlock);
+        // to keep it from being locked
         GpsServices.lockIsListening = false;
-      //  Intent stopGPS = new Intent(this, GpsServices.class);
-       // stopService(stopGPS);
-//        finish();
+        emergencyUnlockButton.setBackgroundColor(Color.GREEN);
+
+        // return to first screen
+        Intent firstActivity = new Intent(this, FirstActivity.class);
+        FirstActivity.isEmergencyMode = true;
+        startActivity(firstActivity);
     }
 }

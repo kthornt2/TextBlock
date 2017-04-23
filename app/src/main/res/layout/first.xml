@@ -11,17 +11,16 @@
     tools:context="edu.oakland.textblock.FirstActivity">
 
 
+    <!--<ImageButton-->
+    <!--android:id="@+id/settings"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:layout_marginBottom="184dp"-->
+    <!--android:background="#00000000"-->
+    <!--android:src="@drawable/s1" />-->
 
-
-    <ImageButton
-        android:id="@+id/settings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="184dp"
-        android:background="#00000000"
-        android:src="@drawable/s1" />
 
     <ImageView
         android:id="@+id/guardian_view"
@@ -38,19 +37,41 @@
         android:layout_below="@+id/guardian_view"
         android:layout_centerHorizontal="true"
         android:src="@drawable/iii" />
+    />
+
+    <Button
+        android:id="@+id/indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:background="#00ff00"
+        android:padding="10dp"
+        android:text="Safety Mode" />
+
+    <TextView
+        android:id="@+id/speedTextview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/guard"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="59dp"
+        android:text="" />
 
     <ImageButton
         android:id="@+id/guard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/settings"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/settings"
-        android:layout_marginBottom="68dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="63dp"
         android:background="#00000000"
         android:src="@drawable/g2" />
 
     <ImageView
+        android:id="@+id/imageView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"

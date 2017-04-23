@@ -35,11 +35,11 @@ public class GpsServices extends Service implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    public static boolean lockIsListening = true;
-    public static boolean showGPSDialogue = true;
     private static final String TAG = "LocationActivity";
     private static final long INTERVAL = 1000 * 10;
     private static final long FASTEST_INTERVAL = 1000 * 5;
+    public static boolean lockIsListening = true;
+    public static boolean showGPSDialogue = true;
     public static String
             DISTANCE_BROADCAST = GpsServices.class.getName() + "Location Broadcast",
             EXTRA_SPEED = "extra_speed",
@@ -163,17 +163,19 @@ public class GpsServices extends Service implements
                 calculatedSpeed = distance / 10;
             }
 
-            NumberFormat formatter = new DecimalFormat("#0.000");
+            NumberFormat formatter = new DecimalFormat("#0.0");
             if (showGPSDialogue == true) {
                 Toast.makeText(getApplicationContext(),
                         "Lat is: " + lat2 + "\n Lon is: " + lon2 +
-                                "\n Distance is: " + formatter.format(distance) +
-                                "\n Time Elasped is: " + doubleTimeElapsed +
-                                "\n Total Distance is:" + formatter.format(totalDistance) +
+//                                "\n Distance is: " + formatter.format(distance) +
+//                                "\n Time Elasped is: " + doubleTimeElapsed +
+//                                "\n Total Distance is:" + formatter.format(totalDistance) +
                                 "\n CalcSpeed is: " + formatter.format(calculatedSpeed) +
                                 "\n getSpeed is: " + formatter.format(currentSpeed)
                         , Toast.LENGTH_LONG).show();
             }
+//            FirstActivity.speedTextview.setText("Speed: "+formatter.format(currentSpeed)+" km/h");
+//            BlockActivity.speedTextview2.setText("Speed:"+formatter.format(currentSpeed)+" km/h");
             lat1 = lat2;
             lon1 = lon2;
             oldTime = newTime;
