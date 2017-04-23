@@ -1,17 +1,24 @@
 package edu.oakland.textblock;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -23,13 +30,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import static edu.oakland.textblock.EnableMultiDex.context;
 
-public class Notifications extends AppCompatActivity {
+
+public class Notifications extends Activity {
     private Button testButton;
     private ListView listView;
     private ListAdapter listAdapter;
@@ -65,9 +76,53 @@ public class Notifications extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.list);
         getPhotosFromSever(listView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //TODO
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                builder.setPositiveButton("Approve", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //TODO
+                    }
+                }).setNegativeButton("Deny", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //TODO
+                    }
+                });
+                final AlertDialog dialog = builder.create();
+                LayoutInflater inflater = getLayoutInflater();
+                View dialogLayout = inflater.inflate(R.layout.popup, null);
+                dialog.setView(dialogLayout);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+                dialog.show();
+
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface d) {
+                        ImageView imageView = (ImageView) findViewById(R.id.selfie)  ;
+                        try {
+                            URL newurl = new URL("http://52.41.167.226/photos/IMG_20170414_162437.jpg");
+                            Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
+                            imageView.setImageBitmap(mIcon_val);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
+
+                       // LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Math.round(imageWidthInPX),
+                        //        Math.round(imageWidthInPX * (float)icon.getHeight() / (float)icon.getWidth()));
+                      //  image.setLayoutParams(layoutParams);
+
+
+                    }
+                });
+
+
             }
         });
 
