@@ -85,7 +85,7 @@ public class GpsServices extends Service implements
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "onCreate ...............................");
+//        Log.d(TAG, "onCreate ...............................");
         //show error dialog if GoolglePlayServices not available
 
         createLocationRequest();
@@ -98,7 +98,7 @@ public class GpsServices extends Service implements
 
     @Override
     public void onStart(Intent intent, int startid) {
-        Log.d(TAG, "onStart fired ..............");
+//        Log.d(TAG, "onStart fired ..............");
         mGoogleApiClient.connect();
     }
 
@@ -113,7 +113,7 @@ public class GpsServices extends Service implements
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.d(TAG, "onConnected - isConnected ...............: " + mGoogleApiClient.isConnected());
+//        Log.d(TAG, "onConnected - isConnected ...............: " + mGoogleApiClient.isConnected());
         startLocationUpdates();
     }
 
@@ -121,7 +121,7 @@ public class GpsServices extends Service implements
         checkPermission(this);
         PendingResult<Status> pendingResult = LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
-        Log.d(TAG, "Location update started ..............: ");
+//        Log.d(TAG, "Location update started ..............: ");
     }
 
     @Override
@@ -130,27 +130,27 @@ public class GpsServices extends Service implements
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d(TAG, "Connection failed: " + connectionResult.toString());
+//        Log.d(TAG, "Connection failed: " + connectionResult.toString());
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d(TAG, "Firing onLocationChanged..............................................");
+//        Log.d(TAG, "Firing onLocationChanged..............................................");
         mCurrentLocation = location;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
         updateUI();
     }
 
     private void updateUI() {
-        Log.d(TAG, "UI update initiated .............");
+//        Log.d(TAG, "UI update initiated .............");
         if (null != mCurrentLocation) {
             currentSpeed = mCurrentLocation.getSpeed();
             lat2 = mCurrentLocation.getLatitude();
             lon2 = mCurrentLocation.getLongitude();
             newTime = System.currentTimeMillis();
 //            System.out.println("Lat2: " + lat2 + "Lon2: " + lon2);
-            Log.d("Lat2", String.valueOf(lat2));
-            Log.d("Lon2", String.valueOf(lon2));
+//            Log.d("Lat2", String.valueOf(lat2));
+//            Log.d("Lon2", String.valueOf(lon2));
             if (oldTime != 0) {
                 timeElapsed = (newTime - oldTime);
                 doubleTimeElapsed = timeElapsed * .001;
@@ -241,7 +241,7 @@ public class GpsServices extends Service implements
     protected void stopLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(
                 mGoogleApiClient, this);
-        Log.d(TAG, "Location update stopped .......................");
+//        Log.d(TAG, "Location update stopped .......................");
     }
 
     private void sendBroadcastMessage(double distance, double speed) {
@@ -258,7 +258,7 @@ public class GpsServices extends Service implements
 
         //clean up for app closing
         stopSelf();
-        Log.i(TAG, "Stopping service 'GPSServices'");
+//        Log.i(TAG, "Stopping service 'GPSServices'");
 
         super.onDestroy();
     }

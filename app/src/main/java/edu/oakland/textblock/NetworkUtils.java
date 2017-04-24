@@ -22,12 +22,11 @@ import java.net.URL;
  */
 
 public class NetworkUtils {
-    // this URL is to upload photos
+    // this URL for uploading photos
     private static final String URL_UPLOAD_PHOTO_IN_PHP = "http://52.41.167.226/UploadPhoto3.php";
-    //    private static final String URI_UPLOAD_PHOTO_IN_JSP = "http://52.41.167.226/TextBlockServerSlideTest/UploadPhoto";
     private static int responseCode = 0;
     private static String responseMessage;
-    private String imei;
+    private static String imei;
 
     public NetworkUtils(String imei) {
         this.imei = imei;

@@ -45,7 +45,8 @@ public class TakePhotoActivity extends AppCompatActivity {
     private static final String PICTURE_FILE_PREFIX = "IMG_";
     private static final String JPEG_FILE_SUFFIX = ".jpg";
     private static final int REQUEST_PICTURE_CAPTURE = 1;
-    private final String URL_UPLOAD_PHOTO_IN_PHP = "http://52.41.167.226/UploadPhoto3.php";
+    //    private final String URL_UPLOAD_PHOTO_IN_PHP = "http://52.41.167.226/UploadPhoto3.php";
+    private final String URL_UPLOAD_PHOTO_IN_PHP = "http://123.206.68.39/UploadPhoto3.php";
     private ImageView imageView;
     private Bitmap imageBitmap;
     private File photo;
@@ -82,6 +83,7 @@ public class TakePhotoActivity extends AppCompatActivity {
             Log.d("MyApp saveFile", "Failed to save the photo for photo is null");
             // to make sure it is under monitor.
             GpsServices.lockIsListening = true;
+            GpsServices.showGPSDialogue = true;
         }
     }
 
@@ -99,10 +101,17 @@ public class TakePhotoActivity extends AppCompatActivity {
             // to add the photo for system gallery
             addPhotoToGallery();
 
+
             TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             String IMEI = telephonyManager.getDeviceId();
+/*
+            // to upload photo on background
+            NetworkUtils networkUtils = new NetworkUtils(IMEI);
+//            networkUtils.uploadFileAsync(firstPhoto);
+            networkUtils.uploadFileAsync(photo);
+*/
 
-
+//            upload(photo);
 
             // to prompt users
             Toast.makeText(getApplicationContext(), "Photo has been automatically sent.\n now please switch the len and take another", Toast.LENGTH_LONG);
@@ -124,13 +133,17 @@ public class TakePhotoActivity extends AppCompatActivity {
                 networkUtils.uploadFileAsync(firstPhoto);
                 networkUtils.uploadFileAsync(photo);
 
+/*
+                upload(firstPhoto);
+                upload(photo);
+*/
+
                 // go to the block screen
                 Intent returnToBlockActivity = new Intent(this, BlockActivity.class);
                 returnToBlockActivity.putExtra("isWaitingForApproval", true);
                 startActivity(returnToBlockActivity);
 
-//                upload(firstPhoto);
-//                upload(photo);
+
 
             }
         } else {
@@ -243,7 +256,7 @@ public class TakePhotoActivity extends AppCompatActivity {
                 params.put("filename", photo.getName());
                 // add photo into the request
                 params.put("photo", photoString);
-                Log.d("MyApp photo", photoString);
+//                Log.d("MyApp photo", photoString);
                 return params;
             }
         };
@@ -264,7 +277,7 @@ public class TakePhotoActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 10, byteArrayOutputStream);
 
         byte[] imageBytes = byteArrayOutputStream.toByteArray();
         String encodeImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);

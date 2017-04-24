@@ -434,6 +434,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                             // update status textview
                             statusTextView.setText("Sign in failed");
                         } else {
+                            // if guardians sign in successfully, GPS and Block should be closed, and they are to open once guardians log out.
+                            GpsServices.lockIsListening = false;
+                            GpsServices.showGPSDialogue = false;
 
                             Intent intent = new Intent(MainActivity.this, GuardianWelcome.class);
                             startActivity(intent);
