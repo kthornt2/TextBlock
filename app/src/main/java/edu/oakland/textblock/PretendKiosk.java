@@ -9,8 +9,6 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -21,7 +19,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -101,8 +98,8 @@ public class PretendKiosk extends Service {
     }
 private void checkDatabaseForApproval()
 {
-    final String URL_GETPHOTOS = "http://52.41.167.226/Approvals.php";
-    RequestQueue requestQueue;
+    final String URL_GETPHOTOS = "http://52.41.167.226/GetApprovalStatus.php";
+    final RequestQueue requestQueue;
     requestQueue = Volley.newRequestQueue(this);
 
     // instantiate a StringRequest to get photos' links
@@ -111,13 +108,13 @@ private void checkDatabaseForApproval()
         @Override
         public void onResponse(String response) {
             Log.d("MyApp Res", response);
-            if(response.contains("1")){
+            if (response.equals("1;") || response == "1;") {
                 Log.d("PretendKiosk", "The phone was unlocked via Guardian Approval");
                 Toast.makeText(getApplicationContext(), "Lock has been lifted via Guardian Approval",Toast.LENGTH_LONG);
-                GpsServices.lockIsListening = false;
-                GpsServices.showGPSDialogue = false;
+                UnlockAssistant.stopListening();
                 stopSelf();
-
+                Intent returnToFirstActivity = new Intent(getApplicationContext(), FirstActivity.class);
+                startActivity(returnToFirstActivity);
             }
             // TODO
         }

@@ -2,6 +2,7 @@ package edu.oakland.textblock;
 
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -163,7 +164,15 @@ public class NetworkUtils {
                     e.printStackTrace();
                 }
                 if (responseCode == 200) {
-                    System.out.println(getResponse(httpURLConnection));
+                    String response = getResponse(httpURLConnection);
+                    System.out.println(response);
+
+                    if (response.equals("1;") || response == "1;") {
+                        // it means the users can be unlocked once they upload their photos
+//                        UnlockAssistant.stopListening();
+                        BlockActivity.APPROVAL_STATUS = true;
+                        Log.d("MyApp", "Phone is permitted to be unlocked.");
+                    }
                 }
                 httpURLConnection.disconnect();
             }

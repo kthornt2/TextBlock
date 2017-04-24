@@ -45,8 +45,7 @@ public class TakePhotoActivity extends AppCompatActivity {
     private static final String PICTURE_FILE_PREFIX = "IMG_";
     private static final String JPEG_FILE_SUFFIX = ".jpg";
     private static final int REQUEST_PICTURE_CAPTURE = 1;
-    //    private final String URL_UPLOAD_PHOTO_IN_PHP = "http://52.41.167.226/UploadPhoto3.php";
-    private final String URL_UPLOAD_PHOTO_IN_PHP = "http://123.206.68.39/UploadPhoto3.php";
+    private final String URL_UPLOAD_PHOTO_IN_PHP = "http://52.41.167.226/UploadPhoto3.php";
     private ImageView imageView;
     private Bitmap imageBitmap;
     private File photo;
@@ -82,8 +81,7 @@ public class TakePhotoActivity extends AppCompatActivity {
         } else {
             Log.d("MyApp saveFile", "Failed to save the photo for photo is null");
             // to make sure it is under monitor.
-            GpsServices.lockIsListening = true;
-            GpsServices.showGPSDialogue = true;
+            UnlockAssistant.resumeListening();
         }
     }
 
@@ -110,7 +108,8 @@ public class TakePhotoActivity extends AppCompatActivity {
 //            networkUtils.uploadFileAsync(firstPhoto);
             networkUtils.uploadFileAsync(photo);
 */
-
+//            upload(firstPhoto);
+//            upload(photo);
 //            upload(photo);
 
             // to prompt users
@@ -124,8 +123,7 @@ public class TakePhotoActivity extends AppCompatActivity {
             } else {
                 Log.d("MyAPP", "User has finished taking pictures.\n then we should return to the block activity");
                 // keep locking the phone as soon as finish taking photo
-                GpsServices.lockIsListening = true;
-                GpsServices.showGPSDialogue = true;
+                UnlockAssistant.resumeListening();
                 Toast.makeText(getApplicationContext(), "Your Photos have been automatically sent.\n please wait for your guardian to unlock your phone.", Toast.LENGTH_LONG);
 
                 // to upload photo on background
@@ -133,24 +131,17 @@ public class TakePhotoActivity extends AppCompatActivity {
                 networkUtils.uploadFileAsync(firstPhoto);
                 networkUtils.uploadFileAsync(photo);
 
-/*
-                upload(firstPhoto);
-                upload(photo);
-*/
-
                 // go to the block screen
                 Intent returnToBlockActivity = new Intent(this, BlockActivity.class);
                 returnToBlockActivity.putExtra("isWaitingForApproval", true);
                 startActivity(returnToBlockActivity);
 
 
-
             }
         } else {
             Log.d("MyAPP", "User has cancel to take a picture.\n then we should return to the statue activity");
             // keep locking the phone if user cancel taking photo
-            GpsServices.lockIsListening = true;
-            GpsServices.showGPSDialogue = true;
+            UnlockAssistant.resumeListening();
 
             Intent returnToStatueActivity = new Intent(this, BlockActivity.class);
             startActivity(returnToStatueActivity);
@@ -226,7 +217,7 @@ public class TakePhotoActivity extends AppCompatActivity {
     }
 
     private void upload(final File photo) {
-        RequestQueue requestQueue;
+        final RequestQueue requestQueue;
         requestQueue = Volley.newRequestQueue(this);
 
         // instantiate a StringRequest to get photos' links
@@ -236,6 +227,13 @@ public class TakePhotoActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 Log.d("MyApp Res", response);
+                if (response.equals(1) || response == "1") {
+                    // it means the users can be unlocked once they upload their photos
+                    UnlockAssistant.stopListening();
+                    Intent returnToFirstActivity = new Intent(getApplicationContext(), FirstActivity.class);
+                    startActivity(returnToFirstActivity);
+
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -247,7 +245,6 @@ public class TakePhotoActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 // converting Bitmap to string
                 String photoString = getStringFromPhoto(photo);
-
                 Map<String, String> params = new Hashtable<String, String>();
                 // add IMEI into the request
                 TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -256,7 +253,7 @@ public class TakePhotoActivity extends AppCompatActivity {
                 params.put("filename", photo.getName());
                 // add photo into the request
                 params.put("photo", photoString);
-//                Log.d("MyApp photo", photoString);
+                Log.d("MyApp photo", photoString);
                 return params;
             }
         };
@@ -277,7 +274,7 @@ public class TakePhotoActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 10, byteArrayOutputStream);
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 30, byteArrayOutputStream);
 
         byte[] imageBytes = byteArrayOutputStream.toByteArray();
         String encodeImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);

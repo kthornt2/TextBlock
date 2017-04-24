@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 public class BlockActivity extends AppCompatActivity {
     public static TextView speedTextview2;
+    public static boolean APPROVAL_STATUS = false;
     private ImageButton EmergencyCall;
     private ImageButton MailButton;
     private ImageButton CameraButton;
@@ -24,6 +25,10 @@ public class BlockActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.block);
+/*
+        Intent startKisok = new Intent(getApplicationContext(), PretendKiosk.class);
+        startService(startKisok);
+*/
         speedTextview2 = (TextView) findViewById(R.id.speedTextView2);
         emergencyUnlockButton = (Button) findViewById(R.id.emergency_unlock);
         CameraButton = (ImageButton) findViewById(R.id.camera);
@@ -41,6 +46,10 @@ public class BlockActivity extends AppCompatActivity {
 
     }
 
+    public void unlock() {
+        Intent returnToFirstActivity = new Intent(getApplicationContext(), FirstActivity.class);
+        startActivity(returnToFirstActivity);
+    }
 
     public void unlockMyPhone(View view) {
 
