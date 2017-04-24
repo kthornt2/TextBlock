@@ -40,7 +40,7 @@ import java.util.Map;
 import static edu.oakland.textblock.EnableMultiDex.context;
 
 
-public class Notifications extends Activity {
+public class Notifications extends AppCompatActivity {
     private Button testButton;
     private ListView listView;
     private ListAdapter listAdapter;
@@ -75,13 +75,14 @@ public class Notifications extends Activity {
 
         listView = (ListView) findViewById(R.id.list);
         getPhotosFromSever(listView);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //TODO
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                AlertDialog.Builder builder = new AlertDialog.Builder(Notifications.this);
                 builder.setPositiveButton("Approve", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -106,7 +107,8 @@ public class Notifications extends Activity {
                     public void onShow(DialogInterface d) {
                         ImageView imageView = (ImageView) findViewById(R.id.selfie)  ;
                         try {
-                            URL newurl = new URL("http://52.41.167.226/photos/IMG_20170414_162437.jpg");
+                            URL newurl = new URL("http://52.41.167.226/photos/IMG_20170423_235611.jpg");
+
                             Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
                             imageView.setImageBitmap(mIcon_val);
                         } catch (IOException e) {
@@ -114,9 +116,7 @@ public class Notifications extends Activity {
                         }
 
 
-                       // LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Math.round(imageWidthInPX),
-                        //        Math.round(imageWidthInPX * (float)icon.getHeight() / (float)icon.getWidth()));
-                      //  image.setLayoutParams(layoutParams);
+
 
 
                     }
