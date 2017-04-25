@@ -1,11 +1,9 @@
 package edu.oakland.textblock;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -43,36 +41,16 @@ public class Notifications extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notifications);
-
-        testButton = (Button) findViewById(R.id.test_button);
-
-        testButton.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //对话框
-                Dialog dialog = new AlertDialog.Builder(Notifications.this)
-                        .setTitle("Request For Permission")
-                        .setMessage("test the dialog")
-                        .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .setNegativeButton("Deny", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .create();
-                dialog.show();
-            }
-        });
-
         listView = (ListView) findViewById(R.id.list);
         getPhotosFromSever(listView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //TODO
+                Intent photoAcitivty = new Intent(getApplicationContext(), ShowSelfie.class);
+                String photo_url = parent.getItemAtPosition(position).toString();
+                Log.d("MyApp", photo_url);
+                photoAcitivty.putExtra("PHOTO_URL", photo_url);
+                startActivity(photoAcitivty);
             }
         });
 
@@ -101,33 +79,6 @@ public class Notifications extends AppCompatActivity {
                         photoURLs.add(result[i]);
                     }
                     listView.setAdapter(listAdapter);
-/*
-                    // to save them into a txt file.
-                    File photos=new File(getFileDirectory(),"photoURLs");
-                    if(!photos.exists()){
-                        try {
-                            photos.createNewFile();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    FileWriter saveURLs=null;
-                    try {
-                        saveURLs=new FileWriter(photos.getAbsolutePath());
-                        saveURLs.write(response);
-                        saveURLs.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }finally {
-                        if(saveURLs!=null){
-                            try {
-                                saveURLs.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-*/
                 }
             }
         }, new Response.ErrorListener() {

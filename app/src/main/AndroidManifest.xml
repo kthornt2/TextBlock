@@ -70,6 +70,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".ShowSelfie">
+            <intent-filter>
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".Settings">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
@@ -101,11 +108,6 @@
             </intent-filter>
         </activity>
 
-        <!--<receiver android:name=".BootReceiver">
-            <intent-filter >
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
-        </receiver>-->
 
         <receiver android:name=".BootReceiver2">
             <intent-filter>
