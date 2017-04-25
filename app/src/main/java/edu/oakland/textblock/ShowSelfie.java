@@ -27,6 +27,7 @@ import java.util.Map;
 
 public class ShowSelfie extends Activity {
     private String photo_url = "";
+    private String photo_url_twin = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,7 @@ public class ShowSelfie extends Activity {
         setContentView(R.layout.show_selfie);
         setCurrentImage();
         photo_url = getIntent().getStringExtra("PHOTO_URL");
+        photo_url_twin = getIntent().getStringExtra("PHOTO_URL_TWIN");
 
     }
 
@@ -61,10 +63,16 @@ public class ShowSelfie extends Activity {
 
     private void refuseRequest() {
         sendRequest(photo_url, "-1");
+        if (photo_url_twin != null) {
+            sendRequest(photo_url_twin, "-1");
+        }
     }
 
     private void approveRequest() {
         sendRequest(photo_url, "1");
+        if (photo_url_twin != null) {
+            sendRequest(photo_url_twin, "1");
+        }
     }
 
     private void sendRequest(final String url, final String isApproved) {

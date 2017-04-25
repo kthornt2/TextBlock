@@ -23,7 +23,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -47,8 +50,18 @@ public class Notifications extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent photoAcitivty = new Intent(getApplicationContext(), ShowSelfie.class);
+
                 String photo_url = parent.getItemAtPosition(position).toString();
-                Log.d("MyApp", photo_url);
+                if (position > 1) {
+                    String photo_url_neighbor1 = parent.getItemAtPosition(position - 1).toString();
+                    String photo_url_neighbor2 = parent.getItemAtPosition(position + 1).toString();
+                    decideTrueTwinPhoto(photo_url, photo_url_neighbor1, photo_url_neighbor2);
+                    Log.d("MyApp", photo_url);
+                    Log.d("MyApp", photo_url_neighbor1);
+                    Log.d("MyApp", photo_url_neighbor2);
+                    photoAcitivty.putExtra("PHOTO_URL_TWIN", decideTrueTwinPhoto(photo_url, photo_url_neighbor1, photo_url_neighbor2));
+                }
+
                 photoAcitivty.putExtra("PHOTO_URL", photo_url);
                 startActivity(photoAcitivty);
             }
@@ -56,6 +69,37 @@ public class Notifications extends AppCompatActivity {
 
     }
 
+    private String decideTrueTwinPhoto(String photo_url, String photo_url_neighbor1, String photo_url_neighbor2) {
+        Long millisecond0 = parsePhotoUrl(photo_url);
+        Long millisecond1 = parsePhotoUrl(photo_url_neighbor1);
+        Long millisecond2 = parsePhotoUrl(photo_url_neighbor2);
+        if (returnCloserOne(millisecond0, millisecond1, millisecond2) == 1) {
+            return photo_url_neighbor1;
+        } else {
+            return photo_url_neighbor2;
+        }
+    }
+
+    private int returnCloserOne(Long millisecond0, Long millisecond1, Long millisecond2) {
+        Long difference1 = Math.abs(millisecond0 - millisecond1);
+        Long difference2 = Math.abs(millisecond0 - millisecond2);
+        if (difference1 < difference2) {
+            return 1;
+        } else {
+            return 2;
+        }
+    }
+
+    private long parsePhotoUrl(String photo_url) {
+        Date date = null;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        try {
+            date = simpleDateFormat.parse(photo_url.substring(32, 46));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date.getTime();
+    }
 
 
     private void getPhotosFromSever(final ListView listView) {
@@ -134,7 +178,6 @@ public class Notifications extends AppCompatActivity {
         }
         return photoURLsDirectory;
     }
-
 
 
 }
