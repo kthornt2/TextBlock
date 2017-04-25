@@ -33,13 +33,13 @@ public class ShowSelfie extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_selfie);
         setCurrentImage();
-        photo_url = getIntent().getStringExtra("PHOTO_URL");
+        photo_url = getIntent().getStringExtra(photo_url);
 
     }
 
     private void setCurrentImage() {
         final ImageView imageView = (ImageView) findViewById(R.id.imageDisplay);
-        Picasso.with(getApplicationContext()).load("http://52.41.167.226/photos/IMG_20170423_235611.jpg").into(imageView);
+        Picasso.with(getApplicationContext()).load(photo_url).into(imageView);
     }
 
 
