@@ -141,7 +141,7 @@ public class Notifications extends AppCompatActivity {
                 TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                 String IMEI = telephonyManager.getDeviceId();
                 Log.d("MyApp IMEI", IMEI);
-                params.put("IMEI", IMEI);
+                params.put("IMEI", "860670027551265");
                 return params;
             }
         };

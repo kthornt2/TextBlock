@@ -112,9 +112,11 @@ private void checkDatabaseForApproval()
                 Log.d("PretendKiosk", "The phone was unlocked via Guardian Approval");
                 Toast.makeText(getApplicationContext(), "Lock has been lifted via Guardian Approval",Toast.LENGTH_LONG);
                 UnlockAssistant.stopListening();
-                stopSelf();
+
+
                 Intent returnToFirstActivity = new Intent(getApplicationContext(), FirstActivity.class);
                 startActivity(returnToFirstActivity);
+                stopSelf();
             }
             // TODO
         }
