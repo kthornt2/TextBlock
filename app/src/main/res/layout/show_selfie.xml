@@ -8,32 +8,43 @@
         android:id="@+id/imageDisplay"
         android:layout_width="match_parent"
         android:layout_height="406dp"
-        android:layout_margin="20dp"
-        android:layout_marginBottom="60dp" />
+        android:layout_above="@+id/button4"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="13dp" />
 
     <Button
         android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/imageDisplay"
-        android:layout_alignRight="@+id/imageDisplay"
-        android:layout_below="@+id/imageDisplay"
-        android:layout_marginEnd="54dp"
-        android:layout_marginRight="54dp"
-        android:layout_marginTop="26dp"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:onClick="refuse"
         android:text="Refuse" />
 
     <Button
+        android:layout_width="70dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:onClick="showOppositePhoto"
+        android:text="OPPO" />
+
+    <Button
         android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button4"
-        android:layout_alignBottom="@+id/button4"
-        android:layout_alignLeft="@+id/imageDisplay"
-        android:layout_alignStart="@+id/imageDisplay"
-        android:layout_marginLeft="56dp"
-        android:layout_marginStart="56dp"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:onClick="approve"
         android:text="Approve" />
 </RelativeLayout>

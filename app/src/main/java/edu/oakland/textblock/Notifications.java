@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -23,8 +22,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
@@ -36,7 +33,6 @@ import static edu.oakland.textblock.R.string.app_name;
 
 
 public class Notifications extends AppCompatActivity {
-    private Button testButton;
     private ListView listView;
     private ListAdapter listAdapter;
 
@@ -52,14 +48,27 @@ public class Notifications extends AppCompatActivity {
                 Intent photoAcitivty = new Intent(getApplicationContext(), ShowSelfie.class);
 
                 String photo_url = parent.getItemAtPosition(position).toString();
-                if (position > 1) {
+                Log.d("MyApp Position", Integer.toString(position));
+                Log.d("MyApp Count", Integer.toString(parent.getCount()));
+                if (position == 0) {
+                    // guardian clicks on the first row
+                    photoAcitivty.putExtra("PHOTO_URL_TWIN", parent.getItemAtPosition(position + 1).toString());
+                } else if (position == parent.getCount() - 1) {
+                    // guardian clicks on the last row
+
+                    photoAcitivty.putExtra("PHOTO_URL_TWIN", parent.getItemAtPosition(position - 1).toString());
+                } else {
+                    // guardian clicks on one of the middle rows
+//                    Log.d("MyApp Count",Integer.toString(parent.getCount()));
                     String photo_url_neighbor1 = parent.getItemAtPosition(position - 1).toString();
                     String photo_url_neighbor2 = parent.getItemAtPosition(position + 1).toString();
-                    decideTrueTwinPhoto(photo_url, photo_url_neighbor1, photo_url_neighbor2);
-                    Log.d("MyApp", photo_url);
-                    Log.d("MyApp", photo_url_neighbor1);
-                    Log.d("MyApp", photo_url_neighbor2);
+
+//                    Log.d("MyApp", photo_url);
+//                    Log.d("MyApp", photo_url_neighbor1);
+//                    Log.d("MyApp", photo_url_neighbor2);
+//                    Log.d("MyApp",decideTrueTwinPhoto(photo_url, photo_url_neighbor1, photo_url_neighbor2));
                     photoAcitivty.putExtra("PHOTO_URL_TWIN", decideTrueTwinPhoto(photo_url, photo_url_neighbor1, photo_url_neighbor2));
+
                 }
 
                 photoAcitivty.putExtra("PHOTO_URL", photo_url);
@@ -91,13 +100,7 @@ public class Notifications extends AppCompatActivity {
     }
 
     private long parsePhotoUrl(String photo_url) {
-        Date date = null;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        try {
-            date = simpleDateFormat.parse(photo_url.substring(32, 46));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        Date date = PhotoURLAssistant.getDateFromString2(photo_url);
         return date.getTime();
     }
 
@@ -120,7 +123,7 @@ public class Notifications extends AppCompatActivity {
                     List photoURLs = new ArrayList<String>();
                     listAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.textview_for_listview, photoURLs);
                     for (int i = 1; i < numberOfRow; i++) {
-                        photoURLs.add(result[i]);
+                        photoURLs.add(PhotoURLAssistant.getReadableDateLabelFromPhotoURL(result[i]));
                     }
                     listView.setAdapter(listAdapter);
                 }

@@ -80,4 +80,62 @@ public class ExampleUnitTest {
         return date.getTime();
     }
 
+
+    @Test
+    public void testSimpleDateFormat() {
+        SimpleDateFormat mySimpleDateFormat2 = new SimpleDateFormat("EEE, MMM dd, yyyy, HH:mm:ss z");
+        Date date = new Date();
+        String string = mySimpleDateFormat2.format(date);
+        System.out.println(string);
+        Date date2 = null;
+        try {
+            date2 = mySimpleDateFormat2.parse(string);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        System.out.println(date2.toString());
+
+        SimpleDateFormat mySimpleDateFormat1 = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        Date date3 = new Date();
+        String dateString = mySimpleDateFormat1.format(date3);
+        System.out.println(dateString);
+        try {
+            System.out.println(mySimpleDateFormat1.parse(dateString).toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testPhotoURLAssistant() {
+        String url = "http://52.41.167.226/photos/IMG_20170424_005050.jpg";
+        url = "http://52.41.167.226/photos/IMG_20170424_001220.jpg";
+
+        String name = PhotoURLAssistant.getNameFromURL(url);
+        System.out.println(name);
+
+        String dateString = name.substring(4, 18);
+        System.out.println(dateString);
+
+        Date date1_1 = PhotoURLAssistant.getDateFromString1(name.substring(4, 19));
+        String dateString1 = PhotoURLAssistant.getStringFromDate1(date1_1);
+        System.out.println(date1_1);
+
+        String dateString2 = PhotoURLAssistant.getStringFromDate2(date1_1);
+        System.out.println(dateString2);
+
+        Date date2 = PhotoURLAssistant.getDateFromString2(dateString2);
+        System.out.println(date2.toString());
+
+
+        String readString = PhotoURLAssistant.getReadableDateLabelFromPhotoURL(url);
+
+        System.out.println(PhotoURLAssistant.getDateFromString2(readString).toString());
+
+        System.out.println(PhotoURLAssistant.getStringFromDate1(PhotoURLAssistant.getDateFromString2(PhotoURLAssistant.getReadableDateLabelFromPhotoURL(url))));
+
+        System.out.println(PhotoURLAssistant.getURLFromReadableDateLabel(PhotoURLAssistant.getReadableDateLabelFromPhotoURL(url)));
+
+    }
+
 }

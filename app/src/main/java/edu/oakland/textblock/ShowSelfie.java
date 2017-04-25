@@ -33,17 +33,20 @@ public class ShowSelfie extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_selfie);
-        setCurrentImage();
-        photo_url = getIntent().getStringExtra("PHOTO_URL");
-        photo_url_twin = getIntent().getStringExtra("PHOTO_URL_TWIN");
+        photo_url = PhotoURLAssistant.getURLFromReadableDateLabel(getIntent().getStringExtra("PHOTO_URL"));
+        photo_url_twin = PhotoURLAssistant.getURLFromReadableDateLabel(getIntent().getStringExtra("PHOTO_URL_TWIN"));
+        setCurrentImage(photo_url);
 
     }
 
-    private void setCurrentImage() {
+    private void setCurrentImage(String photoURL) {
         final ImageView imageView = (ImageView) findViewById(R.id.imageDisplay);
-        Picasso.with(getApplicationContext()).load("http://52.41.167.226/photos/IMG_20170423_235611.jpg").into(imageView);
+        Picasso.with(getApplicationContext()).load(photoURL).into(imageView);
     }
 
+    public void showOppositePhoto(View view) {
+        setCurrentImage(photo_url_twin);
+    }
 
     public void approve(View view) {
         approveRequest();
@@ -107,6 +110,8 @@ public class ShowSelfie extends Activity {
         };
         requestQueue.add(getPhotosRequest);
     }
+
+
 }
 
 
