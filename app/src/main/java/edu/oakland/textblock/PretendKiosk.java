@@ -28,7 +28,18 @@ import java.util.Map;
  */
 
 public class PretendKiosk extends Service {
-    //private static final long INTERVAL = TimeUnit.SECONDS.toMillis(1); // periodic interval to check in seconds -> 1 seconds
+    /**
+     * The purpose of the class is to run as a service in the background of the device while the phone is locked.
+     * When the phone is in the locked state, this service checks to see if TextBlock is the top process
+     * running on the heap.  If it isn't, it relaunches the BlockActivity.  This means if any thing other than
+     * TextBlock is the top process, this service will activate the BlockActivity, providing the "lock" aspect
+     * of the lock Screen.  This emulates Kiosk behavior to accomplish this.
+     *
+     * Also, while this service is running, it is running a seperate thread and a loop to check for the guardian approval status.
+     * This checks the database for whether or not the Selfies have been approved.  If they are approved, the Kiosk service stops,
+     * and the lock is deactivated.
+     */
+
     private static final String TAG = PretendKiosk.class.getSimpleName();
     private static final String PREF_KIOSK_MODE = "pref_kiosk_mode";
 
@@ -75,6 +86,8 @@ public class PretendKiosk extends Service {
 
         );
 
+        //start a thread that checks the approval status of selfies.
+
         approvalCheckThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -97,6 +110,7 @@ public class PretendKiosk extends Service {
         return Service.START_NOT_STICKY;
     }
 private void checkDatabaseForApproval()
+        //here is the method to check database for approval
 {
     final String URL_GETPHOTOS = "http://52.41.167.226/GetApprovalStatus.php";
     final RequestQueue requestQueue;
@@ -143,12 +157,17 @@ private void checkDatabaseForApproval()
 }
 
     private void handleKioskMode() {
+
+
+
+
+        
         // checks if the kiosk mode is active
         if (isKioskModeActive(this)) {
             // by looking at the list of tasks.  Is it the front task? If not...
             if (isInBackground() == true) {
                 //restore the app
-                restoreApp(); // restore!
+                restoreApp(); // launches Block Screen
             }
         }
     }
@@ -180,6 +199,7 @@ private void checkDatabaseForApproval()
 
     }
 
+    //are we running?
     public boolean isKioskModeActive(final Context context) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         return sp.getBoolean(PREF_KIOSK_MODE, true);

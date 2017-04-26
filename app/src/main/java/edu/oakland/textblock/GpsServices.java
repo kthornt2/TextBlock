@@ -35,6 +35,12 @@ public class GpsServices extends Service implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
+    /**
+     * This code constitutes the GPS Service, which uses Google Play Location services to get location
+     * data.  It seems as though it works better when driving then small distances, so we might implement another class
+     * later for short distances.  This also has a listener for the speed that activates the PretendKiosk
+     */
+
     private static final String TAG = "LocationActivity";
     private static final long INTERVAL = 1000 * 10;
     private static final long FASTEST_INTERVAL = 1000 * 5;
@@ -186,12 +192,15 @@ public class GpsServices extends Service implements
 
         if (isMyServiceRunning(PretendKiosk.class) == false) {
             //
-            final double criticalSpeed = 1;
+            final double criticalSpeed = 5;
             if (mCurrentLocation.getSpeed() >= criticalSpeed  && lockIsListening) {
                 Log.d(TAG, "Lock is triggering");
                 Intent startLock = new Intent(getApplicationContext(), PretendKiosk.class);
                 startService(startLock);
-            }/* else if (isMyServiceRunning(PretendKiosk.class) == true) {
+            }
+            //This code would unlock phone as a function of time below speed limit.  It is not implemented
+            //because it does not work well.
+            /* else if (isMyServiceRunning(PretendKiosk.class) == true) {
                     if (mCurrentLocation.getSpeed() <= criticalSpeed || calculatedSpeed <= criticalSpeed) {
                         isSlow = true;
                         Timer timer = new Timer();
@@ -212,7 +221,7 @@ public class GpsServices extends Service implements
             }
         }
 
-
+        //launches GPSService class event at boot.
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -223,6 +232,8 @@ public class GpsServices extends Service implements
         return false;
     }
 
+    //a function to determine distance if getSpeed isn't returning values.  We can take this and divide
+    //by time.  Although it's not very accurate, so we prefer to use getSpeed when possible.
     public double CalculationByDistance(double lat1, double lon1, double lat2, double lon2) {
         if (lat2 != 0){
             double Radius = EARTH_RADIUS;
@@ -238,12 +249,14 @@ public class GpsServices extends Service implements
         }
     }
 
+    //This function is recommenended in case there is trouble stopping service.
     protected void stopLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(
                 mGoogleApiClient, this);
 //        Log.d(TAG, "Location update stopped .......................");
     }
 
+    //For outputting data to BlockScreen.  Not implemented yet.
     private void sendBroadcastMessage(double distance, double speed) {
         double roundedDistance= Math.round((distance * 100)) / 100.0d;
         double roundedSpeed= Math.round((speed * 100)) / 100.0d;
